@@ -1,0 +1,140 @@
+@import "public";
+@import "reset";
+
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /*text-align: center;*/
+  color: white;
+  margin: 0;
+}
+
+.color-primary{
+  color: $color-primary
+}
+.color-success{
+  color: $color-success
+}
+.color-warning{
+  color: $color-warning
+}
+.color-danger{
+  color: $color-danger
+}
+
+.dialog-header-bg-danger {
+  .el-dialog .el-dialog__header {
+    background-color: $color-danger;
+  }
+  .dialog-footer .el-button--primary{
+    background-color: $color-danger;
+    border-color: $color-danger;
+  }
+}
+
+.dialog-header-bg-success {
+  .el-dialog .el-dialog__header {
+    background-color: $color-success;
+  }
+  .dialog-footer .el-button--primary{
+    background-color: $color-success;
+    border-color: $color-success;
+  }
+}
+
+.dialog-header-bg-primary {
+  .el-dialog .el-dialog__header {
+    background-color: $color-primary;
+  }
+  .dialog-footer .el-button--primary{
+    background-color: $color-primary;
+    border-color: $color-primary;
+  }
+}
+
+.dialog-header-bg-warning {
+  .el-dialog .el-dialog__header {
+    background-color: $color-warning;
+  }
+  .dialog-footer .el-button--primary{
+    background-color: $color-warning;
+    border-color: $color-warning;
+  }
+}
+
+/*自定义弹窗样式*/
+.custom-dialog::-webkit-scrollbar {
+  width: 0;
+}
+
+.custom-dialog .el-dialog {
+  border-radius: 10px;
+  //margin-top: 12vh !important;
+  //margin-bottom: 0;
+
+  &__header {
+    min-height: 20px;
+    background: $color-primary;
+    border-radius: 10px 10px 0 0;
+    position: relative;
+    padding: 12px
+  }
+
+  &__title {
+    font-size: 20px;
+    line-height: 20px;
+    color: #fff;
+  }
+
+  &__close {
+    color: #fff !important;
+  }
+
+  &__body {
+    padding-right: 30px;
+    padding-bottom: 0;
+  }
+
+  &__footer {
+    padding-right: 30px;
+    //padding-top: 6px;
+    margin-top: 10px;
+  }
+
+  .el-form-item {
+    margin-bottom: 16px;
+  }
+
+  .el-select {
+    width: 100%;
+  }
+
+  .dialog-footer .el-button {
+    padding-left: 20px;
+    padding-right: 20px;
+
+  }
+
+  //.dialog-footer .el-button--primary{
+  //
+  //}
+
+  .dialog-footer .el-button--primary:hover{
+    color: $color-info;
+
+  }
+  //
+  .dialog-footer .el-button--default{
+    background-color: white;
+    border-color: $color-info;
+    //color: white;
+  }
+
+  .dialog-footer .el-button--default:hover{
+    background-color: white;
+    border-color: $color-info;
+    color: $color-info;
+  }
+
+}

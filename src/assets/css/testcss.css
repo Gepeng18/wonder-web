@@ -1,0 +1,24 @@
+.custom-dialog .el-dialog{
+    border-radius: 10px;
+    overflow: hidden;
+}
+.custom-dialog .el-dialog .el-dialog__header{
+    background-color: #7763fa;
+    border-radius: 10px 10px 0 0;
+    height: 20px;
+}
+.custom-dialog .el-dialog .el-dialog__title {
+    font-size: 20px;
+    line-height: 20px;
+    color: #fff;
+}
+.custom-dialog .el-dialog .el-button--primary{
+    background-color: #7763fa;
+    border-color: #7763fa;
+}
+
+.custom-dialog .el-dialog .el-button--default:hover{
+    background-color: rgba(119, 99, 250, 0.61);
+    border-color: white;
+    color: white;
+}

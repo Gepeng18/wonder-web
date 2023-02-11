@@ -1,0 +1,144 @@
+<template>
+  <CommonDialog title="编辑" ref="dialog" @confirm="confirm">
+    <el-form :model="formData" label-width="90px" label-suffix="：">
+      <el-form-item label="菜单名称">
+        <el-input v-model="formData.name"></el-input>
+      </el-form-item>
+      <el-form-item label="菜单类型">
+        <el-select
+            v-model="formData.menuType"
+            placeholder="请选择类型"
+            @change="menuTypeChange"
+        >
+          <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="上级菜单">
+        <treeselect
+            :options="menuOptions"
+            :load-options="loadOptions"
+            noChildrenText="无选项-选择目录，那么筛选目录菜单。如果选择按钮可以挂在在菜单下"
+            placeholder="请选择上级菜单"
+            v-model="menuOptionValue"
+            @select="onSelect"
+            @deselect="onDeselect"
+        />
+      </el-form-item>
+      <el-form-item label="权限字符">
+        <el-input v-model="formData.permission"></el-input>
+      </el-form-item>
+      <el-form-item label="菜单排序">
+        <el-input-number v-model="formData.sort" size="medium" controls-position="right" @change="handleChange" :min="1" :max="999"></el-input-number>
+      </el-form-item>
+
+
+    </el-form>
+  </CommonDialog>
+</template>
+
+<script>
+import CommonDialog from "@/components/CommonDialog.vue";
+import Treeselect from "@riophae/vue-treeselect";
+import "@riophae/vue-treeselect/dist/vue-treeselect.css";
+export default {
+  name: "MenuEdit",
+  components: {CommonDialog, Treeselect},
+  data() {
+    return {
+      formData: {},
+      menuOptions: [{
+        id: 0,
+        label: "主目录",
+        children: null,
+      }],
+      menuOptionValue: null,
+      options: [],
+      filterForm: {
+        columnPathId: [],
+        parentColumnId: [],
+        columnId: []
+      },
+
+    }
+  },
+  methods: {
+    menuTypeChange(val){
+      this.formData.menuType = val
+    },
+    handleChange(	currentValue){
+      this.formData.sort = currentValue
+    },
+    onSelect(node) {
+      if (node.has_child) {
+        this.filterForm.parentColumnId.push(node.id);
+      }
+
+      this.filterForm.columnPathId.push(String(node.parentId));
+    },
+
+    onDeselect(node) {
+      console.log('onDeselect', node)
+
+      this.filterForm.columnPathId = this.filterForm.columnPathId.filter(
+          pathId => node.parentId !== pathId
+      );
+    },
+    loadOptions({ action, parentNode, callback }) {
+      if (action === 'LOAD_CHILDREN_OPTIONS') {
+        this.$api.menu.list({parentId: parentNode.id}).then(res => {
+          if (res.length === 0){
+            parentNode.children = []
+            callback()
+            return
+          }
+
+          let children = []
+          for (let i = 0; i < res.length; i++) {
+            let obj = {
+              id: res[i].id,
+              label: res[i].name,
+              children: null
+            }
+            children.push(obj)
+          }
+          parentNode.children = children
+          callback()
+        })
+      }
+    },
+
+    getMenuType() {
+      this.$api.dict.findByType({type: 'system_menu_type'}).then(res => {
+        this.options = res
+      })
+    },
+    getData(id) {
+      let params = {
+        id
+      }
+      this.$api.menu.findById(params).then(res => {
+        this.formData = res
+        this.menuOptionValue = res.parentId
+      })
+    },
+    show(id) {
+      this.getMenuType()
+      this.getData(id)
+      this.$refs.dialog.show()
+    },
+    confirm() {
+
+    }
+  }
+}
+</script>
+
+<style scoped>
+
+</style>
