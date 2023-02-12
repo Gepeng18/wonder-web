@@ -29,8 +29,8 @@ export default {
   data() {
     return {
       form: {
-        username: '',
-        password: '',
+        username: 'admin',
+        password: '123456',
         code:'',
         uuid: ''
       },
@@ -52,7 +52,8 @@ export default {
       this.$api.user.getCode().then(res => {
         this.imgBase64 = res.imgBase64
         this.form.uuid = res.uuid
-        this.form.code = ''
+        // this.form.code = ''
+        this.form.code = res.code
       })
     },
     onSubmit() {

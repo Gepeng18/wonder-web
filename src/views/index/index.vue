@@ -1,72 +1,52 @@
 <template>
   <!-- 系统整体页面布局 -->
-  <el-container class="el-container" style="height: 100%">
+  <el-container>
     <el-header class="header">
       <div class="header-left">
         <h2>管理系统</h2>
       </div>
       <div class="header-right">
-                <div @click="logout"><h3>退出</h3></div>
+        <div @click="logout"><h3>退出</h3></div>
       </div>
-      <CommonDialog ref="commonDialog" :display="false" title="提示" type="danger" confirm-text="退出" cancel-text="取消" @confirm="doLogout">
+      <CommonDialog ref="commonDialog" :display="false" title="提示" type="danger" confirm-text="退出" cancel-text="取消"
+                    @confirm="doLogout">
         <span>该操作会退出当前登录，是否退出？</span>
       </CommonDialog>
     </el-header>
-    <el-container style="height: 100%">
+    <el-container>
       <el-aside style="width: 201px;">
-
         <NavTab></NavTab>
-
-<!--        <el-menu-->
-<!--            :default-active="this.$route.path"-->
-<!--            class="el-menu-vertical-demo"-->
-<!--            router-->
-<!--            @open="handleOpen"-->
-<!--            @close="handleClose"-->
-
-<!--        >-->
-<!--          <el-sub-menu index="/">-->
-<!--            <el-menu-item index="/home" @click="clickItem('/home')">首页</el-menu-item>-->
-<!--            <el-menu-item index="/system/user" @click="clickItem('/system/user')">用户管理</el-menu-item>-->
-<!--            <el-menu-item index="/system/role" @click="clickItem('/system/role')">角色管理</el-menu-item>-->
-<!--            <el-menu-item index="/system/menu" @click="clickItem('/system/menu')">菜单管理</el-menu-item>-->
-<!--            <el-menu-item index="/system/dict" @click="clickItem('/system/dict')">字典管理</el-menu-item>-->
-<!--          </el-sub-menu>-->
-<!--        </el-menu>-->
+        <!--            <el-menu-item index="/home" @click="clickItem('/home')">首页</el-menu-item>-->
+        <!--            <el-menu-item index="/system/user" @click="clickItem('/system/user')">用户管理</el-menu-item>-->
+        <!--            <el-menu-item index="/system/role" @click="clickItem('/system/role')">角色管理</el-menu-item>-->
+        <!--            <el-menu-item index="/system/menu" @click="clickItem('/system/menu')">菜单管理</el-menu-item>-->
+        <!--            <el-menu-item index="/system/dict" @click="clickItem('/system/dict')">字典管理</el-menu-item>-->
       </el-aside>
-<!--      <el-main>-->
-<!--        &lt;!&ndash;        <el-container>&ndash;&gt;-->
-<!--        &lt;!&ndash;          <el-header>&ndash;&gt;-->
-<!--        <NavTab ref="navTab"/>-->
-<!--        &lt;!&ndash;          </el-header>&ndash;&gt;-->
-<!--        &lt;!&ndash;          <el-main>&ndash;&gt;-->
-<!--        <router-view/>-->
-<!--        &lt;!&ndash;          </el-main>&ndash;&gt;-->
-
-<!--        &lt;!&ndash;        </el-container>&ndash;&gt;-->
-<!--      </el-main>-->
-      <el-main>
-        <div>
+      <el-main class="content-main">
+        <div style="height: 100%">
           <el-tabs
-              v-model="activeIndex"
+              v-model="activeTab"
               type="card"
               @tab-remove="removeTab"
-              @tab-click="clickTab"
+              @tab-click="clickBtn"
+              style="line-height: 40px"
           >
             <el-tab-pane
-                :key="item.name"
-                v-for="item in editableTabs"
+                :key="index"
+                v-for="(item, index) in tabList"
                 :label="item.title"
-                :name="item.name"
+                :name="item.path"
                 :closable="item.closable"
             >
-              <router-view></router-view>
             </el-tab-pane>
+            <transition name="fade-transform" mode="out-in">
+              <keep-alive>
+                <router-view></router-view>
+              </keep-alive>
+            </transition>
           </el-tabs>
         </div>
       </el-main>
-
-
     </el-container>
   </el-container>
 </template>
@@ -81,61 +61,99 @@ export default {
   components: {NavTab},
   data() {
     return {
-      activeIndex: '2',
-      editableTabs: [{
-        title: 'Tab 1',
-        name: '1',
-        content: 'Tab 1 content'
-      }, {
-        title: 'Tab 2',
-        name: '2',
-        content: 'Tab 2 content'
-      }],
-      tabIndex: 2,
+      // 当前活跃的tabs
+      activeTab: '',
 
-      menuList:[
-
-      ]
+      menuList: []
     }
   },
-  mounted() {
-
+  computed: {
+    // eslint-disable-next-line vue/no-dupe-keys
+    tabList() {
+      return store.getters['getTabs']
+    },
   },
 
-  setup() {
+  watch: {
+    $route: function () {
+      this.setActiveTab()
+      this.addTab()
+    },
   },
   methods: {
-    clickItem(e){
-      console.log(e)
-      // this.addTab()
+    // 设置活跃的tab
+    setActiveTab() {
+      this.activeTab = this.$route.path
     },
-
+    // 添加tab
     addTab() {
-      let newTabName = ++this.tabIndex + '';
-      this.editableTabs.push({
-        title: 'New Tab',
-        name: newTabName,
-        content: 'New Tab content'
-      });
-      this.editableTabsValue = newTabName;
+      const {path, meta} = this.$route
+      const tab = {
+        path,
+        title: meta.title,
+        closable: true
+      }
+      store.commit('addTab', tab)
+
+    },
+    // 点击tab
+    clickBtn(tab) {
+      const {name} = tab
+      this.$router.push({path: name})
     },
     removeTab(targetName) {
-      let tabs = this.editableTabs;
-      let activeName = this.editableTabsValue;
+      let tabs = this.tabList;
+      let activeName = this.activeTab;
+      let that = this
+      if (tabs.length === 1) {
+        this.$message.warning('必须保留一个喔')
+        return
+      }
+
       if (activeName === targetName) {
         tabs.forEach((tab, index) => {
-          if (tab.name === targetName) {
+          if (tab.path === targetName) {
             let nextTab = tabs[index + 1] || tabs[index - 1];
             if (nextTab) {
-              activeName = nextTab.name;
+              activeName = nextTab.path;
+              that.$router.push({
+                path: nextTab.path
+              })
             }
           }
         });
       }
-
-      this.editableTabsValue = activeName;
-      this.editableTabs = tabs.filter(tab => tab.name !== targetName);
+      this.activeTab = activeName;
+      let newTabs = tabs.filter((tab) => tab.path !== targetName)
+      if (newTabs.length === 1)
+        newTabs[0].closable = false
+      store.state.tabList = newTabs
     },
+
+
+    // 删除tab
+    // removeTab(target) {
+    //   // 当前激活的tab
+    //   let active = this.activeTab
+    //   const tabs = this.tabList
+    //   // 只有一个标签页的时候不允许删除
+    //   if (tabs.length === 1) return
+    //   if (active === target) {
+    //     console.log(1111111)
+    //     tabs.forEach((tab, index) => {
+    //       // 如果删除的就是当前活跃的tab,就把活跃的tab变成上一个或下一个
+    //       const nextTab = tab[index + 1] || tab[index - 1]
+    //       if (nextTab) {
+    //         active = nextTab.path
+    //       }
+    //     })
+    //   }
+    //   // 重新设置当前激活的选项卡和 选项卡列表
+    //   this.activeTab = active
+    //   store.state.tabList = tabs.filter((tab) => tab.path !== target)
+    // },
+
+
     handleOpen() {
       this.isCollapse = false
 
@@ -149,7 +167,20 @@ export default {
     doLogout() {
       store.commit('logout')
     }
-  }
+  },
+  // 解决刷新数据丢失问题
+  beforeRefresh() {
+    window.addEventListener('beforeunload', () => {
+      sessionStorage.setItem('tabsView', JSON.stringify(this.tabList))
+    })
+    let tabSession = sessionStorage.getItem('tabsView')
+    if (tabSession) {
+      let oldTabs = JSON.parse(tabSession)
+      if (oldTabs.length > 0) {
+        store.state.tabList = oldTabs
+      }
+    }
+  },
 }
 </script>
 
@@ -161,6 +192,10 @@ export default {
   height: 60px;
   display: flex;
   justify-content: space-between;
+}
+
+.el-tabs__content {
+
 }
 
 .header-left {

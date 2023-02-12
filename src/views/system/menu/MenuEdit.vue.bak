@@ -22,21 +22,19 @@
       <el-form-item label="上级菜单">
         <treeselect
             :options="menuOptions"
+            :load-options="loadOptions"
             noChildrenText="无选项-选择目录，那么筛选目录菜单。如果选择按钮可以挂在在菜单下"
             placeholder="请选择上级菜单"
-            :normalizer="normalizer"
             v-model="menuOptionValue"
             @select="onSelect"
             @deselect="onDeselect"
-            open
-            treeDefaultExpandAll
         />
       </el-form-item>
       <el-form-item label="权限字符">
         <el-input v-model="formData.permission"></el-input>
       </el-form-item>
       <el-form-item label="菜单排序">
-        <el-input-number v-model="formData.sort"  controls-position="right" @change="handleChange" :min="1" :max="999"></el-input-number>
+        <el-input-number v-model="formData.sort" size="medium" controls-position="right" @change="handleChange" :min="1" :max="999"></el-input-number>
       </el-form-item>
 
 
@@ -56,9 +54,8 @@ export default {
       formData: {},
       menuOptions: [{
         id: 0,
-        name: "主目录",
+        label: "主目录",
         children: null,
-        menuType: 1,
       }],
       menuOptionValue: null,
       options: [],
@@ -70,26 +67,7 @@ export default {
 
     }
   },
-  mounted() {
-    this.getMenuTree()
-
-  },
-
   methods: {
-    normalizer(node){
-      if (node.children && !node.children.length) {
-        delete node.children
-      }
-      if(node.id === this.formData.id){
-        return null
-      }
-      return {
-        id: node.id,
-        label: node.name,
-        children: node.children,
-      }
-    },
-
     menuTypeChange(val){
       this.formData.menuType = val
     },
@@ -100,18 +78,39 @@ export default {
       if (node.has_child) {
         this.filterForm.parentColumnId.push(node.id);
       }
+
       this.filterForm.columnPathId.push(String(node.parentId));
     },
 
     onDeselect(node) {
+      console.log('onDeselect', node)
+
       this.filterForm.columnPathId = this.filterForm.columnPathId.filter(
           pathId => node.parentId !== pathId
       );
     },
-    getMenuTree(){
-      this.$api.menu.treeList().then(res => {
-        this.menuOptions[0].children = res
-      })
+    loadOptions({ action, parentNode, callback }) {
+      if (action === 'LOAD_CHILDREN_OPTIONS') {
+        this.$api.menu.list({parentId: parentNode.id}).then(res => {
+          if (res.length === 0){
+            parentNode.children = []
+            callback()
+            return
+          }
+
+          let children = []
+          for (let i = 0; i < res.length; i++) {
+            let obj = {
+              id: res[i].id,
+              label: res[i].name,
+              children: null
+            }
+            children.push(obj)
+          }
+          parentNode.children = children
+          callback()
+        })
+      }
     },
 
     getMenuType() {
@@ -126,13 +125,14 @@ export default {
       this.$api.menu.findById(params).then(res => {
         this.formData = res
         this.menuOptionValue = res.parentId
+        // with (res.parentId > 0) {
+        //
+        // }
       })
     },
     show(id) {
       this.getMenuType()
-
       this.getData(id)
-
       this.$refs.dialog.show()
     },
     confirm() {

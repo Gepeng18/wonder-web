@@ -22,5 +22,10 @@ body{
   margin: 0;
 }
 
-
+#nprogress .bar {
+  background: #00ff0d !important;
+}
+#nprogress .peg {
+  box-shadow: 0 0 10px red, 0 0 5px red !important;
+}
 </style>

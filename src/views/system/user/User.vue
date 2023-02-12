@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="height: 100%;">
     <TableSearchBar @search="handleSearch" @reset="handleReset">
       <el-form :model="searchForm" label-suffix=":" label-width="70px">
         <el-row :gutter="5" align="middle">
@@ -40,13 +40,14 @@
           </template>
         </el-table-column>
       </el-table>
-      <el-divider></el-divider>
-      <div style="text-align: center">
+      <div class="table-footer">
+        <el-divider></el-divider>
+
         <el-pagination
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
             :current-page="pageInfo.curPage"
-            :page-sizes="[2, 3, 4]"
+            :page-sizes="[10, 20, 50]"
             :page-size="pageInfo.pageSize"
             layout="total, sizes, prev, pager, next, jumper"
             :total="pageInfo.totalElements">
@@ -91,7 +92,7 @@ export default {
       pageInfo:{
         totalElements: 0,
         curPage: 1,
-        pageSize: 2
+        pageSize: 10
       },
       selectId: null,
       selectName: ''
@@ -167,5 +168,10 @@ export default {
 </script>
 
 <style scoped>
+.table-footer{
+  text-align: center;
+  /*position: absolute;*/
+  /*bottom: 0;*/
 
+}
 </style>

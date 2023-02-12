@@ -1,14 +1,14 @@
 <template>
   <div>
     <template v-for="menu in this.menuList">
-      <el-submenu :key="menu.id" :index="menu.id" v-if="menu.children && menu.menuType !== 3 && menu.menuType !== 2">
+      <el-submenu :key="menu.id" :index="menu.id.toString()" v-if="menu.children && menu.menuType === 1">
         <template slot="title">
           <i :class="menu.icon"></i>
           <span slot="title">{{menu.name}}</span>
         </template>
         <menu-tree :menuList="menu.children"></menu-tree>
       </el-submenu>
-      <el-menu-item :key="menu.id" :index="menu.path" @click="clickItem(menu.path)" v-else-if="menu.menuType !== 3">
+      <el-menu-item :key="menu.id" :index="menu.path" v-else-if="menu.menuType ===2">
         <i :class="menu.icon"></i>
         <span slot="title">{{menu.name}}</span>
       </el-menu-item>
