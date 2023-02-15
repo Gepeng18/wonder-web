@@ -30,9 +30,8 @@ function getRoute (item) {
         // 路由的路径
         path: item.path,
         // 路由名
-        name: item.name,
+        name: item.title,
         // 路由所在组件
-        // component: (resolve) => require([`@/layout/Index`], resolve),
         component: (resolve) => require([`@/view${item.component}`], resolve),
         meta: {
             id: item.id,

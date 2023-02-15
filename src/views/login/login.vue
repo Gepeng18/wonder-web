@@ -29,7 +29,7 @@ export default {
   data() {
     return {
       form: {
-        username: 'admin',
+        username: 'whz',
         password: '123456',
         code:'',
         uuid: ''
@@ -62,12 +62,33 @@ export default {
         //请求成功操作
         store.commit('logined', res)
         this.$message.success('登录成功')
+
+        // this.getUserRoutes()
         this.$router.push({
           path: '/index'
         })
       }).catch(() => {
         this.loading = false
         this.getCode()
+      })
+    },
+    getUserRoutes(){
+      store.dispatch("setUserRoutes").then(routes => {
+        console.log('routes', routes)
+        console.log('router.getRoutes()', this.$router.getRoutes())
+        // this.$router.addRoute('index', {
+        //   path: '/system/user',
+        //   meta: {
+        //     auth: true,
+        //     title: '用户'
+        //   },
+        //   component:()=>import('@/views/system/user/User.vue')
+        // })
+        // console.log('routes', routes)
+        // console.log('router.getRoutes()', this.$router.getRoutes())
+        this.$router.push({
+          path: '/index'
+        })
       })
     }
   }

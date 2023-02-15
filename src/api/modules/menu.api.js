@@ -18,4 +18,9 @@ export const findById = (params = {}) => request({
     params
 })
 
+export const getRoutes = () => request({
+    url: '/menu/getRoutes',
+    method: 'get',
+})
+
 
