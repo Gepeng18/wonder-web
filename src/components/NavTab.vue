@@ -19,7 +19,6 @@
 
 <script>
 import MenuTree from "@/components/MenuTree.vue";
-import store from "@/store";
 import {shallowRef} from "vue";
 import {defineAsyncComponent} from "vue";
 export default {
@@ -50,7 +49,7 @@ export default {
                 title: item.name,
                 content: shallowRef(defineAsyncComponent(() => import(`@/views/system/user/User.vue`))),
               }
-              store.commit('addTab', tab)
+              this.$store.commit('addTab', tab)
               that.$router.push({
                 path: item.path
               })

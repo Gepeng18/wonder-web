@@ -13,7 +13,8 @@ const store = new Vuex.Store({
         token: localStorage.getItem('token') ? localStorage.getItem('token') : '',
 
         tabList:[],   //动态标签页
-        userRoutes: [] // 用户的路由信息
+        userRoutes: [],  // 用户的路由信息,
+        test: 111111111111
     },
 
     mutations: {
@@ -38,6 +39,9 @@ const store = new Vuex.Store({
 
         setUserRoutes (state, payload) {
             state.userRoutes = payload
+        },
+        increment(state){
+            state.test++
         }
     },
     getters: {
@@ -51,27 +55,26 @@ const store = new Vuex.Store({
         }
     },
     actions: {
-//请求后端获取路由
-        setUserRoutes({state, commit, getters}) {
-            //如果第一次进入项目，没有路由则请求后端，动态设置路由
-            if (!state.userRoutes.length) {
-                console.log('动态路由为空')
-                api.menu.getRoutes().then(res => {
-                    // 提交mutatuons存储路由到vuex
-                    commit("setUserRoutes", res);
-                    console.log('获取到的动态路由：', res)
-                    return res;
-                })
-            }
-            console.log('动态路由 不 为空')
-
-            //如果已经获取过路由了，则直接返回现有路由
-            return getters.userRoutes;
+        //请求后端获取路由
+        setUserRoutes({state, commit}) {
+            // eslint-disable-next-line no-unused-vars
+            return new Promise((resolve, reject) => {
+                //如果第一次进入项目，没有路由则请求后端，动态设置路由
+                if (!state.userRoutes.length) {
+                    console.log('动态路由为空')
+                    api.menu.getRoutes().then(res => {
+                        // 提交mutatuons存储路由到vuex
+                        commit("setUserRoutes", res);
+                        console.log('获取到的动态路由：', res)
+                        resolve()
+                    })
+                }
+                resolve()
+            })
         }
-    },
-    modules: {
-
     }
 })
 
+
+Vue.prototype.$store = store
 export default store;

@@ -1,9 +1,27 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import store from "@/store";
 // import {fnAddDynamicMenuRoutes} from "@/utils/getAsyncRouter";
 // import api from "@/api";
 // import store from '@/store/index'
+
+
+// 解决编程式路由往同一地址跳转时会报错的情况
+const originalPush = VueRouter.prototype.push;
+const originalReplace = VueRouter.prototype.replace;
+
+// push
+VueRouter.prototype.push = function push(location, onResolve, onReject) {
+    if (onResolve || onReject)
+        return originalPush.call(this, location, onResolve, onReject);
+    return originalPush.call(this, location).catch(err => err);
+};
+
+//replace
+VueRouter.prototype.replace = function push(location, onResolve, onReject) {
+    if (onResolve || onReject)
+        return originalReplace.call(this, location, onResolve, onReject);
+    return originalReplace.call(this, location).catch(err => err);
+};
 
 Vue.use(VueRouter)
 
@@ -89,33 +107,22 @@ const baseRoutes = [
 ]
 
 const createRouter = () => new VueRouter({
-    mode: 'history',
+    // mode: 'history',
     routes: baseRoutes
 })
 
 const router = createRouter()
 
-
 import NProgress from 'nprogress';
 
 import 'nprogress/nprogress.css';
-import api from "@/api";
-// import api from "@/api";
-// import {fnAddDynamicMenuRoutes} from "@/utils/getAsyncRouter";
-
-
-const originalPush = VueRouter.prototype.push
-VueRouter.prototype.push = function push(location, onResolve, onReject) {
-    if (onResolve || onReject) return originalPush.call(this, location, onResolve, onReject)
-    return originalPush.call(this, location).catch(err => err)
-}
-
-
+import store from "@/store";
 
 /**
  * 路由拦截
  * 权限验证
  */
+// eslint-disable-next-line no-unused-vars
 let isToken = true
 router.beforeEach((to, from, next) => {
     NProgress.start()
@@ -124,28 +131,40 @@ router.beforeEach((to, from, next) => {
         console.log('需要权限')
         const token = store.state.token
         if (token && token !== 'undefined') {
-            console.log('token', token)
             if (isToken && !store.getters.userRoutes.length) {
                 console.log('用户动态路由为空')
-                api.menu.getRoutes().then(res => {
-                    store.commit("setUserRoutes", res)
-                    res.forEach(item => {
-                        console.log('item', item)
-                        router.addRoute('index', {
-                            path: item.path,
-                            meta: {
-                                auth: item.auth,
-                                title: item.title
-                            },
-                            component: resolve => require([`@/views/${item.component}`], resolve)
-                        })
-                    })
-                    isToken = false
-                    console.log('router.getRoutes()', router.getRoutes())
-                    next({...to, replace: true})
+                // store.dispatch('setUserRoutes').then(() => {
+                //     console.log('获取动态路由的回调')
+                //     store.getters.userRoutes.forEach(item => {
+                //         console.log('item', item)
+                //         router.addRoute('index', {
+                //             path: item.path,
+                //             meta: {
+                //                 auth: item.auth,
+                //                 title: item.title
+                //             },
+                //             component: resolve => require([`@/views/${item.component}`], resolve)
+                //         })
+                //     })
+                // })
+
+                router.addRoute('index', {
+                    path: '/system/user',
+                    meta: {
+                        auth: true,
+                        title: '用户'
+                    },
+                    component:()=>import('@/views/system/user/User.vue')
                 })
 
+                isToken = false
+                console.log('isToken', isToken)
+                console.log('用户动态路由长度：', store.getters.userRoutes.length)
+                console.log('router.getRoutes()', router.getRoutes())
+                // next({...to, replace: true})
+                next({...to, replace: true})
             }
+            next({...to, replace: true})
         } else {
             console.log('需要权限, 但是没有token')
 

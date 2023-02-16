@@ -1,6 +1,6 @@
 import axios from 'axios'
-import store from "@/store"
 import { Message } from 'element-ui'
+import store from "@/store";
 
 const service = axios.create({
     baseURL: 'http://127.0.0.1/admin',

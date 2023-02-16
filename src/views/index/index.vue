@@ -93,7 +93,7 @@ export default {
         title: meta.title,
         closable: true
       }
-      store.commit('addTab', tab)
+      this.$store.commit('addTab', tab)
 
     },
     // 点击tab
@@ -127,7 +127,7 @@ export default {
       let newTabs = tabs.filter((tab) => tab.path !== targetName)
       if (newTabs.length === 1)
         newTabs[0].closable = false
-      store.state.tabList = newTabs
+      this.$store.state.tabList = newTabs
     },
 
 
@@ -165,7 +165,7 @@ export default {
       this.$refs.commonDialog.show()
     },
     doLogout() {
-      store.commit('logout')
+      this.$store.commit('logout')
     }
   },
   // 解决刷新数据丢失问题
@@ -177,7 +177,7 @@ export default {
     if (tabSession) {
       let oldTabs = JSON.parse(tabSession)
       if (oldTabs.length > 0) {
-        store.state.tabList = oldTabs
+        this.$store.state.tabList = oldTabs
       }
     }
   },
