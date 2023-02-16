@@ -55,10 +55,10 @@
 
 import store from "@/store";
 import NavTab from "@/components/NavTab.vue";
-
+import CommonDialog from "@/components/CommonDialog";
 export default {
   name: "index",
-  components: {NavTab},
+  components: {NavTab, CommonDialog},
   data() {
     return {
       // 当前活跃的tabs

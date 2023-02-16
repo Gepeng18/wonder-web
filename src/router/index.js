@@ -5,23 +5,23 @@ import VueRouter from 'vue-router'
 // import store from '@/store/index'
 
 
-// 解决编程式路由往同一地址跳转时会报错的情况
-const originalPush = VueRouter.prototype.push;
-const originalReplace = VueRouter.prototype.replace;
-
-// push
-VueRouter.prototype.push = function push(location, onResolve, onReject) {
-    if (onResolve || onReject)
-        return originalPush.call(this, location, onResolve, onReject);
-    return originalPush.call(this, location).catch(err => err);
-};
-
-//replace
-VueRouter.prototype.replace = function push(location, onResolve, onReject) {
-    if (onResolve || onReject)
-        return originalReplace.call(this, location, onResolve, onReject);
-    return originalReplace.call(this, location).catch(err => err);
-};
+// // 解决编程式路由往同一地址跳转时会报错的情况
+// const originalPush = VueRouter.prototype.push;
+// const originalReplace = VueRouter.prototype.replace;
+//
+// // push
+// VueRouter.prototype.push = function push(location, onResolve, onReject) {
+//     if (onResolve || onReject)
+//         return originalPush.call(this, location, onResolve, onReject);
+//     return originalPush.call(this, location).catch(err => err);
+// };
+//
+// //replace
+// VueRouter.prototype.replace = function push(location, onResolve, onReject) {
+//     if (onResolve || onReject)
+//         return originalReplace.call(this, location, onResolve, onReject);
+//     return originalReplace.call(this, location).catch(err => err);
+// };
 
 Vue.use(VueRouter)
 
@@ -50,15 +50,15 @@ const baseRoutes = [
         },
         component: () => import('@/views/index/index.vue'),
         children: [
-            // {
-            //     name:'home',
-            //     path: '/home',
-            //     meta: {
-            //         auth: true,
-            //         title:'首页'
-            //     },
-            //     component:()=>import('@/views/home/Home.vue')
-            // },
+            {
+                name:'home',
+                path: '/home',
+                meta: {
+                    auth: true,
+                    title:'首页'
+                },
+                component:()=>import('@/views/home/Home.vue')
+            },
             // {
             //     path: '/system/user',
             //     meta: {
@@ -107,7 +107,7 @@ const baseRoutes = [
 ]
 
 const createRouter = () => new VueRouter({
-    // mode: 'history',
+    mode: 'history',
     routes: baseRoutes
 })
 
@@ -117,6 +117,7 @@ import NProgress from 'nprogress';
 
 import 'nprogress/nprogress.css';
 import store from "@/store";
+import api from "@/api";
 
 /**
  * 路由拦截
@@ -133,38 +134,43 @@ router.beforeEach((to, from, next) => {
         if (token && token !== 'undefined') {
             if (isToken && !store.getters.userRoutes.length) {
                 console.log('用户动态路由为空')
-                // store.dispatch('setUserRoutes').then(() => {
-                //     console.log('获取动态路由的回调')
-                //     store.getters.userRoutes.forEach(item => {
-                //         console.log('item', item)
-                //         router.addRoute('index', {
-                //             path: item.path,
-                //             meta: {
-                //                 auth: item.auth,
-                //                 title: item.title
-                //             },
-                //             component: resolve => require([`@/views/${item.component}`], resolve)
-                //         })
-                //     })
-                // })
+                api.menu.getRoutes().then(res => {
+                    store.commit('setUserRoutes', res)
+                    console.log('store.getters.userRoutes', store.getters.userRoutes)
+                    store.getters.userRoutes.forEach(item => {
+                        console.log('item', item)
+                        router.addRoute('index', {
+                            path: item.path,
+                            meta: {
+                                auth: item.auth,
+                                title: item.title
+                            },
+                            component: resolve => require([`@/views/${item.component}`], resolve)
+                        })
+                    })
 
-                router.addRoute('index', {
-                    path: '/system/user',
-                    meta: {
-                        auth: true,
-                        title: '用户'
-                    },
-                    component:()=>import('@/views/system/user/User.vue')
+                    isToken = false
+                    console.log('isToken', isToken)
+                    console.log('用户动态路由长度：', store.getters.userRoutes.length)
+                    console.log('router.getRoutes()', router.getRoutes())
+                    next({...to, replace: true})
+
                 })
 
-                isToken = false
-                console.log('isToken', isToken)
-                console.log('用户动态路由长度：', store.getters.userRoutes.length)
-                console.log('router.getRoutes()', router.getRoutes())
-                // next({...to, replace: true})
-                next({...to, replace: true})
+
+                // router.addRoute('index', {
+                //     path: '/system/user',
+                //     meta: {
+                //         auth: true,
+                //         title: '用户'
+                //     },
+                //     component:()=>import('@/views/system/user/User.vue')
+                // })
+
+
+                // next()
             }
-            next({...to, replace: true})
+            next()
         } else {
             console.log('需要权限, 但是没有token')
 

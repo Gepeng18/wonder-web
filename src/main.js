@@ -19,5 +19,4 @@ Vue.component(CollapseTransition.name, CollapseTransition)
 new Vue({
   render: h => h(App),
   router,
-  // store
 }).$mount('#app')

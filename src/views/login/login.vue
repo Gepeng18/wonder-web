@@ -29,6 +29,8 @@
 <script>
 // import { ElLoading } from 'element-plus'
 
+// import {getUserLoginInfo} from "@/api/modules/user.api";
+
 export default {
   name: "login",
   data() {
@@ -80,25 +82,11 @@ export default {
         this.getCode()
       })
     },
-    getUserRoutes(){
-      this.$store.dispatch("setUserRoutes").then(routes => {
-        console.log('routes', routes)
-        console.log('router.getRoutes()', this.$router.getRoutes())
-        // this.$router.addRoute('index', {
-        //   path: '/system/user',
-        //   meta: {
-        //     auth: true,
-        //     title: '用户'
-        //   },
-        //   component:()=>import('@/views/system/user/User.vue')
-        // })
-        // console.log('routes', routes)
-        // console.log('router.getRoutes()', this.$router.getRoutes())
-        this.$router.push({
-          path: '/index'
-        })
-      })
-    }
+    // getLoginUserInfo(){
+    //   this.$api.user.getUserLoginInfo().then(res => {
+    //
+    //   })
+    // }
   }
 }
 </script>

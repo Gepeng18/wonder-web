@@ -35,3 +35,8 @@ export const edit = (data = {}) => request({
     method: 'post',
     data
 })
+
+export const getUserLoginInfo = () => request({
+    url: '/user/getUserLoginInfo',
+    method: 'get'
+})

@@ -47,9 +47,9 @@ export default {
               const tab = {
                 path:item.path,
                 title: item.name,
-                content: shallowRef(defineAsyncComponent(() => import(`@/views/system/user/User.vue`))),
+                content: shallowRef(defineAsyncComponent(() => import(`@/views/${item.component}.vue`))),
               }
-              this.$store.commit('addTab', tab)
+              that.$store.commit('addTab', tab)
               that.$router.push({
                 path: item.path
               })
