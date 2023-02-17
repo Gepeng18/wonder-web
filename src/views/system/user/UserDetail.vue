@@ -39,7 +39,10 @@ export default {
     show(data) {
       this.user = data
       this.$refs.dialog.show()
+    },
+    confirm() {
     }
+
   }
 }
 </script>

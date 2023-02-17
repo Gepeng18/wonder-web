@@ -18,8 +18,8 @@ export const findById = (params = {}) => request({
     params
 })
 
-export const getRoutes = () => request({
-    url: '/menu/getRoutes',
+export const findByUserId = () => request({
+    url: '/menu/findByUserId',
     method: 'get',
 })
 

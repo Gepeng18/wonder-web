@@ -2,25 +2,31 @@
   <!-- 系统整体页面布局 -->
   <el-container>
     <el-header class="header">
-      <div class="header-left">
-        <h2>管理系统</h2>
+      <div class="left"><h2>管理系统</h2></div>
+
+      <div class="right">
+        <div class="right-sub">
+          <h3>{{ this.$store.state.user.name }}</h3>
+        </div>
+        <div class="right-sub avatar">
+          <el-avatar  :size="50" src="https://img2.woyaogexing.com/2022/05/10/8ff885eade914ea88a78563f1a2eda0e!400x400.jpeg"></el-avatar>
+        </div>
+        <div class="right-sub">
+          <span @click="logout"><h3>退出</h3></span>
+        </div>
       </div>
-      <div class="header-right">
-        <div @click="logout"><h3>退出</h3></div>
-      </div>
-      <CommonDialog ref="commonDialog" :display="false" title="提示" type="danger" confirm-text="退出" cancel-text="取消"
-                    @confirm="doLogout">
-        <span>该操作会退出当前登录，是否退出？</span>
-      </CommonDialog>
     </el-header>
+
+    <CommonDialog ref="commonDialog" :display="false" title="提示" type="danger" confirm-text="退出" cancel-text="取消"
+                  @confirm="doLogout">
+      <span>该操作会退出当前登录，是否退出？</span>
+    </CommonDialog>
+
     <el-container>
-      <el-aside style="width: 201px;">
-        <NavTab></NavTab>
-        <!--            <el-menu-item index="/home" @click="clickItem('/home')">首页</el-menu-item>-->
-        <!--            <el-menu-item index="/system/user" @click="clickItem('/system/user')">用户管理</el-menu-item>-->
-        <!--            <el-menu-item index="/system/role" @click="clickItem('/system/role')">角色管理</el-menu-item>-->
-        <!--            <el-menu-item index="/system/menu" @click="clickItem('/system/menu')">菜单管理</el-menu-item>-->
-        <!--            <el-menu-item index="/system/dict" @click="clickItem('/system/dict')">字典管理</el-menu-item>-->
+<!--      <el-aside style="width: 201px;">-->
+      <el-aside style="width: auto;">
+        <!--侧边栏-->
+        <NavTab/>
       </el-aside>
       <el-main class="content-main">
         <div style="height: 100%">
@@ -53,25 +59,33 @@
 
 <script>
 
-import store from "@/store";
 import NavTab from "@/components/NavTab.vue";
 import CommonDialog from "@/components/CommonDialog";
+
 export default {
   name: "index",
   components: {NavTab, CommonDialog},
   data() {
     return {
       // 当前活跃的tabs
-      activeTab: '',
-
-      menuList: []
+      // activeTab: '',
     }
   },
   computed: {
-    // eslint-disable-next-line vue/no-dupe-keys
     tabList() {
-      return store.getters['getTabs']
+      return this.$store.getters.getTabs
     },
+    // activeTab() {
+    //   return this.$store.getters.activeTab
+    // }
+    activeTab: {
+      get() {
+        return this.$store.getters.activeTab
+      },
+      set() {
+        this.$store.commit('setActiveTab', this.$route.path)
+      }
+    }
   },
 
   watch: {
@@ -83,7 +97,8 @@ export default {
   methods: {
     // 设置活跃的tab
     setActiveTab() {
-      this.activeTab = this.$route.path
+      // this.activeTab = this.$route.path
+      this.$store.commit('setActiveTab', this.$route.path)
     },
     // 添加tab
     addTab() {
@@ -102,13 +117,11 @@ export default {
       this.$router.push({path: name})
     },
     removeTab(targetName) {
-      let tabs = this.tabList;
-      let activeName = this.activeTab;
       let that = this
-      if (tabs.length === 1) {
-        this.$message.warning('必须保留一个喔')
-        return
-      }
+      let tabs = that.tabList;
+      // let activeName = that.activeTab;
+      let activeName = this.$store.getters.activeTab
+      ;
 
       if (activeName === targetName) {
         tabs.forEach((tab, index) => {
@@ -123,36 +136,13 @@ export default {
           }
         });
       }
-      this.activeTab = activeName;
+      // that.activeTab = activeName;
+      this.$store.commit('setActiveTab', activeName)
       let newTabs = tabs.filter((tab) => tab.path !== targetName)
       if (newTabs.length === 1)
         newTabs[0].closable = false
-      this.$store.state.tabList = newTabs
+      that.$store.state.tabList = newTabs
     },
-
-
-    // 删除tab
-    // removeTab(target) {
-    //   // 当前激活的tab
-    //   let active = this.activeTab
-    //   const tabs = this.tabList
-    //   // 只有一个标签页的时候不允许删除
-    //   if (tabs.length === 1) return
-    //   if (active === target) {
-    //     console.log(1111111)
-    //     tabs.forEach((tab, index) => {
-    //       // 如果删除的就是当前活跃的tab,就把活跃的tab变成上一个或下一个
-    //       const nextTab = tab[index + 1] || tab[index - 1]
-    //       if (nextTab) {
-    //         active = nextTab.path
-    //       }
-    //     })
-    //   }
-    //   // 重新设置当前激活的选项卡和 选项卡列表
-    //   this.activeTab = active
-    //   store.state.tabList = tabs.filter((tab) => tab.path !== target)
-    // },
-
 
     handleOpen() {
       this.isCollapse = false
@@ -189,22 +179,39 @@ export default {
 
 .header {
   background-color: $color-primary;
-  height: 60px;
+  line-height: 60px;
   display: flex;
+  color: white;
   justify-content: space-between;
+
+  .left {
+    width: 200px;
+  }
+
+  .right {
+    width: auto;
+    display: flex;
+    line-height: 60px;
+    justify-content: space-around;
+
+
+    .right-sub {
+      padding: 0 20px;
+      line-height: 60px;
+    }
+    .avatar{
+      //background-color: #F56C6C;
+      margin-top: 5px;
+
+    }
+  }
+
 }
 
 .el-tabs__content {
 
 }
 
-.header-left {
-  line-height: 60px;
-}
-
-.header-right {
-  line-height: 60px;
-}
 
 ::v-deep .el-main {
   padding: 5px;

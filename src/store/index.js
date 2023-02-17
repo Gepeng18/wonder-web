@@ -2,29 +2,36 @@ import Vue from "vue";
 import Vuex from "vuex";
 
 import router from "@/router";
+import api from "@/api";
+import {handleTree} from "@/utils/MenuHandle"
 
 Vue.use(Vuex)
-
 
 const store = new Vuex.Store({
     state: {
         // 存储 token
-        token: localStorage.getItem('token') ? localStorage.getItem('token') : '',
-
-        tabList:[],   //动态标签页
+        token: sessionStorage.getItem('token') ? sessionStorage.getItem('token') : '',
+        activeTab: '',
+        tabList: [],   //动态标签页
+        user: {},
         userRoutes: [],  // 用户的路由信息,
-        test: 111111111111
+        userMenus: [],
+        userRoles: [],
+        userDepts: [],
+        userPerMits: []
     },
 
     mutations: {
         logined(state, res) {
             state.token = res.token;
-            localStorage.setItem('token', res.token);
+            sessionStorage.setItem('token', res.token);
+            state.user = res.userInfo;
         },
         logout(state) {
-            localStorage.clear()
+            sessionStorage.clear()
             console.log('执行了 退出登录')
             state.token = ''
+            state = {}
             router.push('/login')
         },
 
@@ -36,29 +43,86 @@ const store = new Vuex.Store({
                 state.tabList[0].closable = true
         },
 
-        // setUserRoutes (state, payload) {
-        //     state.userRoutes = payload
-        // },
-        increment(state){
-            state.test++
+        setActiveTab(state, activeTab){
+            state.activeTab = activeTab
         },
 
-        //请求后端获取路由
-        setUserRoutes(state, res) {
-            state.userRoutes = res
-        }
+        setUserRoutes(state, payload) {
+            state.userRoutes = payload
+            sessionStorage.setItem('userRoutes', JSON.stringify(payload))
+        },
+        setUserMenus(state, payload) {
+            state.userMenus = payload
+            sessionStorage.setItem('userMenus', JSON.stringify(payload))
+
+        },
+        setUserPermits(state, payload) {
+            state.userPerMits = payload
+            sessionStorage.setItem('userPerMits', payload)
+
+        },
+        setUserRoles(state, payload) {
+            state.userRoles = payload
+            sessionStorage.setItem('userRoles', JSON.stringify(payload))
+
+        },
+        setUserDepts(state, payload) {
+            state.userDepts = payload
+            sessionStorage.setItem('userDepts', payload)
+
+        },
+
+
     },
     getters: {
-        // 获取tbsList
         getTabs: (state) => {
             return state.tabList
         },
-
-        userRoutes (state) {
+        activeTab(state){
+          return state.activeTab
+        },
+        userRoutes(state) {
             return state.userRoutes
+        },
+        userMenus(state) {
+            return state.userMenus
+        },
+        userPermits(state) {
+            return state.userPerMits
+        },
+        userRoles(state) {
+            return state.userRoles
+        },
+        userDepts(state) {
+            return state.userDepts
         }
     },
     actions: {
+        getUserMenu(context) {
+            if (!context.getters.userMenus.length) {
+                api.menu.findByUserId().then(res => {
+                    let {permits, routes, menus} = handleTree(res)
+                    context.commit('setUserRoutes', routes)
+                    context.commit('setUserPermits', permits)
+                    context.commit('setUserMenus', menus)
+                    //生成动态路由
+                    context.dispatch('setDynamicRoutes')
+                })
+            }
+        },
+        setDynamicRoutes(context){
+            console.log('setDynamicRoutes', context.state.userRoutes)
+            context.state.userRoutes.forEach(item => {
+                router.addRoute('index', {
+                    path: item.path,
+                    meta: {
+                        auth: item.auth,
+                        title: item.title
+                    },
+                    component: resolve => require([`@/views/${item.component}`], resolve)
+                })
+            })
+        }
 
     }
 })

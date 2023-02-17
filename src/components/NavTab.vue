@@ -1,5 +1,6 @@
 <template>
   <div style="height: 100%">
+
     <el-menu
         unique-opened
         router
@@ -10,7 +11,13 @@
         text-color="#fff"
         :default-active="$route.path"
         active-text-color="#ffd04b"
-        style="height: 100%">
+        style="height: 100%"
+        :collapse="isCollapse"
+    >
+      <el-radio-group v-model="isCollapse" style="margin-bottom: 20px;">
+        <el-radio-button :label="false">展开</el-radio-button>
+        <el-radio-button :label="true">收起</el-radio-button>
+      </el-radio-group>
       <MenuTree :menuList="menuList"></MenuTree>
     </el-menu>
   </div>
@@ -21,22 +28,25 @@
 import MenuTree from "@/components/MenuTree.vue";
 import {shallowRef} from "vue";
 import {defineAsyncComponent} from "vue";
+
 export default {
   name: "NavTab",
   components: {MenuTree},
   data() {
     return {
-      menuList:[],
+      isCollapse: false
+    }
+  },
+  computed:{
+    menuList(){
+      return this.$store.getters.userMenus
     }
   },
   created() {
-    this.$api.menu.treeList({}).then(res => {
-      this.menuList = res
-      this.getFirstRoutePath(res)
-    })
+    this.getFirstRoutePath(this.menuList)
   },
   methods: {
-    getFirstRoutePath(res){
+    getFirstRoutePath(data){
       let that =  this
       const fn = function(array){
         array.forEach((item,index)=>{
@@ -57,7 +67,7 @@ export default {
           }
         })
       }
-      fn(res);
+      fn(data);
     },
     handleOpen(key, keyPath){
       console.log('open key: ', key, 'open keyPath: ', keyPath);

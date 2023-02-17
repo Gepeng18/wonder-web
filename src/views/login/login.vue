@@ -1,12 +1,6 @@
 <template>
   <div class="page-box">
     <div class="login-panel">
-      <div style="color: #7763fa">
-      <h1>22{{this.$store.state.test}}</h1>
-        <el-button type="primary" @click="increment" :loading="loading" style="width: 100px">增加</el-button>
-
-      </div>
-
       <el-form :model="form" label-width="70px" label-suffix="：">
         <el-form-item label="账号">
           <el-input v-model="form.username"/>
@@ -27,9 +21,6 @@
 </template>
 
 <script>
-// import { ElLoading } from 'element-plus'
-
-// import {getUserLoginInfo} from "@/api/modules/user.api";
 
 export default {
   name: "login",
@@ -38,7 +29,7 @@ export default {
       form: {
         username: 'whz',
         password: '123456',
-        code:'',
+        code: '',
         uuid: ''
       },
       loadingHidden: false,
@@ -53,11 +44,18 @@ export default {
   mounted() {
     this.getCode()
   },
-
+  watch: {
+    '$store.getters.userMenus': {
+      handler() {
+        if (this.$store.state.userMenus.length) {
+          this.$router.push({
+            path: '/index'
+          })
+        }
+      }
+    }
+  },
   methods: {
-    increment(){
-      this.$store.commit('increment')
-    },
     getCode() {
       this.$api.user.getCode().then(res => {
         this.imgBase64 = res.imgBase64
@@ -72,21 +70,12 @@ export default {
         //请求成功操作
         this.$store.commit('logined', res)
         this.$message.success('登录成功')
-
-        // this.getUserRoutes()
-        this.$router.push({
-          path: '/index'
-        })
+        this.$store.dispatch('getUserMenu')
       }).catch(() => {
         this.loading = false
         this.getCode()
       })
     },
-    // getLoginUserInfo(){
-    //   this.$api.user.getUserLoginInfo().then(res => {
-    //
-    //   })
-    // }
   }
 }
 </script>

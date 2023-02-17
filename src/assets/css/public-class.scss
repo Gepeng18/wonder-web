@@ -6,15 +6,13 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   /*text-align: center;*/
-  color: white;
+  color: black;
   margin: 0;
 }
 
 html,body,#app,.el-container{
   padding: 0;
-
   margin: 0;
-
   height: 100%;
 }
 
@@ -61,6 +59,7 @@ html,body,#app,.el-container{
   }
 }
 
+
 .dialog-header-bg-warning {
   .el-dialog .el-dialog__header {
     background-color: $color-warning;
@@ -78,6 +77,7 @@ html,body,#app,.el-container{
 
 .custom-dialog .el-dialog {
   border-radius: 10px;
+  color: white;
   //margin-top: 12vh !important;
   //margin-bottom: 0;
 
