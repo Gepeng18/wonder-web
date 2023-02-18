@@ -2,12 +2,10 @@
   <div>
     <div>
       <el-button type="primary" icon="el-icon-plus" size="medium">添加</el-button>
-
     </div>
     <el-divider></el-divider>
 
-
-    <div>
+    <div id="menuList">
       <el-table
           :data="tableData"
           style="width: 100%"
@@ -18,7 +16,6 @@
           :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
 
         <el-table-column type="index" width="50" />
-
         <el-table-column
             prop="name"
             label="菜单名称"
@@ -50,10 +47,8 @@
           <template  slot-scope="scope">
             <el-button type="primary" size="mini" round @click="edit(scope.row)">修改</el-button>
             <el-button type="danger" size="mini" round @click="del(scope.row)">删除</el-button>
-
           </template>
         </el-table-column>
-
       </el-table>
     </div>
 
@@ -89,7 +84,7 @@ export default {
     },
 
     getData() {
-      this.$api.menu.list().then(res => {
+      this.$api.menu.list({},{target: '#menuList'}).then(res => {
         this.tableData = res
       })
     },
@@ -98,7 +93,7 @@ export default {
       let params = {
         parentId: tree.id
       }
-      this.$api.menu.list(params).then(res => {
+      this.$api.menu.list(params, {target: '#menuList'}).then(res => {
         resolve(res)
       })
     }

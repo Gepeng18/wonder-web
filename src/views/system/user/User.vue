@@ -23,13 +23,17 @@
     </TableSearchBar>
 
     <div>
-      <el-table :data="tableData" stripe style="width: 100%">
+      <el-table :data="tableData"
+                stripe
+                style="width: 100%"
+                id="userList"
+      >
         <el-table-column prop="name" label="姓名"/>
         <el-table-column prop="username" label="帐号"/>
-        <el-table-column prop="phone" label="手机" />
-        <el-table-column prop="email" label="邮箱" />
-        <el-table-column prop="createTime" label="创建时间" />
-        <el-table-column prop="updateTime" label="修改时间" />
+        <el-table-column prop="phone" label="手机"/>
+        <el-table-column prop="email" label="邮箱"/>
+        <el-table-column prop="createTime" label="创建时间"/>
+        <el-table-column prop="updateTime" label="修改时间"/>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button class="primary" type="text" @click="detail(scope.row)">查看</el-button>
@@ -59,7 +63,7 @@
       <!--删除弹框-->
       <CommonDialog type="danger" ref="delDialog" @confirm="delConfirm" title="提示">
         <div>
-          是否删除 “<span class="color-danger">{{selectName}}</span>”  ？
+          是否删除 “<span class="color-danger">{{ selectName }}</span>” ？
         </div>
       </CommonDialog>
 
@@ -86,16 +90,16 @@ export default {
       searchForm: {
         username: '',
         name: '',
-        phone:''
+        phone: ''
       },
       tableData: [],
-      pageInfo:{
+      pageInfo: {
         totalElements: 0,
         curPage: 1,
         pageSize: 10
       },
       selectId: null,
-      selectName: ''
+      selectName: '',
     }
   },
 
@@ -103,39 +107,39 @@ export default {
     this.findList()
   },
   methods: {
-    editSubmit(data){
+    editSubmit(data) {
       this.$api.user.edit(data)
     },
-    delConfirm(){
+    delConfirm() {
       this.$message.success('删除成功')
       this.selectName = ''
-      this.selectId  = null
+      this.selectId = null
     },
-    edit(row){
+    edit(row) {
       this.$refs.userEdit.show(row)
     },
-    del(row){
+    del(row) {
       this.selectId = row.id
       this.selectName = row.name
       this.$refs.delDialog.show()
     },
-    resetPWDConfirm(params){
+    resetPWDConfirm(params) {
       this.$api.user.resetPWD(params).then(() => {
         this.$message.success('修改成功')
       })
     },
-    detail(row){
+    detail(row) {
       this.$refs.userDetail.show(row)
     },
-    resetPWD(row){
+    resetPWD(row) {
       this.$refs.resetPWD.show(row.id)
     },
-    findList(){
+    findList() {
       const params = {
         ...this.searchForm,
         ...this.pageInfo
       }
-      this.$api.user.findUserPage(params).then(res => {
+      this.$api.user.findUserPage(params, {target: '#userList'}).then(res => {
         this.tableData = res.dataList
         this.pageInfo.totalElements = res.totalElements
         this.pageInfo.totalPage = res.totalPage
@@ -168,7 +172,7 @@ export default {
 </script>
 
 <style scoped>
-.table-footer{
+.table-footer {
   text-align: center;
   /*position: absolute;*/
   /*bottom: 0;*/

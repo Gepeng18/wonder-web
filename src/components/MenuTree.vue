@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <fragment>
     <template v-for="menu in this.menuList">
       <el-submenu :key="menu.id" :index="menu.id.toString()" v-if="menu.children && menu.menuType === 1">
         <template slot="title">
@@ -13,7 +13,7 @@
         <span slot="title">{{menu.name}}</span>
       </el-menu-item>
     </template>
-  </div>
+  </fragment>
 
 </template>
 

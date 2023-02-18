@@ -9,8 +9,8 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
     state: {
-        // 存储 token
-        token: sessionStorage.getItem('token') ? sessionStorage.getItem('token') : '',
+        currentPath:'',
+        token: '',
         activeTab: '',
         tabList: [],   //动态标签页
         user: {},
@@ -22,29 +22,28 @@ const store = new Vuex.Store({
     },
 
     mutations: {
-        logined(state, res) {
-            state.token = res.token;
-            sessionStorage.setItem('token', res.token);
-            state.user = res.userInfo;
+        login(state, payload) {
+            state.token = payload.token;
+            sessionStorage.setItem('token', payload.token);
+            state.user = payload.userInfo;
         },
-        logout(state) {
+        logout() {
             sessionStorage.clear()
-            console.log('执行了 退出登录')
-            state.token = ''
-            state = {}
             router.push('/login')
         },
 
         addTab: (state, tab) => {
             // 如果tab已经存在，不添加新的tabs
-            if (state.tabList.some(item => item.path === tab.path)) return
+            if (state.tabList.some(item => item.path === tab.path))
+                return
             state.tabList.push(tab)
             if (state.tabList.length > 1)
                 state.tabList[0].closable = true
         },
 
-        setActiveTab(state, activeTab){
+        setActiveTab(state, activeTab) {
             state.activeTab = activeTab
+            state.currentPath = activeTab
         },
 
         setUserRoutes(state, payload) {
@@ -54,32 +53,38 @@ const store = new Vuex.Store({
         setUserMenus(state, payload) {
             state.userMenus = payload
             sessionStorage.setItem('userMenus', JSON.stringify(payload))
-
         },
         setUserPermits(state, payload) {
             state.userPerMits = payload
             sessionStorage.setItem('userPerMits', payload)
-
         },
         setUserRoles(state, payload) {
             state.userRoles = payload
             sessionStorage.setItem('userRoles', JSON.stringify(payload))
-
         },
         setUserDepts(state, payload) {
             state.userDepts = payload
             sessionStorage.setItem('userDepts', payload)
-
         },
 
-
+        RESET_STATE: (state) => {
+            state.token = ''
+            state.activeTab = ''
+            state.tabList = []
+            state.user = {}
+            state.userRoutes = []
+            state.userMenus = []
+            state.userRoles = []
+            state.userDepts = []
+            state.userPerMits = []
+        },
     },
     getters: {
         getTabs: (state) => {
             return state.tabList
         },
-        activeTab(state){
-          return state.activeTab
+        activeTab(state) {
+            return state.activeTab
         },
         userRoutes(state) {
             return state.userRoutes
@@ -95,6 +100,9 @@ const store = new Vuex.Store({
         },
         userDepts(state) {
             return state.userDepts
+        },
+        currentPath(state){
+            return state.currentPath
         }
     },
     actions: {
@@ -110,7 +118,7 @@ const store = new Vuex.Store({
                 })
             }
         },
-        setDynamicRoutes(context){
+        setDynamicRoutes(context) {
             console.log('setDynamicRoutes', context.state.userRoutes)
             context.state.userRoutes.forEach(item => {
                 router.addRoute('index', {

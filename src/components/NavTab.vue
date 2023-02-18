@@ -1,10 +1,9 @@
 <template>
-  <div style="height: 100%">
-
+  <div style="display: flex;height: 100%;background-color: #545c64">
     <el-menu
         unique-opened
         router
-        class="el-menu-vertical-demo"
+        class="el-menu-vertical"
         @open="handleOpen"
         @close="handleClose"
         background-color="#545c64"
@@ -14,12 +13,15 @@
         style="height: 100%"
         :collapse="isCollapse"
     >
-      <el-radio-group v-model="isCollapse" style="margin-bottom: 20px;">
-        <el-radio-button :label="false">展开</el-radio-button>
-        <el-radio-button :label="true">收起</el-radio-button>
-      </el-radio-group>
+<!--            <div style="width: 100%;height: 50px;color: white;">-->
+<!--              <i style="float: right;font-size:25px;line-height: 50px;margin-right: 20px" :class="[isCollapse ? 'el-icon-s-unfold':'el-icon-s-fold']" @click="isCollapse=!isCollapse"></i>-->
+<!--            </div>-->
+
       <MenuTree :menuList="menuList"></MenuTree>
     </el-menu>
+    <div class="collapse" @click="isCollapse=!isCollapse">
+      <i :class="['collapse-icon', isCollapse ? 'el-icon-s-unfold':'el-icon-s-fold']"></i>
+    </div>
   </div>
 
 </template>
@@ -37,8 +39,8 @@ export default {
       isCollapse: false
     }
   },
-  computed:{
-    menuList(){
+  computed: {
+    menuList() {
       return this.$store.getters.userMenus
     }
   },
@@ -46,16 +48,16 @@ export default {
     this.getFirstRoutePath(this.menuList)
   },
   methods: {
-    getFirstRoutePath(data){
-      let that =  this
-      const fn = function(array){
-        array.forEach((item,index)=>{
-          if( index === 0){
-            if(item.children && item.menuType !== 2){
+    getFirstRoutePath(data) {
+      let that = this
+      const fn = function (array) {
+        array.forEach((item, index) => {
+          if (index === 0) {
+            if (item.children && item.menuType !== 2) {
               fn(item.children);
-            }else{
+            } else {
               const tab = {
-                path:item.path,
+                path: item.path,
                 title: item.name,
                 content: shallowRef(defineAsyncComponent(() => import(`@/views/${item.component}.vue`))),
               }
@@ -69,24 +71,51 @@ export default {
       }
       fn(data);
     },
-    handleOpen(key, keyPath){
+
+    handleOpen(key, keyPath) {
       console.log('open key: ', key, 'open keyPath: ', keyPath);
     },
-    handleClose(key, keyPath){
+
+    handleClose(key, keyPath) {
       console.log('close key: ', key, 'close keyPath: ', keyPath);
     }
   }
-
-
 }
 </script>
 
 <style lang="scss" scoped>
+.collapse {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  background-color: #545c64;
+}
 
-.tags{
+.collapse:hover {
+  opacity: 0.5;
+}
+
+.collapse-icon {
+  color: #fff;;
+  float: right;
+  font-size: 25px;
+  line-height: 50px;
+}
+
+/* 必须设置 */
+.el-menu-vertical:not(.el-menu--collapse) {
+  width: 200px;
+  border-right: none;
+}
+
+.el-menu {
+  border-right: none;
+}
+
+.tags {
   padding: 5px 10px 5px 10px;
 
-  .item{
+  .item {
     margin-right: 5px;
 
     .el-tag {
@@ -94,7 +123,7 @@ export default {
     }
   }
 
-  .el-divider--horizontal{
+  .el-divider--horizontal {
     margin: 10px 0 10px 0;
   }
 }

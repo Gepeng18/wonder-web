@@ -7,15 +7,17 @@ export const loginByPassword = params => request({
 })
 
 //获取验证码
-export const getCode = () => request({
+export const getCode = (headers= {}) => request({
     url: '/auth/getCode',
-    method: 'get'
+    method: 'get',
+    headers
 })
 
-export const findUserPage = (data = {}) => request({
+export const findUserPage = (data = {}, headers= {}) => request({
     url: '/user/list',
     method: 'post',
-    data
+    data,
+    headers
 })
 
 export const resetPWD = (data = {}) => request({

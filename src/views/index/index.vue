@@ -9,7 +9,7 @@
           <h3>{{ this.$store.state.user.name }}</h3>
         </div>
         <div class="right-sub avatar">
-          <el-avatar  :size="50" src="https://img2.woyaogexing.com/2022/05/10/8ff885eade914ea88a78563f1a2eda0e!400x400.jpeg"></el-avatar>
+          <el-avatar :size="50" src="https://img2.woyaogexing.com/2022/05/10/8ff885eade914ea88a78563f1a2eda0e!400x400.jpeg"></el-avatar>
         </div>
         <div class="right-sub">
           <span @click="logout"><h3>退出</h3></span>
@@ -36,6 +36,8 @@
               @tab-remove="removeTab"
               @tab-click="clickBtn"
               style="line-height: 40px"
+              editable
+              @edit="reloadCurrentTab"
           >
             <el-tab-pane
                 :key="index"
@@ -46,8 +48,8 @@
             >
             </el-tab-pane>
             <transition name="fade-transform" mode="out-in">
-              <keep-alive>
-                <router-view></router-view>
+              <keep-alive v-if="ifRouterAlive">
+                <router-view />
               </keep-alive>
             </transition>
           </el-tabs>
@@ -67,17 +69,13 @@ export default {
   components: {NavTab, CommonDialog},
   data() {
     return {
-      // 当前活跃的tabs
-      // activeTab: '',
+      ifRouterAlive: true
     }
   },
   computed: {
     tabList() {
       return this.$store.getters.getTabs
     },
-    // activeTab() {
-    //   return this.$store.getters.activeTab
-    // }
     activeTab: {
       get() {
         return this.$store.getters.activeTab
@@ -95,9 +93,17 @@ export default {
     },
   },
   methods: {
+    reload() {
+      this.ifRouterAlive = false;
+      this.$nextTick(() => {
+        this.ifRouterAlive = true;
+      });
+    },
+    reloadCurrentTab(){
+      this.reload()
+    },
     // 设置活跃的tab
     setActiveTab() {
-      // this.activeTab = this.$route.path
       this.$store.commit('setActiveTab', this.$route.path)
     },
     // 添加tab
@@ -109,7 +115,6 @@ export default {
         closable: true
       }
       this.$store.commit('addTab', tab)
-
     },
     // 点击tab
     clickBtn(tab) {
@@ -118,10 +123,8 @@ export default {
     },
     removeTab(targetName) {
       let that = this
-      let tabs = that.tabList;
-      // let activeName = that.activeTab;
+      let tabs = that.tabList
       let activeName = this.$store.getters.activeTab
-      ;
 
       if (activeName === targetName) {
         tabs.forEach((tab, index) => {
@@ -136,39 +139,18 @@ export default {
           }
         });
       }
-      // that.activeTab = activeName;
       this.$store.commit('setActiveTab', activeName)
       let newTabs = tabs.filter((tab) => tab.path !== targetName)
       if (newTabs.length === 1)
         newTabs[0].closable = false
       that.$store.state.tabList = newTabs
     },
-
-    handleOpen() {
-      this.isCollapse = false
-
-    },
-    handleClose() {
-      this.isCollapse = true
-    },
     logout() {
       this.$refs.commonDialog.show()
     },
     doLogout() {
       this.$store.commit('logout')
-    }
-  },
-  // 解决刷新数据丢失问题
-  beforeRefresh() {
-    window.addEventListener('beforeunload', () => {
-      sessionStorage.setItem('tabsView', JSON.stringify(this.tabList))
-    })
-    let tabSession = sessionStorage.getItem('tabsView')
-    if (tabSession) {
-      let oldTabs = JSON.parse(tabSession)
-      if (oldTabs.length > 0) {
-        this.$store.state.tabList = oldTabs
-      }
+      this.$store.commit('RESET_STATE')
     }
   },
 }
@@ -211,8 +193,31 @@ export default {
 .el-tabs__content {
 
 }
+::v-deep(.el-tabs__new-tab){
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 41px;
+  width: 84px;
+  //border-color: #545c64;
+  color: #FFF;
+  border-bottom: 0 #00ff0d solid; /*上边*/
+  background-color: #5AC725;
+  margin: 0;
+  font-size: 15px;
+  transform: translateY(-50);
+  &:after{
+    position: absolute;
+    content: "刷新";
+  }
+  .el-icon-plus{
+    display: none;
+  }
 
-
+}
+::v-deep(.el-tabs__new-tab:hover){
+  opacity: 0.8;
+}
 ::v-deep .el-main {
   padding: 5px;
 }

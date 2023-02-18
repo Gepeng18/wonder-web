@@ -14,13 +14,26 @@
 
     <div>
       <el-table :data="tableData" stripe style="width: 100%">
-        <el-table-column prop="name" label="角色名称"/>
+        <el-table-column type="index" width="50" />
+        <el-table-column prop="name" label="角色名称" width="250"/>
+        <el-table-column prop="code" label="角色编码"  width="250"/>
+        <el-table-column label="状态" width="250">
+          <template slot-scope="scope">
+            <el-switch
+                :value="!scope.row.disabled"
+                active-color="#13ce66"
+                inactive-color="#ff4949"
+                @change="switchChange(scope.row)"
+            >
+            </el-switch>
+          </template>
+        </el-table-column>
         <el-table-column prop="description" label="描述"/>
-        <el-table-column prop="createTime" label="创建时间" />
-        <el-table-column prop="updateTime" label="修改时间" />
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button type="primary" size="mini"  round @click="edit(scope.row)">修改</el-button>
+            <el-button type="primary" size="mini"  round @click="edit(scope.row)">菜单权限</el-button>
+            <el-button type="primary" size="mini"  round @click="edit(scope.row)">数据权限</el-button>
             <el-button type="primary" size="mini"  round @click="edit(scope.row)">分配用户</el-button>
             <el-button type="danger" size="mini"  round  @click="del(scope.row)">删除</el-button>
           </template>
@@ -32,7 +45,7 @@
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
             :current-page="pageInfo.curPage"
-            :page-sizes="[2, 3, 4]"
+            :page-sizes="[10, 20, 50]"
             :page-size="pageInfo.pageSize"
             layout="total, sizes, prev, pager, next, jumper"
             :total="pageInfo.totalElements">
@@ -40,9 +53,16 @@
       </div>
 
       <!--删除弹框-->
-      <CommonDialog type="danger" ref="delDialog" @confirm="delConfirm" title="提示">
+      <CommonDialog type="danger" ref="delDialog" @confirm="delConfirm" @cancel="cancel" title="提示">
         <div>
           是否删除 “<span class="color-danger">{{selectName}}</span>”  ？
+        </div>
+      </CommonDialog>
+
+      <!--停启用 弹框-->
+      <CommonDialog type="warning" ref="disabledDialog" @confirm="disableConfirm" @cancel="cancel" title="提示">
+        <div>
+          是否{{selectSwitch ? '启用' : '停用'}} “<span class="color-warning">{{selectName}}</span>”  ？
         </div>
       </CommonDialog>
 
@@ -71,10 +91,11 @@ export default {
       pageInfo:{
         totalElements: 0,
         curPage: 1,
-        pageSize: 2
+        pageSize: 10
       },
       selectId: null,
-      selectName: ''
+      selectName: '',
+      selectSwitch: false,
     }
   },
 
@@ -82,13 +103,29 @@ export default {
     this.findList()
   },
   methods: {
+    switchChange(row){
+      this.selectSwitch = row.disabled
+      this.selectName = row.name
+      this.selectId = row.id
+      this.$refs.disabledDialog.show()
+    },
     editConfirm(data){
       this.$api.role.edit(data)
     },
-    delConfirm(){
-      this.$message.success('删除成功')
+    disableConfirm(){
+
+      this.resetSelected()
+    },
+    cancel(){
+      this.resetSelected()
+    },
+    resetSelected(){
       this.selectName = ''
       this.selectId  = null
+    },
+    delConfirm(){
+      this.$message.success('删除成功')
+      this.resetSelected()
     },
     edit(row){
       this.$refs.roleEdit.show(row)

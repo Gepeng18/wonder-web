@@ -10,7 +10,9 @@
         </el-form-item>
         <el-form-item label="验证码">
           <el-input v-model="form.code" type="text" style="width: 100px;float: left"/>
-          <el-image :src="imgBase64" style="width: 120px;margin-left: 5px;height: 40px" @click="getCode()"></el-image>
+          <div id="captcha">
+            <el-image :src="imgBase64" style="width: 120px;margin-left: 5px;height: 40px" @click="getCode()"></el-image>
+          </div>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSubmit" :loading="loading" style="width: 100px">登录</el-button>
@@ -57,7 +59,7 @@ export default {
   },
   methods: {
     getCode() {
-      this.$api.user.getCode().then(res => {
+      this.$api.user.getCode({target: '#captcha'}).then(res => {
         this.imgBase64 = res.imgBase64
         this.form.uuid = res.uuid
         // this.form.code = ''
@@ -68,7 +70,7 @@ export default {
       this.loading = true
       this.$api.user.loginByPassword(this.form).then(res => {
         //请求成功操作
-        this.$store.commit('logined', res)
+        this.$store.commit('login', res)
         this.$message.success('登录成功')
         this.$store.dispatch('getUserMenu')
       }).catch(() => {

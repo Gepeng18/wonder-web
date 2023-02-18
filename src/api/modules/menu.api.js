@@ -6,10 +6,11 @@ export const treeList = (data = {}) => request({
     data
 })
 
-export const list = (data = {}) => request({
+export const list = (data = {},  headers= {}) => request({
     url: '/menu/list',
     method: 'post',
-    data
+    data,
+    headers
 })
 
 export const findById = (params = {}) => request({
