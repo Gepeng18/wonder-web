@@ -13,37 +13,53 @@
           stripe
           lazy
           :load="load"
-          :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
+          :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
+
+      >
 
         <el-table-column type="index" width="50" />
         <el-table-column
             prop="name"
             label="菜单名称"
-            width="180">
+        >
         </el-table-column>
         <el-table-column
-            prop="permission"
-            label="权限"
-            width="180">
-        </el-table-column>
-        <el-table-column
-            prop="path"
-            label="路径"
-            width="180">
-        </el-table-column>
-        <el-table-column
-            prop="sort"
-            label="排序"
-            width="180">
+            label="图标"
+        >
+          <template slot-scope="scope">
+            <i :class="scope.row.icon" ></i>
+          </template>
         </el-table-column>
         <el-table-column
             label="类型"
-            width="180">
+        >
           <template slot-scope="scope">
             {{typeMap[scope.row.menuType]}}
           </template>
         </el-table-column>
-        <el-table-column label="操作">
+        <el-table-column
+            prop="permission"
+            label="权限"
+        >
+        </el-table-column>
+        <el-table-column
+            prop="path"
+            label="路由路径"
+        >
+        </el-table-column>
+        <el-table-column
+            prop="component"
+            label="组件路径"
+        >
+        </el-table-column>
+        <el-table-column
+            prop="sort"
+            label="排序"
+        >
+        </el-table-column>
+
+        <el-table-column label="操作"
+        >
           <template  slot-scope="scope">
             <el-button type="primary" size="mini" round @click="edit(scope.row)">修改</el-button>
             <el-button type="danger" size="mini" round @click="del(scope.row)">删除</el-button>

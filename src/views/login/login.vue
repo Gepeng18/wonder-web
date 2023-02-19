@@ -1,22 +1,25 @@
 <template>
   <div class="page-box">
-    <div class="login-panel">
-      <el-form :model="form" label-width="70px" label-suffix="：">
-        <el-form-item label="账号">
+    <div class="login-panel" id="captcha">
+      <div class="title">
+        管理系统
+      </div>
+      <el-form :model="form" :rules="rules" label-width="100px" label-suffix="：">
+        <el-form-item label="登录账号" prop="username">
           <el-input v-model="form.username"/>
         </el-form-item>
-        <el-form-item label="密码">
-          <el-input v-model="form.password" type="password"/>
+        <el-form-item label="登录密码" prop="password">
+          <el-input v-model="form.password" type="password" show-password/>
         </el-form-item>
-        <el-form-item label="验证码">
+        <el-form-item label="验证码" prop="code">
           <el-input v-model="form.code" type="text" style="width: 100px;float: left"/>
-          <div id="captcha">
-            <el-image :src="imgBase64" style="width: 120px;margin-left: 5px;height: 40px" @click="getCode()"></el-image>
+          <div>
+            <el-image :src="imgBase64" style="width: 90px;margin-left: 5px;height: 40px" @click="getCode()"></el-image>
           </div>
         </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="onSubmit" :loading="loading" style="width: 100px">登录</el-button>
-        </el-form-item>
+<!--        <el-form-item>-->
+          <el-button type="primary" @click="onSubmit" :loading="loading" style="width: 100%;font-size: 17px">登录</el-button>
+<!--        </el-form-item>-->
       </el-form>
     </div>
   </div>
@@ -36,7 +39,20 @@ export default {
       },
       loadingHidden: false,
       imgBase64: '',
-      loading: false
+      loading: false,
+
+      rules:{
+        username:[
+            {required: true, message: '请输入登录账号',trigger: 'blur'}
+        ],
+        password:[
+            {required: true, message: '请输入登录密码',trigger: 'blur'}
+        ],
+        code:[
+            {required: true, message: '请输入验证码，点击图片可切换',trigger: 'change'},
+            {min:4, max: 4, message: '请输入4位数验证码，点击图片可切换',trigger: 'change'}
+        ],
+      }
     }
   },
   setup() {
@@ -82,9 +98,9 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .page-box {
-  background-color: #ffffff;
+  background-color: #597da7;
   height: 100vh;
 }
 
@@ -94,10 +110,21 @@ export default {
   background-color: #ffffff;
   width: 300px;
   /*height: 400px;*/
-  padding: 40px;
-  top: 40%;
+  padding: 20px 40px 40px 40px;
+  top: 50%;
   left: 50%;
   position: absolute;
   transform: translate(-50%, -50%);
+
+  .title{
+    color: #545c64;
+    font-size: 30px;
+    font-weight: bolder;
+    line-height: 60px;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
 }
+
 </style>

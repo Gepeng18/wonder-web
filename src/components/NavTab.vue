@@ -10,18 +10,18 @@
         text-color="#fff"
         :default-active="$route.path"
         active-text-color="#ffd04b"
-        style="height: 100%"
         :collapse="isCollapse"
     >
-<!--            <div style="width: 100%;height: 50px;color: white;">-->
-<!--              <i style="float: right;font-size:25px;line-height: 50px;margin-right: 20px" :class="[isCollapse ? 'el-icon-s-unfold':'el-icon-s-fold']" @click="isCollapse=!isCollapse"></i>-->
-<!--            </div>-->
+      <div style="width: 100%;height: 50px;color: white;">
+        <i style="float: right;font-size:25px;line-height: 50px;margin-right: 20px"
+           :class="[isCollapse ? 'el-icon-s-unfold':'el-icon-s-fold']" @click="isCollapse=!isCollapse"></i>
+      </div>
 
       <MenuTree :menuList="menuList"></MenuTree>
     </el-menu>
-    <div class="collapse" @click="isCollapse=!isCollapse">
-      <i :class="['collapse-icon', isCollapse ? 'el-icon-s-unfold':'el-icon-s-fold']"></i>
-    </div>
+    <!--    <div class="collapse" @click="isCollapse=!isCollapse">-->
+    <!--      <i :class="['collapse-icon', isCollapse ? 'el-icon-s-unfold':'el-icon-s-fold']"></i>-->
+    <!--    </div>-->
   </div>
 
 </template>
@@ -45,7 +45,7 @@ export default {
     }
   },
   created() {
-    this.getFirstRoutePath(this.menuList)
+    this.$store.state.activeTab || this.getFirstRoutePath(this.menuList)
   },
   methods: {
     getFirstRoutePath(data) {
@@ -104,7 +104,7 @@ export default {
 
 /* 必须设置 */
 .el-menu-vertical:not(.el-menu--collapse) {
-  width: 200px;
+  width: 150px;
   border-right: none;
 }
 

@@ -34,4 +34,10 @@ export default {
   }
 }
 </script>
+<style scoped lang="scss">
+.el-submenu .el-menu-item{
+  min-width: 150px;
+}
+
+</style>
 

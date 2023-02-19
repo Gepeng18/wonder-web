@@ -9,7 +9,8 @@
           <h3>{{ this.$store.state.user.name }}</h3>
         </div>
         <div class="right-sub avatar">
-          <el-avatar :size="50" src="https://img2.woyaogexing.com/2022/05/10/8ff885eade914ea88a78563f1a2eda0e!400x400.jpeg"></el-avatar>
+          <el-avatar :size="50"
+                     src="https://img2.woyaogexing.com/2022/05/10/8ff885eade914ea88a78563f1a2eda0e!400x400.jpeg"></el-avatar>
         </div>
         <div class="right-sub">
           <span @click="logout"><h3>退出</h3></span>
@@ -23,20 +24,20 @@
     </CommonDialog>
 
     <el-container>
-<!--      <el-aside style="width: 201px;">-->
+      <!--      <el-aside style="width: 201px;">-->
       <el-aside style="width: auto;">
         <!--侧边栏-->
         <NavTab/>
       </el-aside>
-      <el-main class="content-main">
-        <div style="height: 100%">
+      <el-main>
+        <div style="height: auto">
           <el-tabs
               v-model="activeTab"
               type="card"
               @tab-remove="removeTab"
               @tab-click="clickBtn"
               style="line-height: 40px"
-              editable
+              addable
               @edit="reloadCurrentTab"
           >
             <el-tab-pane
@@ -47,13 +48,18 @@
                 :closable="item.closable"
             >
             </el-tab-pane>
-            <transition name="fade-transform" mode="out-in">
-              <keep-alive v-if="ifRouterAlive">
-                <router-view />
-              </keep-alive>
-            </transition>
+
           </el-tabs>
+
         </div>
+        <div>
+          <transition name="fade-transform" mode="out-in">
+            <keep-alive v-if="ifRouterAlive">
+              <router-view/>
+            </keep-alive>
+          </transition>
+        </div>
+
       </el-main>
     </el-container>
   </el-container>
@@ -69,9 +75,11 @@ export default {
   components: {NavTab, CommonDialog},
   data() {
     return {
-      ifRouterAlive: true
+      ifRouterAlive: true,
+
     }
   },
+
   computed: {
     tabList() {
       return this.$store.getters.getTabs
@@ -91,6 +99,7 @@ export default {
       this.setActiveTab()
       this.addTab()
     },
+
   },
   methods: {
     reload() {
@@ -99,7 +108,7 @@ export default {
         this.ifRouterAlive = true;
       });
     },
-    reloadCurrentTab(){
+    reloadCurrentTab() {
       this.reload()
     },
     // 设置活跃的tab
@@ -119,6 +128,7 @@ export default {
     // 点击tab
     clickBtn(tab) {
       const {name} = tab
+      this.$store.commit('setActiveTab', name)
       this.$router.push({path: name})
     },
     removeTab(targetName) {
@@ -141,16 +151,14 @@ export default {
       }
       this.$store.commit('setActiveTab', activeName)
       let newTabs = tabs.filter((tab) => tab.path !== targetName)
-      if (newTabs.length === 1)
-        newTabs[0].closable = false
-      that.$store.state.tabList = newTabs
+      // that.$store.state.tabList = newTabs
+      that.$store.commit('setTabs', newTabs)
     },
     logout() {
       this.$refs.commonDialog.show()
     },
     doLogout() {
       this.$store.commit('logout')
-      this.$store.commit('RESET_STATE')
     }
   },
 }
@@ -159,9 +167,11 @@ export default {
 <style lang="scss" scoped>
 @import "@/assets/css/public.scss";
 
-.header {
+$el-header-height: 60px;
+
+.el-header {
   background-color: $color-primary;
-  line-height: 60px;
+  line-height: $el-header-height;
   display: flex;
   color: white;
   justify-content: space-between;
@@ -173,15 +183,16 @@ export default {
   .right {
     width: auto;
     display: flex;
-    line-height: 60px;
+    line-height: $el-header-height;
     justify-content: space-around;
 
 
     .right-sub {
       padding: 0 20px;
-      line-height: 60px;
+      line-height: $el-header-height;
     }
-    .avatar{
+
+    .avatar {
       //background-color: #F56C6C;
       margin-top: 5px;
 
@@ -193,31 +204,44 @@ export default {
 .el-tabs__content {
 
 }
-::v-deep(.el-tabs__new-tab){
+
+::v-deep(.el-tabs__new-tab) {
   display: flex;
   align-items: center;
   justify-content: center;
   height: 41px;
   width: 84px;
   //border-color: #545c64;
-  color: #FFF;
+  color: #111;
   border-bottom: 0 #00ff0d solid; /*上边*/
-  background-color: #5AC725;
+  background-color: #FFF;
   margin: 0;
   font-size: 15px;
   transform: translateY(-50);
-  &:after{
+
+  &:after {
     position: absolute;
-    content: "刷新";
+    content: "刷新本页";
   }
-  .el-icon-plus{
+
+  .el-icon-plus {
     display: none;
   }
 
 }
-::v-deep(.el-tabs__new-tab:hover){
+
+.el-aside{
+  height: calc(100vh - $el-header-height);
+}
+.el-main{
+  padding: 0;
+  height: calc(100vh - $el-header-height);
+
+}
+::v-deep(.el-tabs__new-tab:hover) {
   opacity: 0.8;
 }
+
 ::v-deep .el-main {
   padding: 5px;
 }

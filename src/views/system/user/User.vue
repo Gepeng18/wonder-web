@@ -22,7 +22,7 @@
       </el-form>
     </TableSearchBar>
 
-    <div>
+    <div :style="style">
       <el-table :data="tableData"
                 stripe
                 style="width: 100%"
@@ -32,8 +32,8 @@
         <el-table-column prop="username" label="帐号"/>
         <el-table-column prop="phone" label="手机"/>
         <el-table-column prop="email" label="邮箱"/>
-        <el-table-column prop="createTime" label="创建时间"/>
-        <el-table-column prop="updateTime" label="修改时间"/>
+<!--        <el-table-column prop="createTime" label="创建时间"/>-->
+<!--        <el-table-column prop="updateTime" label="修改时间"/>-->
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button class="primary" type="text" @click="detail(scope.row)">查看</el-button>
@@ -68,9 +68,7 @@
       </CommonDialog>
 
       <UserEdit ref="userEdit" @confirm="editSubmit"/>
-
     </div>
-
   </div>
 
 </template>
@@ -87,6 +85,10 @@ export default {
   components: {UserEdit, CommonDialog, UserDetail, ResetPWD, TableSearchBar},
   data() {
     return {
+      style:{
+        // overflow: 'auto',
+        // 'max-height': this.$store.state.tabContentHeight + 'px'
+      },
       searchForm: {
         username: '',
         name: '',
@@ -100,6 +102,16 @@ export default {
       },
       selectId: null,
       selectName: '',
+    }
+  },
+  watch:{
+    '$store.state.tabContentHeight':{
+      handler(){
+
+        this.style['max-height'] = this.$store.state.tabContentHeight + 'px'
+        console.log('跟新后的hei', this.style)
+
+      }
     }
   },
 

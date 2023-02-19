@@ -18,7 +18,9 @@ const store = new Vuex.Store({
         userMenus: [],
         userRoles: [],
         userDepts: [],
-        userPerMits: []
+        userPerMits: [],
+        tabContentHeight: '500',
+        mainContentHeight: '500'
     },
 
     mutations: {
@@ -29,6 +31,7 @@ const store = new Vuex.Store({
         },
         logout() {
             sessionStorage.clear()
+            store.commit('RESET_STATE')
             router.push('/login')
         },
 
@@ -37,8 +40,12 @@ const store = new Vuex.Store({
             if (state.tabList.some(item => item.path === tab.path))
                 return
             state.tabList.push(tab)
-            if (state.tabList.length > 1)
-                state.tabList[0].closable = true
+            state.tabList[0].closable = state.tabList.length !== 1;
+        },
+        setTabs(state, tabs){
+            if (tabs.length === 1)
+                tabs[0].closable = false
+            state.tabList = tabs
         },
 
         setActiveTab(state, activeTab) {
@@ -67,7 +74,13 @@ const store = new Vuex.Store({
             sessionStorage.setItem('userDepts', payload)
         },
 
+        setTabContentHeight(state, payload){
+            state.tabContentHeight = payload - 145
+            state.mainContentHeight = payload - 64
+        },
+
         RESET_STATE: (state) => {
+            console.log('重置store')
             state.token = ''
             state.activeTab = ''
             state.tabList = []
