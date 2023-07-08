@@ -3,7 +3,7 @@
     <div>
       <el-button type="primary" icon="el-icon-plus" size="medium">添加</el-button>
     </div>
-    <el-divider></el-divider>
+    <el-divider/>
 
     <div id="menuList">
       <el-table
@@ -14,15 +14,16 @@
           lazy
           :load="load"
           :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
-
       >
 
         <el-table-column type="index" width="50" />
+
         <el-table-column
             prop="name"
             label="菜单名称"
         >
         </el-table-column>
+
         <el-table-column
             label="图标"
         >
@@ -30,28 +31,35 @@
             <i :class="scope.row.icon" ></i>
           </template>
         </el-table-column>
+
         <el-table-column
             label="类型"
         >
           <template slot-scope="scope">
-            {{typeMap[scope.row.menuType]}}
+            <el-tag :type="scope.row.menuType === 1 ? '' : scope.row.menuType === 2 ? 'success' : 'warning'">
+              {{typeMap[scope.row.menuType]}}
+            </el-tag>
           </template>
         </el-table-column>
+
         <el-table-column
             prop="permission"
             label="权限"
         >
         </el-table-column>
+
         <el-table-column
             prop="path"
             label="路由路径"
         >
         </el-table-column>
+
         <el-table-column
             prop="component"
             label="组件路径"
         >
         </el-table-column>
+
         <el-table-column
             prop="sort"
             label="排序"
@@ -87,7 +95,12 @@ export default {
   },
 
   created() {
-    this.typeMap = getMapping("system_menu_type")
+    // this.typeMap = getMapping("system_menu_type")
+    this.typeMap = {
+      '1': '目录',
+      '2': '菜单',
+      '3': '按钮',
+    }
   },
 
   mounted() {
@@ -100,7 +113,7 @@ export default {
     },
 
     getData() {
-      this.$api.menu.list({},{target: '#menuList'}).then(res => {
+      this.$api.menu.list({},{target: '#main'}).then(res => {
         this.tableData = res
       })
     },
@@ -109,7 +122,7 @@ export default {
       let params = {
         parentId: tree.id
       }
-      this.$api.menu.list(params, {target: '#menuList'}).then(res => {
+      this.$api.menu.list(params, {target: '#main'}).then(res => {
         resolve(res)
       })
     }

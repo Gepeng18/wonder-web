@@ -3,7 +3,7 @@
     <div class="body">
       <el-form :model="user" label-width="60px" label-suffix="：" >
         <el-form-item label="姓名">
-          <el-input v-model="user.name" readonly></el-input>
+          <el-input v-model="user.nickname" readonly></el-input>
         </el-form-item>
         <el-form-item label="账号">
           <el-input v-model="user.username" readonly></el-input>

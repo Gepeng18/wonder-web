@@ -21,6 +21,8 @@
           <el-button type="primary" @click="onSubmit" :loading="loading" style="width: 100%;font-size: 17px">登录</el-button>
 <!--        </el-form-item>-->
       </el-form>
+
+      <div style="text-align: center;margin-top: 20px"><h4>扫码登录</h4></div>
     </div>
   </div>
 </template>
@@ -32,7 +34,7 @@ export default {
   data() {
     return {
       form: {
-        username: 'whz',
+        username: 'admin',
         password: '123456',
         code: '',
         uuid: ''
@@ -87,7 +89,11 @@ export default {
       this.$api.user.loginByPassword(this.form).then(res => {
         //请求成功操作
         this.$store.commit('login', res)
-        this.$message.success('登录成功')
+        // this.$notify({
+        //   title: '提示',
+        //   message: '登录成功！欢迎您 ' + res.userInfo.nickname,
+        //   type: 'success'
+        // })
         this.$store.dispatch('getUserMenu')
       }).catch(() => {
         this.loading = false

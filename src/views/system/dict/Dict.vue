@@ -94,9 +94,9 @@ export default {
         ...this.pageInfo
       }
       this.$api.dict.list(params).then(res => {
-        this.tableData = res.dataList
-        this.pageInfo.totalElements = res.totalElements
-        this.pageInfo.totalPage = res.totalPage
+        this.tableData = res.list
+        this.pageInfo.total = res.total
+        this.pageInfo.pages = res.pages
       })
     },
     handleSearch() {

@@ -123,6 +123,10 @@ const store = new Vuex.Store({
             if (!context.getters.userMenus.length) {
                 api.menu.findByUserId().then(res => {
                     let {permits, routes, menus} = handleTree(res)
+                    console.log('permits = ', permits)
+                    console.log('routes = ', routes)
+                    console.log('menus = ', menus)
+
                     context.commit('setUserRoutes', routes)
                     context.commit('setUserPermits', permits)
                     context.commit('setUserMenus', menus)

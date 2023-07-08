@@ -1,9 +1,9 @@
 import request from "@/utils/request";
 //登录
-export const loginByPassword = params => request({
-    url: '/auth/login',
+export const loginByPassword = data => request({
+    url: '/auth/login/username',
     method: 'post',
-    params
+    data
 })
 
 //获取验证码
@@ -13,7 +13,7 @@ export const getCode = (headers= {}) => request({
     headers
 })
 
-export const findUserPage = (data = {}, headers= {}) => request({
+export const page = (data = {}, headers= {}) => request({
     url: '/user/list',
     method: 'post',
     data,

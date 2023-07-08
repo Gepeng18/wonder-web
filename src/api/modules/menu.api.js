@@ -13,10 +13,9 @@ export const list = (data = {},  headers= {}) => request({
     headers
 })
 
-export const findById = (params = {}) => request({
-    url: '/menu/findById',
-    method: 'get',
-    params
+export const findById = (id) => request({
+    url: '/menu/get/' + id,
+    method: 'get'
 })
 
 export const findByUserId = () => request({

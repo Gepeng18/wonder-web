@@ -3,7 +3,7 @@
     <div>
       <el-form ref="form" :model="form" :rules="rules" label-width="100px" label-suffix="：">
         <el-form-item label="用户昵称" prop="name">
-          <el-input v-model="form.name"></el-input>
+          <el-input v-model="form.nickname"></el-input>
         </el-form-item>
         <el-form-item label="登录账号" prop="username">
           <el-input v-model="form.username"></el-input>

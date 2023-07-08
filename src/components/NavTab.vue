@@ -104,7 +104,7 @@ export default {
 
 /* 必须设置 */
 .el-menu-vertical:not(.el-menu--collapse) {
-  width: 150px;
+  width: 200px;
   border-right: none;
 }
 

@@ -48,7 +48,7 @@
             :page-sizes="[10, 20, 50]"
             :page-size="pageInfo.pageSize"
             layout="total, sizes, prev, pager, next, jumper"
-            :total="pageInfo.totalElements">
+            :total="pageInfo.total">
         </el-pagination>
       </div>
 
@@ -89,7 +89,7 @@ export default {
       },
       tableData: [],
       pageInfo:{
-        totalElements: 0,
+        total: 0,
         curPage: 1,
         pageSize: 10
       },
@@ -142,9 +142,9 @@ export default {
         ...this.pageInfo
       }
       this.$api.role.findPage(params).then(res => {
-        this.tableData = res.dataList
-        this.pageInfo.totalElements = res.totalElements
-        this.pageInfo.totalPage = res.totalPage
+        this.tableData = res.list
+        this.pageInfo.total = res.total
+        this.pageInfo.pages = res.pages
       })
     },
     handleSearch() {

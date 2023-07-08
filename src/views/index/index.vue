@@ -6,7 +6,7 @@
 
       <div class="right">
         <div class="right-sub">
-          <h3>{{ this.$store.state.user.name }}</h3>
+<!--          <h3>{{ this.$store.state.user.name }}</h3>-->
         </div>
         <div class="right-sub avatar">
           <el-avatar :size="50"
@@ -29,7 +29,7 @@
         <!--侧边栏-->
         <NavTab/>
       </el-aside>
-      <el-main>
+      <el-main id="main">
         <div style="height: auto">
           <el-tabs
               v-model="activeTab"

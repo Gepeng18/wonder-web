@@ -1,5 +1,5 @@
 <template>
-  <div style="height: 100%;">
+  <div style="height: 100%;" id="content">
     <TableSearchBar @search="handleSearch" @reset="handleReset">
       <el-form :model="searchForm" label-suffix=":" label-width="70px">
         <el-row :gutter="5" align="middle">
@@ -26,9 +26,9 @@
       <el-table :data="tableData"
                 stripe
                 style="width: 100%"
-                id="userList"
+
       >
-        <el-table-column prop="name" label="姓名"/>
+        <el-table-column prop="nickname" label="姓名"/>
         <el-table-column prop="username" label="帐号"/>
         <el-table-column prop="phone" label="手机"/>
         <el-table-column prop="email" label="邮箱"/>
@@ -54,7 +54,7 @@
             :page-sizes="[10, 20, 50]"
             :page-size="pageInfo.pageSize"
             layout="total, sizes, prev, pager, next, jumper"
-            :total="pageInfo.totalElements">
+            :total="pageInfo.total">
         </el-pagination>
       </div>
       <ResetPWD ref="resetPWD" @confirm="resetPWDConfirm"></ResetPWD>
@@ -91,12 +91,12 @@ export default {
       },
       searchForm: {
         username: '',
-        name: '',
+        nickname: '',
         phone: ''
       },
       tableData: [],
       pageInfo: {
-        totalElements: 0,
+        total: 0,
         curPage: 1,
         pageSize: 10
       },
@@ -116,7 +116,7 @@ export default {
   },
 
   mounted() {
-    this.findList()
+    this.getData()
   },
   methods: {
     editSubmit(data) {
@@ -132,7 +132,7 @@ export default {
     },
     del(row) {
       this.selectId = row.id
-      this.selectName = row.name
+      this.selectName = row.nickname
       this.$refs.delDialog.show()
     },
     resetPWDConfirm(params) {
@@ -146,37 +146,37 @@ export default {
     resetPWD(row) {
       this.$refs.resetPWD.show(row.id)
     },
-    findList() {
+    getData() {
       const params = {
         ...this.searchForm,
         ...this.pageInfo
       }
-      this.$api.user.findUserPage(params, {target: '#userList'}).then(res => {
-        this.tableData = res.dataList
-        this.pageInfo.totalElements = res.totalElements
-        this.pageInfo.totalPage = res.totalPage
+      this.$api.user.page(params, {target: '#main'}).then(res => {
+        this.tableData = res.list
+        this.pageInfo.total = res.total
+        this.pageInfo.pages = res.pages
       })
     },
     handleSearch() {
-      this.findList()
+      this.getData()
     },
     handleReset(e) {
       this.searchForm.name = ''
       this.searchForm.username = ''
       this.searchForm.phone = ''
       this.pageInfo.curPage = 1
-      this.findList()
+      this.getData()
       console.log(e)
       e.target.blur()
     },
     handleSizeChange(val) {
       this.pageInfo.pageSize = val
       this.pageInfo.curPage = 1
-      this.findList()
+      this.getData()
     },
     handleCurrentChange(val) {
       this.pageInfo.curPage = val
-      this.findList()
+      this.getData()
     }
 
   }
