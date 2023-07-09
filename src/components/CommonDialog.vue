@@ -73,20 +73,22 @@ export default {
   data() {
     return {
       visible: this.display,
+      data: null
     }
   },
   methods: {
-    show() {
+    show(data = null) {
+      this.data = data
       this.visible = true
     },
     confirm() {
       this.close()
-      this.$emit('confirm')
+      this.$emit('confirm', this.data)
     },
 
     cancel() {
       this.close()
-      this.$emit('cancel')
+      this.$emit('cancel', this.data)
     },
 
     close(){

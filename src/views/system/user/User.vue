@@ -10,7 +10,7 @@
           </el-col>
           <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6">
             <el-form-item label="姓名">
-              <el-input v-model="searchForm.name" placeholder="姓名"/>
+              <el-input v-model="searchForm.nickname" placeholder="姓名"/>
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6">
@@ -21,12 +21,15 @@
         </el-row>
       </el-form>
     </TableSearchBar>
-
+    <div>
+      <el-button type="success" icon="el-icon-plus" size="mini">添加</el-button>
+      <el-button type="info" icon="el-icon-plus" size="mini">搜索</el-button>
+    </div>
+    <el-divider/>
     <div :style="style">
       <el-table :data="tableData"
                 stripe
                 style="width: 100%"
-
       >
         <el-table-column prop="nickname" label="姓名"/>
         <el-table-column prop="username" label="帐号"/>
@@ -161,7 +164,7 @@ export default {
       this.getData()
     },
     handleReset(e) {
-      this.searchForm.name = ''
+      this.searchForm.nickname = ''
       this.searchForm.username = ''
       this.searchForm.phone = ''
       this.pageInfo.curPage = 1
