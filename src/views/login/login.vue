@@ -17,12 +17,11 @@
             <el-image :src="imgBase64" style="width: 90px;margin-left: 5px;height: 40px" @click="getCode()"></el-image>
           </div>
         </el-form-item>
-<!--        <el-form-item>-->
-          <el-button type="primary" @click="onSubmit" :loading="loading" style="width: 100%;font-size: 17px">登录</el-button>
-<!--        </el-form-item>-->
+
+        <el-button type="primary" @click="onSubmit" :loading="loading" style="width: 100%;font-size: 17px">登录</el-button>
       </el-form>
 
-      <div style="text-align: center;margin-top: 20px"><h4>扫码登录</h4></div>
+      <!--      <div style="text-align: center;margin-top: 20px"><h4>扫码登录</h4></div>-->
     </div>
   </div>
 </template>
@@ -43,16 +42,16 @@ export default {
       imgBase64: '',
       loading: false,
 
-      rules:{
-        username:[
-            {required: true, message: '请输入登录账号',trigger: 'blur'}
+      rules: {
+        username: [
+          {required: true, message: '请输入登录账号', trigger: 'blur'}
         ],
-        password:[
-            {required: true, message: '请输入登录密码',trigger: 'blur'}
+        password: [
+          {required: true, message: '请输入登录密码', trigger: 'blur'}
         ],
-        code:[
-            {required: true, message: '请输入验证码，点击图片可切换',trigger: 'change'},
-            {min:4, max: 4, message: '请输入4位数验证码，点击图片可切换',trigger: 'change'}
+        code: [
+          {required: true, message: '请输入验证码，点击图片可切换', trigger: 'change'},
+          {min: 4, max: 4, message: '请输入4位数验证码，点击图片可切换', trigger: 'change'}
         ],
       }
     }
@@ -86,7 +85,7 @@ export default {
     },
     onSubmit() {
       this.loading = true
-      this.$api.user.loginByPassword(this.form).then(res => {
+      this.$api.user.loginByUsername(this.form).then(res => {
         //请求成功操作
         this.$store.commit('login', res)
         // this.$notify({
@@ -122,7 +121,7 @@ export default {
   position: absolute;
   transform: translate(-50%, -50%);
 
-  .title{
+  .title {
     color: #545c64;
     font-size: 30px;
     font-weight: bolder;

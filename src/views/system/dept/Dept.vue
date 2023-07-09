@@ -17,8 +17,7 @@
 
     <div>
       <el-button type="success" icon="el-icon-plus" size="mini">添加</el-button>
-      <el-button type="danger" icon="el-icon-plus" size="mini">删除</el-button>
-      <el-button type="info" icon="el-icon-search" size="mini" @click="showSearchBar = !showSearchBar">搜索</el-button>
+      <el-button type="primary" icon="el-icon-search" size="mini" @click="showSearchBar = !showSearchBar">搜索</el-button>
       <span>    存在问题: 在编辑弹框更改上级后,列表没刷新成功,旧的节点没去掉</span>
     </div>
 

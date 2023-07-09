@@ -99,7 +99,6 @@ export default {
     getTree() {
       this.$api.dept.tree().then(res => {
         this.options = res
-        console.log('this.$refs.dialog', this.$refs.dialog)
         this.$refs.dialog.show()
       })
     },
