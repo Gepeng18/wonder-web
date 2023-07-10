@@ -39,7 +39,7 @@ export default {
     },
     top: {
       type: String,
-      default: '0%'
+      default: '-50px'
     },
     showCancel: {
       type: Boolean,

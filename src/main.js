@@ -11,6 +11,8 @@ import CollapseTransition from 'element-ui/lib/transitions/collapse-transition';
 import Fragment from 'vue-fragment'
 import "@/utils/permission";
 import has from "@/utils/permission";
+import {DialogType} from "@/utils/constant"
+Vue.prototype.$dialogType = DialogType
 Vue.use(has)
 
 Vue.config.productionTip = false

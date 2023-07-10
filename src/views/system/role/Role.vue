@@ -85,6 +85,7 @@
 import TableSearchBar from "@/components/TableSearchBar/TableSearchBar.vue";
 import CommonDialog from "@/components/CommonDialog.vue";
 import RoleSave from "@/views/system/role/RoleSave.vue";
+// import {DialogType} from "@/utils/constant"
 
 export default {
   name: "Role",
@@ -135,8 +136,13 @@ export default {
       this.$message.success('删除成功')
       this.resetSelected()
     },
+
+    add(row) {
+      this.$refs.roleSave.show(row.id, this.$dialogType.Add)
+    },
+
     edit(row) {
-      this.$refs.roleSave.show(row.id)
+      this.$refs.roleSave.show(row.id, this.$dialogType.Edit)
     },
     del(row) {
       this.selectId = row.id
