@@ -24,6 +24,17 @@
         </el-popover>
       </el-form-item>
 
+      <el-form-item label="角色">
+        <el-select v-model="formData.roleIdList" multiple placeholder="请选择角色" @change="roleSelectChange">
+          <el-option
+              v-for="item in roleOptions"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id">
+          </el-option>
+        </el-select>
+      </el-form-item>
+
       <el-form-item label="用户昵称" prop="nickname">
         <el-input v-model="formData.nickname"></el-input>
       </el-form-item>
@@ -38,6 +49,10 @@
 
       <el-form-item label="电子邮箱" prop="email">
         <el-input v-model="formData.email"></el-input>
+      </el-form-item>
+
+      <el-form-item label="备注" prop="description">
+        <el-input type="textarea" v-model="formData.description"></el-input>
       </el-form-item>
     </el-form>
 
@@ -94,17 +109,24 @@ export default {
           {required: false, validator: validateEMail, message: '请慎输入正确的电子邮件', trigger: "blur"}
         ]
       },
-
+      roleOptions: [],
     }
   },
   methods: {
     confirm() {
-      // if (this.formData.id === null){
-      //   this.$api.user.update()
-      // }else {
-      //   this.$api.user
-      // }
+      if (this.formData.id == null){
+        this.$api.user.save(this.formData).then(() => {
+          this.$message.success('保存成功')
+          this.$emit('confirm')
+        })
+      }else {
+        this.$api.user.update(this.formData).then(() => {
+          this.$message.success('保存成功')
+          this.$emit('confirm')
+        })
+      }
       this.reset()
+
     },
     cancel() {
       this.reset()
@@ -119,14 +141,19 @@ export default {
         // 查询数据
         this.getData(id)
       }
+
+      this.getRoleList()
       this.getDeptTree()
+
       this.$refs.dialog.show()
     },
+
     getData(id) {
       this.$api.user.getById(id).then(res => {
         this.formData = res
       })
     },
+
     handleNodeClick(data) {
       this.formData.deptName = data.name
       this.formData.deptId = data.id
@@ -140,6 +167,17 @@ export default {
         this.$refs.tree.setCurrentKey(this.formData.deptId)
       })
     },
+
+    getRoleList(){
+      this.$api.role.list().then(res => {
+        this.roleOptions = res
+      })
+    },
+
+    roleSelectChange(val){
+      this.formData.roleIdList = val
+    },
+
     reset() {
       this.formData = {
         id: null,

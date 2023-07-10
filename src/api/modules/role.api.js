@@ -1,9 +1,19 @@
 import request from "@/utils/request";
 
-export const findPage = (data = {}) => request({
-    url: '/role/list',
+const prefix = '/role'
+
+export const page = (data = {}, headers ={}) => request({
+    url: prefix + '/page',
     method: 'post',
-    data
+    data,
+    headers
+})
+
+export const list = (data = {}, headers ={}) => request({
+    url: prefix + '/list',
+    method: 'post',
+    data,
+    headers
 })
 
 export const edit = (data = {}) => request({
@@ -12,3 +22,7 @@ export const edit = (data = {}) => request({
     data
 })
 
+export const get = (id) => request({
+    url: prefix + '/get/' + id,
+    method: 'get'
+})

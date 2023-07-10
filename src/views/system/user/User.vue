@@ -103,8 +103,6 @@
           </div>
         </CommonDialog>
 
-        <UserEdit ref="userEdit" @confirm="editSubmit"/>
-
         <!--停启用 弹框-->
         <CommonDialog :type="selectSwitch ? 'warning' : 'success'" ref="switchEnabledDialog"
                       @confirm="switchEnabledConfirm">
@@ -115,7 +113,7 @@
           </div>
         </CommonDialog>
 
-        <UserSave ref="userSave" />
+        <UserSave ref="userSave" @confirm="userSaveConfirm"/>
       </div>
     </div>
   </div>
@@ -127,12 +125,11 @@ import TableSearchBar from "@/components/TableSearchBar/TableSearchBar.vue";
 import ResetPWD from "@/views/system/user/ResetPWD.vue";
 import UserDetail from "@/views/system/user/UserDetail.vue";
 import CommonDialog from "@/components/CommonDialog.vue";
-import UserEdit from "@/views/system/user/UserEdit.vue";
 import UserSave from "@/views/system/user/UserSave.vue";
 
 export default {
   name: "User",
-  components: {UserSave, UserEdit, CommonDialog, UserDetail, ResetPWD, TableSearchBar},
+  components: {UserSave, CommonDialog, UserDetail, ResetPWD, TableSearchBar},
   data() {
     return {
       style:{
@@ -219,18 +216,12 @@ export default {
       })
     },
 
-    editSubmit(data) {
-      this.$api.user.update(data)
-    },
-
     delConfirm() {
       this.$message.success('删除成功')
       this.selectName = ''
       this.selectId = null
     },
-    // edit(row) {
-    //   this.$refs.userEdit.show(row)
-    // },
+
     del(row) {
       this.selectId = row.id
       this.selectName = row.nickname
@@ -258,6 +249,11 @@ export default {
         this.pageInfo.pages = res.pages
       })
     },
+
+    userSaveConfirm(){
+      this.getData()
+    },
+
     handleSearch() {
       this.getData()
     },

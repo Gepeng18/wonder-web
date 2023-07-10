@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <el-button type="primary" icon="el-icon-plus" size="medium">添加</el-button>
+      <el-button type="success" icon="el-icon-plus" size="mini">添加</el-button>
     </div>
     <el-divider/>
 

@@ -158,7 +158,7 @@ export default {
           ]
     },
     getData(id) {
-      this.$api.menu.findById(id).then(res => {
+      this.$api.menu.get(id).then(res => {
         this.formData = res
       })
     },

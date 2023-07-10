@@ -12,23 +12,25 @@
           <el-input
               type="textarea"
               clearable
+              maxlength="30"
               v-model="formData.description"
-              :rows="2"
+              :autosize="{minRows: 2, maxRows: 3}"
               placeholder="请输入角色描述"
+              show-word-limit
           >
           </el-input>
         </el-form-item>
-        <el-form-item label="角色状态">
-          <el-switch
-              :value="!formData.disabled"
-              active-color="#13ce66"
-              inactive-color="#ff4949"
-              active-text="启用"
-              inactive-text="停用"
-              @change="switchChange(formData.disabled)"
-          >
-          </el-switch>
-        </el-form-item>
+<!--        <el-form-item label="角色状态">-->
+<!--          <el-switch-->
+<!--              :value="!formData.disabled"-->
+<!--              active-color="#13ce66"-->
+<!--              inactive-color="#ff4949"-->
+<!--              active-text="启用"-->
+<!--              inactive-text="停用"-->
+<!--              @change="switchChange(formData.disabled)"-->
+<!--          >-->
+<!--          </el-switch>-->
+<!--        </el-form-item>-->
       </el-form>
     </div>
 

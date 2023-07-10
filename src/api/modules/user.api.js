@@ -41,6 +41,12 @@ export const update = (data = {}) => request({
     data
 })
 
+export const save = (data = {}) => request({
+    url: prefix + '/save',
+    method: 'post',
+    data
+})
+
 export const getUserLoginInfo = () => request({
     url: prefix + '/getUserLoginInfo',
     method: 'get'

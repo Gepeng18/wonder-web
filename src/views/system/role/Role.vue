@@ -74,8 +74,7 @@
         </div>
       </CommonDialog>
 
-      <RoleEdit ref="roleEdit" title="编辑角色" @confirm="editConfirm"/>
-
+      <RoleSave ref="roleSave" />
     </div>
 
   </div>
@@ -85,11 +84,11 @@
 <script>
 import TableSearchBar from "@/components/TableSearchBar/TableSearchBar.vue";
 import CommonDialog from "@/components/CommonDialog.vue";
-import RoleEdit from "@/views/system/role/RoleEdit.vue";
+import RoleSave from "@/views/system/role/RoleSave.vue";
 
 export default {
   name: "Role",
-  components: {CommonDialog, TableSearchBar, RoleEdit},
+  components: {RoleSave, CommonDialog, TableSearchBar},
   data() {
     return {
       searchForm: {
@@ -137,7 +136,7 @@ export default {
       this.resetSelected()
     },
     edit(row) {
-      this.$refs.roleEdit.show(row)
+      this.$refs.roleSave.show(row.id)
     },
     del(row) {
       this.selectId = row.id
@@ -150,7 +149,7 @@ export default {
         ...this.searchForm,
         ...this.pageInfo
       }
-      this.$api.role.findPage(params).then(res => {
+      this.$api.role.page(params).then(res => {
         this.tableData = res.list
         this.pageInfo.total = res.total
         this.pageInfo.pages = res.pages
