@@ -16,8 +16,14 @@ export const list = (data = {}, headers ={}) => request({
     headers
 })
 
-export const edit = (data = {}) => request({
-    url: '/role/edit',
+export const update = (data = {}) => request({
+    url: prefix + '/update',
+    method: 'post',
+    data
+})
+
+export const save = (data = {}) => request({
+    url: prefix + '/save',
     method: 'post',
     data
 })

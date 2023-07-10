@@ -20,12 +20,13 @@ let needLoadingRequestCount = 0;
 let loading;
 function showLoading(target){
     needLoadingRequestCount++
-    if (loading == null && target != null){
+    // if (loading == null && target != null){
+    if (loading == null){
         loading = Loading.service({
             lock: true,
             text: "加载中",
             background: 'rgba(0, 0, 0, 0.1)',
-            target: target
+            target: target || '#main'
         });
     }
 }

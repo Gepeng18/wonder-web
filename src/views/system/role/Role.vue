@@ -40,9 +40,8 @@
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button type="text" size="mini" @click="edit(scope.row)">修改</el-button>
-            <el-button type="text" size="mini" @click="edit(scope.row)">菜单权限</el-button>
             <el-button type="text" size="mini" @click="edit(scope.row)">数据权限</el-button>
-            <el-button type="text" size="mini" @click="edit(scope.row)">分配用户</el-button>
+            <el-button type="text" size="mini" @click="del(scope.row)">分配用户</el-button>
             <el-button type="text" style="color: #F56C6C" size="mini" @click="del(scope.row)">删除</el-button>
           </template>
         </el-table-column>
@@ -74,7 +73,7 @@
         </div>
       </CommonDialog>
 
-      <RoleSave ref="roleSave" />
+      <RoleSave ref="roleSave" @confirm="confirm"/>
     </div>
 
   </div>
@@ -118,9 +117,7 @@ export default {
       this.selectId = row.id
       this.$refs.disabledDialog.show()
     },
-    editConfirm(data) {
-      this.$api.role.edit(data)
-    },
+
     disableConfirm() {
 
       this.resetSelected()
@@ -132,6 +129,7 @@ export default {
       this.selectName = ''
       this.selectId = null
     },
+    // fixme 删除、状态更改
     delConfirm() {
       this.$message.success('删除成功')
       this.resetSelected()
@@ -155,11 +153,14 @@ export default {
         ...this.searchForm,
         ...this.pageInfo
       }
-      this.$api.role.page(params).then(res => {
+      this.$api.role.page(params, {target: '#main'}).then(res => {
         this.tableData = res.list
         this.pageInfo.total = res.total
         this.pageInfo.pages = res.pages
       })
+    },
+    confirm(){
+      this.findList()
     },
     handleSearch() {
       this.findList()
