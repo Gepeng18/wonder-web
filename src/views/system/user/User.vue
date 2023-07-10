@@ -99,7 +99,7 @@
         <!--删除弹框-->
         <CommonDialog type="danger" ref="delDialog" @confirm="delConfirm" title="提示">
           <div>
-            是否删除 “<span class="color-danger">{{ selectName }}</span>” ？
+            确认删除 “<span class="color-danger">{{ selectName }}</span>” ？
           </div>
         </CommonDialog>
 
@@ -109,7 +109,7 @@
         <CommonDialog :type="selectSwitch ? 'warning' : 'success'" ref="switchEnabledDialog"
                       @confirm="switchEnabledConfirm">
           <div>
-            是否{{ selectSwitch ? '停用' : '启用' }}账号 “
+            确认{{ selectSwitch ? '停用' : '启用' }}账号 “
             <span style="font-weight: bolder" :class="selectSwitch ? 'color-warning' : 'color-success'">{{ selectName }}</span>
             ” ？
           </div>

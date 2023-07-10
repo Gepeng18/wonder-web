@@ -20,7 +20,7 @@
 
     <CommonDialog ref="commonDialog" :display="false" title="提示" type="danger" confirm-text="退出" cancel-text="取消"
                   @confirm="doLogout">
-      <span>该操作会退出当前登录，是否退出？</span>
+      <span>该操作会退出当前登录，确认退出？</span>
     </CommonDialog>
 
     <el-container>

@@ -77,7 +77,7 @@
     <CommonDialog :type="selectSwitch ? 'warning' : 'success'" ref="switchEnabledDialog"
                   @confirm="switchEnabledConfirm">
       <div>
-        是否{{ selectSwitch ? '停用' : '启用' }} “
+        确认{{ selectSwitch ? '停用' : '启用' }} “
         <span style="font-weight: bolder" :class="selectSwitch ? 'color-warning' : 'color-success'">{{ selectName }}</span>
           ” ？
       </div>
@@ -88,7 +88,7 @@
     <!--删除弹框-->
     <CommonDialog type="danger" ref="delDialog" @confirm="delConfirm">
       <div>
-        是否删除 “  <span style="font-weight: bolder" class="color-danger">{{ deleteName}}</span>  ”  ？
+        确认删除 “  <span style="font-weight: bolder" class="color-danger">{{ deleteName}}</span>  ”  ？
       </div>
     </CommonDialog>
   </div>
