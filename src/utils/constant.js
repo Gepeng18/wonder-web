@@ -4,3 +4,5 @@ export const DialogType = {
     'Edit': 3,
     'Tip': 4
 }
+
+export const SuperAdminCode = 'super_admin'
