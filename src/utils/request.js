@@ -1,7 +1,7 @@
 import axios from 'axios'
-import { Message } from 'element-ui'
+import {Message} from 'element-ui'
 import store from "@/store";
-import { Loading } from 'element-ui';
+import {Loading} from 'element-ui';
 
 const service = axios.create({
     baseURL: 'http://127.0.0.1:8080/security-admin',
@@ -18,10 +18,11 @@ let needLoadingRequestCount = 0;
 
 //loading对象
 let loading;
-function showLoading(target){
+
+function showLoading(target) {
     needLoadingRequestCount++
     // if (loading == null && target != null){
-    if (loading == null){
+    if (loading == null) {
         loading = Loading.service({
             lock: true,
             text: "加载中",
@@ -30,15 +31,16 @@ function showLoading(target){
         });
     }
 }
+
 //隐藏loading
 function hideLoading() {
     needLoadingRequestCount--
-    if (loading && needLoadingRequestCount === 0){
-        setTimeout(() => {
+    setTimeout(() => {
+        if (loading !== null && needLoadingRequestCount === 0) {
             loading.close();
             loading = null;
-        },500)
-    }
+        }
+    }, 500)
 }
 
 //请求拦截器
@@ -49,7 +51,7 @@ service.interceptors.request.use(
         if (store.state.token != null && store.state.token !== "") {
             // 请求头的 Token 加上 token 数据
             config.headers.Authorization = store.state.token;
-        }else {
+        } else {
             console.log('no token');
         }
         return config
@@ -61,11 +63,11 @@ service.interceptors.request.use(
 )
 //响应拦截器
 service.interceptors.response.use(
-    response=> {
+    response => {
         const res = response.data
         console.log("进入响应拦截", res)
         hideLoading()
-        switch (res.code){
+        switch (res.code) {
             case 200:
                 return Promise.resolve(res.data) //请求成功
             case 401:
