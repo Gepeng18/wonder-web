@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <el-button type="success" icon="el-icon-plus" size="mini">添加</el-button>
+      <el-button type="success" icon="el-icon-plus" size="mini" @click="clickAdd">添加</el-button>
     </div>
     <el-divider/>
 
@@ -20,7 +20,7 @@
 
         <el-table-column
             prop="name"
-            label="菜单名称"
+            label="名称"
         >
         </el-table-column>
 
@@ -44,7 +44,7 @@
 
         <el-table-column
             prop="permission"
-            label="权限"
+            label="权限标识"
         >
         </el-table-column>
 
@@ -69,24 +69,24 @@
         <el-table-column label="操作"
         >
           <template  slot-scope="scope">
-            <el-button type="primary" size="mini" round @click="edit(scope.row)">修改</el-button>
-            <el-button type="danger" size="mini" round @click="del(scope.row)">删除</el-button>
+            <el-button type="primary" size="mini" round @click="clickEdit(scope.row)">修改</el-button>
+            <el-button type="danger" size="mini" round @click="clickDel(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
     </div>
 
-    <MenuEdit ref="menuEdit"/>
+    <MenuEditDialog ref="menuEditDialog" @refresh="refresh"/>
   </div>
 </template>
 
 <script>
 import {getMapping} from "@/utils/MappingUtil";
-import MenuEdit from "@/views/system/menu/MenuEdit.vue";
+import MenuEditDialog from "@/views/system/menu/MenuEditDialog.vue";
 
 export default {
-  name: "Menu",
-  components: {MenuEdit},
+  name: "index",
+  components: {MenuEditDialog},
   data() {
     return {
       tableData: [],
@@ -108,21 +108,33 @@ export default {
   },
 
   methods: {
-    edit(row){
-      this.$refs.menuEdit.show(row.id)
+    clickDel(row){
+      this.$message.warning(row.name)
+    },
+
+    clickEdit(row){
+      this.$refs.menuEditDialog.show(row.id, this.$dialogType.Edit)
+    },
+
+    clickAdd(){
+      this.$refs.menuEditDialog.show(null, this.$dialogType.Add)
     },
 
     getData() {
-      this.$api.menu.list({},{target: '#main'}).then(res => {
+      this.$api.menu.list().then(res => {
         this.tableData = res
       })
+    },
+
+    refresh(){
+      this.getData()
     },
 
     load(tree, treeNode, resolve) {
       let params = {
         parentId: tree.id
       }
-      this.$api.menu.list(params, {target: '#main'}).then(res => {
+      this.$api.menu.list(params).then(res => {
         resolve(res)
       })
     }

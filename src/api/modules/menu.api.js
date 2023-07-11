@@ -25,4 +25,14 @@ export const findByUserId = () => request({
     method: 'get',
 })
 
+export const update = (data = {}) => request({
+    url: prefix + '/update',
+    method: 'post',
+    data
+})
 
+export const save = (data = {}) => request({
+    url: prefix + '/save',
+    method: 'post',
+    data
+})
