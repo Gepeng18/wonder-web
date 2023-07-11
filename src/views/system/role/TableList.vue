@@ -124,7 +124,6 @@ export default {
       this.searchForm.name = ''
       this.pageInfo.curPage = 1
       this.findList()
-      e.target.blur()
     },
     handleSizeChange(val) {
       this.pageInfo.pageSize = val

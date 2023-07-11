@@ -9,21 +9,32 @@
       <div class="inner-right">
         <el-row :gutter="5" >
           <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-            <el-button type="primary" @click="$emit('search')">查询</el-button>
+            <el-button type="primary" @click="handlerSearch">查询</el-button>
           </el-col>
           <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-            <el-button type="primary" plain @click="$emit('reset')">重置</el-button>
+            <el-button type="primary" plain @click="handlerReset">重置</el-button>
           </el-col>
         </el-row>
       </div>
     </div>
-    <el-divider></el-divider>
+    <el-divider />
   </div>
 </template>
 
 <script>
 export default {
-  name: "TableSearchBar"
+  name: "TableSearchBar",
+  methods: {
+    handlerSearch(e){
+      e.target.blur()
+      this.$emit('search')
+    },
+
+    handlerReset(e){
+      e.target.blur()
+      this.$emit('reset')
+    }
+  }
 }
 </script>
 
