@@ -12,16 +12,18 @@
         active-text-color="#ffd04b"
         :collapse="isCollapse"
     >
-      <div style="width: 100%;height: 50px;color: white;">
-        <i style="float: right;font-size:25px;line-height: 50px;margin-right: 20px"
-           :class="[isCollapse ? 'el-icon-s-unfold':'el-icon-s-fold']" @click="isCollapse=!isCollapse"></i>
-      </div>
+      <!--      第一种-->
+      <!--      <div style="width: 100%;height: 50px;color: white;">-->
+      <!--        <i style="float: right;font-size:25px;line-height: 50px;margin-right: 20px"-->
+      <!--           :class="[isCollapse ? 'el-icon-s-unfold':'el-icon-s-fold']" @click="isCollapse=!isCollapse"></i>-->
+      <!--      </div>-->
 
       <MenuTree :menuList="menuList"></MenuTree>
     </el-menu>
-    <!--    <div class="collapse" @click="isCollapse=!isCollapse">-->
-    <!--      <i :class="['collapse-icon', isCollapse ? 'el-icon-s-unfold':'el-icon-s-fold']"></i>-->
-    <!--    </div>-->
+    <!--第二种-->
+    <div class="collapse" @click="isCollapse = !isCollapse">
+      <i :class="['collapse-icon', isCollapse ? 'el-icon-s-unfold':'el-icon-s-fold']"></i>
+    </div>
   </div>
 
 </template>
