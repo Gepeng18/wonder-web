@@ -73,10 +73,10 @@ export default {
     show(id = null, dialogType = null) {
       this.dialogType = dialogType
 
-      if (dialogType === this.$dialogType.Edit) {
+      if (dialogType === this.$globalConst.dialogType.Edit) {
         // 编辑
         this.toEdit(id)
-      } else if (dialogType === this.$dialogType.Add) {
+      } else if (dialogType === this.$globalConst.dialogType.Add) {
         // 新增
         this.toAdd()
       }
@@ -107,12 +107,12 @@ export default {
     },
 
     confirm() {
-      if (this.dialogType === this.$dialogType.Edit) {
+      if (this.dialogType === this.$globalConst.dialogType.Edit) {
         this.$api.role.update(this.formData).then(() => {
           this.reset()
           this.$emit('confirm')
         })
-      } else if(this.dialogType === this.$dialogType.Add){
+      } else if(this.dialogType === this.$globalConst.dialogType.Add){
         this.$api.role.save(this.formData).then(() => {
           this.reset()
           this.$emit('confirm')

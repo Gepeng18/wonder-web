@@ -61,11 +61,11 @@ export default {
     },
 
     clickAdd() {
-      this.$refs.roleSave.show(null, this.$dialogType.Add)
+      this.$refs.roleSave.show(null, this.$globalConst.dialogType.Add)
     },
 
     clickEdit(id){
-      this.$refs.roleSave.show(id, this.$dialogType.Edit)
+      this.$refs.roleSave.show(id, this.$globalConst.dialogType.Edit)
     },
 
     clickDel(row) {

@@ -29,7 +29,7 @@
         <el-table-column label="状态">
           <template slot-scope="scope">
             <el-switch
-                :disabled="scope.row.code === $superAdminCode"
+                :disabled="scope.row.code === $globalConst.superAdminCode"
                 :value="scope.row.enabled"
                 active-color="#67C23A"
                 inactive-color="#E6A23C"
@@ -41,7 +41,7 @@
         <el-table-column prop="description" label="描述"/>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <div v-if="scope.row.code !== $superAdminCode">
+            <div v-if="scope.row.code !== $globalConst.superAdminCode">
               <el-button type="text" size="mini" @click="clickEdit(scope.row)">修改</el-button>
               <el-button type="text" size="mini">数据权限</el-button>
               <el-button type="text" size="mini">分配用户</el-button>

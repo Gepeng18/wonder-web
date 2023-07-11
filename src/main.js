@@ -11,9 +11,10 @@ import CollapseTransition from 'element-ui/lib/transitions/collapse-transition';
 import Fragment from 'vue-fragment'
 import "@/utils/permission";
 import has from "@/utils/permission";
-import {DialogType, SuperAdminCode} from "@/utils/constant"
-Vue.prototype.$dialogType = DialogType
-Vue.prototype.$superAdminCode = SuperAdminCode
+import globalConst from "@/utils/globalConst"
+
+Vue.prototype.$globalConst = globalConst
+
 Vue.use(has)
 
 Vue.config.productionTip = false

@@ -156,9 +156,9 @@ export default {
 
     show(id = null, dialogType = null) {
       this.dialogType = dialogType
-      if (dialogType === this.$dialogType.Add) {
+      if (dialogType === this.$globalConst.dialogType.Add) {
         this.toAdd()
-      } else if (dialogType === this.$dialogType.Edit) {
+      } else if (dialogType === this.$globalConst.dialogType.Edit) {
         this.toEdit(id)
       }
 
@@ -177,12 +177,12 @@ export default {
     },
 
     confirm() {
-      if (this.dialogType === this.$dialogType.Add) {
+      if (this.dialogType === this.$globalConst.dialogType.Add) {
         this.$api.menu.save(this.formData).then(() => {
           this.$message.success('添加成功')
           this.$emit('refresh')
         })
-      } else if (this.dialogType === this.$dialogType.Edit) {
+      } else if (this.dialogType === this.$globalConst.dialogType.Edit) {
         this.$api.menu.update(this.formData).then(() => {
           this.$message.success('保存成功')
           this.$emit('refresh')

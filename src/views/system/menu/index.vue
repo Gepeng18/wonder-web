@@ -113,11 +113,11 @@ export default {
     },
 
     clickEdit(row){
-      this.$refs.menuEditDialog.show(row.id, this.$dialogType.Edit)
+      this.$refs.menuEditDialog.show(row.id, this.$globalConst.dialogType.Edit)
     },
 
     clickAdd(){
-      this.$refs.menuEditDialog.show(null, this.$dialogType.Add)
+      this.$refs.menuEditDialog.show(null, this.$globalConst.dialogType.Add)
     },
 
     getData() {
