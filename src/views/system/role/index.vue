@@ -39,7 +39,7 @@ import RoleDelDialog from "@/views/system/role/RoleDelDialog.vue";
 import TableList from "@/views/system/role/TableList.vue";
 
 export default {
-  name: "Role",
+  name: "index",
   components: {TableList, RoleDelDialog, RoleEnabledDialog, RoleSave, CommonDialog, TableSearchBar},
   data() {
     return {
