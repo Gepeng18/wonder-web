@@ -1,15 +1,14 @@
 import axios from 'axios'
-import {Message} from 'element-ui'
+import {Message, Loading} from 'element-ui'
 import store from "@/store";
-import {Loading} from 'element-ui';
 
 const service = axios.create({
-    baseURL: 'http://127.0.0.1:8080/security-admin',
-    withCredentials: true, //跨域请求时发送cookies
+    baseURL: process.env.VUE_APP_BASE_URL,
+    withCredentials: false, //跨域请求时发送cookies
     headers: {
         'Content-Type': 'application/json; charset=UTF-8'
     },
-    timeout: 10000 // 请求超时
+    timeout: process.env.VUE_APP_HTTP_TIMEOUT // 请求超时
 })
 
 
@@ -47,8 +46,8 @@ function hideLoading() {
 service.interceptors.request.use(
     config => {
         showLoading(config.headers.target)
-        // 判断是否存在token,把token添加点请求头中，每次请求携带token传给后端
-        if (store.state.token != null && store.state.token !== "") {
+        // 判断是否存在token，把token添加点请求头中，每次请求携带token传给后端
+        if (store.state.token) {
             // 请求头的 Token 加上 token 数据
             config.headers.Authorization = store.state.token;
         } else {
