@@ -28,9 +28,9 @@
         <el-table-column label="状态">
           <template slot-scope="scope">
             <el-switch
-                :value="!scope.row.disabled"
-                active-color="#13ce66"
-                inactive-color="#ff4949"
+                :value="scope.row.enabled"
+                active-color="#67C23A"
+                inactive-color="#E6A23C"
                 @change="switchChange(scope.row)"
             >
             </el-switch>
@@ -39,10 +39,10 @@
         <el-table-column prop="description" label="描述"/>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button type="text" size="mini" @click="edit(scope.row)">修改</el-button>
-            <el-button type="text" size="mini" @click="edit(scope.row)">数据权限</el-button>
-            <el-button type="text" size="mini" @click="del(scope.row)">分配用户</el-button>
-            <el-button type="text" style="color: #F56C6C" size="mini" @click="del(scope.row)">删除</el-button>
+            <el-button type="text" size="mini" @click="clickEdit(scope.row)">修改</el-button>
+            <el-button type="text" size="mini" >数据权限</el-button>
+            <el-button type="text" size="mini" >分配用户</el-button>
+            <el-button type="text" style="color: #F56C6C" size="mini" @click="clickDel(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -60,18 +60,10 @@
       </div>
 
       <!--删除弹框-->
-      <CommonDialog type="danger" ref="delDialog" @confirm="delConfirm" @cancel="cancel" title="提示">
-        <div>
-          确认删除 “ <span style="font-weight: bolder" class="color-danger">{{ selectName }}</span> ” ？
-        </div>
-      </CommonDialog>
+      <RoleDelDialog ref="delDialog" @confirm="delDialogConfirm"/>
 
       <!--停启用 弹框-->
-      <CommonDialog type="warning" ref="disabledDialog" @confirm="disableConfirm" @cancel="cancel" title="提示">
-        <div>
-          确认{{ selectSwitch ? '启用' : '停用' }} “ <span style="font-weight: bolder" class="color-warning">{{ selectName }}</span> ” ？
-        </div>
-      </CommonDialog>
+      <RoleEnabledDialog ref="enabledDialog" @confirm="enabledDialogConfirm"/>
 
       <RoleSave ref="roleSave" @confirm="confirm"/>
     </div>
@@ -84,11 +76,12 @@
 import TableSearchBar from "@/components/TableSearchBar/TableSearchBar.vue";
 import CommonDialog from "@/components/CommonDialog.vue";
 import RoleSave from "@/views/system/role/RoleSave.vue";
-// import {DialogType} from "@/utils/constant"
+import RoleEnabledDialog from "@/views/system/role/RoleEnabledDialog.vue";
+import RoleDelDialog from "@/views/system/role/RoleDelDialog.vue";
 
 export default {
   name: "Role",
-  components: {RoleSave, CommonDialog, TableSearchBar},
+  components: {RoleDelDialog, RoleEnabledDialog, RoleSave, CommonDialog, TableSearchBar},
   data() {
     return {
       searchForm: {
@@ -100,52 +93,37 @@ export default {
         curPage: 1,
         pageSize: 10
       },
-      selectId: null,
-      selectName: '',
-      selectSwitch: false,
       showSearchBar: false,
     }
   },
 
-  mounted() {
+  created() {
     this.findList()
   },
+
   methods: {
     switchChange(row) {
-      this.selectSwitch = row.disabled
-      this.selectName = row.name
-      this.selectId = row.id
-      this.$refs.disabledDialog.show()
+      this.$refs.enabledDialog.show(row)
     },
 
-    disableConfirm() {
+    enabledDialogConfirm(){
+      this.findList()
+    },
 
-      this.resetSelected()
-    },
-    cancel() {
-      this.resetSelected()
-    },
-    resetSelected() {
-      this.selectName = ''
-      this.selectId = null
-    },
-    // fixme 删除、状态更改
-    delConfirm() {
-      this.$message.success('删除成功')
-      this.resetSelected()
+    delDialogConfirm(){
+      this.findList()
     },
 
     add(row) {
       this.$refs.roleSave.show(row.id, this.$dialogType.Add)
     },
 
-    edit(row) {
+    clickEdit(row) {
       this.$refs.roleSave.show(row.id, this.$dialogType.Edit)
     },
-    del(row) {
-      this.selectId = row.id
-      this.selectName = row.name
-      this.$refs.delDialog.show()
+
+    clickDel(row) {
+      this.$refs.delDialog.show(row)
     },
 
     findList() {

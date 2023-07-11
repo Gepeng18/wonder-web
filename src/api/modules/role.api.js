@@ -32,3 +32,15 @@ export const get = (id) => request({
     url: prefix + '/get/' + id,
     method: 'get'
 })
+
+// 状态更改
+export const enabledSwitch = (id) => request({
+    url: prefix + '/enabledSwitch/' + id,
+    method: 'get'
+})
+
+// 删除
+export const del = (id) => request({
+    url: prefix + '/delete/' + id,
+    method: 'get'
+})
