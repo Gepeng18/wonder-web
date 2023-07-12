@@ -179,6 +179,7 @@ export default {
     confirm() {
       if (this.dialogType === this.$gc.dialogType.Add) {
         this.$api.menu.save(this.formData).then(() => {
+          this.$refs.dialog.close()
           this.$message.success('添加成功')
           this.$emit('close')
         }).catch(() => {

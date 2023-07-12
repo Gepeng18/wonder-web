@@ -75,7 +75,7 @@
           <el-table-column label="操作">
             <template slot-scope="scope">
               <!--              <el-button class="primary" type="text" @click="detail(scope.row)">查看</el-button>-->
-              <div v-if="scope.row.username !== $gc.adminCode">
+              <div v-if="scope.row.username !== $gc.adminCode || $store.state.userinfo.username === $gc.adminCode">
                 <el-button type="text" @click="edit(scope.row)">修改</el-button>
                 <el-button type="text" @click="clickResetPWD(scope.row)">重置密码</el-button>
                 <el-button type="text" class="color-danger" @click="clickDel(scope.row)">删除</el-button>
