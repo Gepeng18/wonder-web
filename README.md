@@ -1,4 +1,4 @@
-# security-admin-web
+# wonder-web
 
 ## Project setup
 ```
