@@ -34,18 +34,18 @@ export default {
     },
   created() {
     // 在页面加载时读取sessionStorage里的状态信息
-    if (sessionStorage.getItem('storeData')) {
-      this.$store.replaceState(Object.assign({}, this.$store.state, JSON.parse(sessionStorage.getItem('storeData'))))
+    if (localStorage.getItem('storeData')) {
+      this.$store.replaceState(Object.assign({}, this.$store.state, JSON.parse(localStorage.getItem('storeData'))))
       this.$store.dispatch('setDynamicRoutes')
-      sessionStorage.clear()
+      // sessionStorage.clear()
     }
     // 在页面刷新时将vuex里的信息保存到sessionStorage里
     window.addEventListener('beforeunload', () => {
-      sessionStorage.setItem('storeData', JSON.stringify(this.$store.state))
+      localStorage.setItem('storeData', JSON.stringify(this.$store.state))
     })
     // 兼容iphone手机
     window.addEventListener('pagehide', () => {
-      sessionStorage.setItem('storeData', JSON.stringify(this.$store.state))
+      localStorage.setItem('storeData', JSON.stringify(this.$store.state))
     })
 
   },

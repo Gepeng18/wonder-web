@@ -13,7 +13,7 @@ const store = new Vuex.Store({
         token: '',
         activeTab: '',
         tabList: [],   //动态标签页
-        user: {},
+        userinfo: {},
         userRoutes: [],  // 用户的路由信息,
         userMenus: [],
         userRoles: [],
@@ -26,11 +26,11 @@ const store = new Vuex.Store({
     mutations: {
         login(state, payload) {
             state.token = payload.token;
-            sessionStorage.setItem('token', payload.token);
-            state.user = payload.userInfo;
+            localStorage.setItem('token', payload.token);
+            state.userinfo = payload.userinfo;
         },
         logout() {
-            sessionStorage.clear()
+            localStorage.clear()
             store.commit('RESET_STATE')
             router.push('/login')
         },
@@ -55,23 +55,23 @@ const store = new Vuex.Store({
 
         setUserRoutes(state, payload) {
             state.userRoutes = payload
-            sessionStorage.setItem('userRoutes', JSON.stringify(payload))
+            localStorage.setItem('userRoutes', JSON.stringify(payload))
         },
         setUserMenus(state, payload) {
             state.userMenus = payload
-            sessionStorage.setItem('userMenus', JSON.stringify(payload))
+            localStorage.setItem('userMenus', JSON.stringify(payload))
         },
         setUserPermits(state, payload) {
             state.userPerMits = payload
-            sessionStorage.setItem('userPerMits', payload)
+            localStorage.setItem('userPerMits', payload)
         },
         setUserRoles(state, payload) {
             state.userRoles = payload
-            sessionStorage.setItem('userRoles', JSON.stringify(payload))
+            localStorage.setItem('userRoles', JSON.stringify(payload))
         },
         setUserDepts(state, payload) {
             state.userDepts = payload
-            sessionStorage.setItem('userDepts', payload)
+            localStorage.setItem('userDepts', payload)
         },
 
         setTabContentHeight(state, payload){
@@ -81,10 +81,11 @@ const store = new Vuex.Store({
 
         RESET_STATE: (state) => {
             console.log('重置store')
+            localStorage.clear()
             state.token = ''
             state.activeTab = ''
             state.tabList = []
-            state.user = {}
+            state.userinfo = {}
             state.userRoutes = []
             state.userMenus = []
             state.userRoles = []

@@ -6,7 +6,7 @@
 
       <div class="right">
         <div class="right-sub">
-<!--          <h3>{{ this.$store.state.user.name }}</h3>-->
+          <h3>{{ this.$store.state.userinfo.nickname }}</h3>
         </div>
         <div class="right-sub avatar">
           <el-avatar :size="50"
@@ -18,8 +18,7 @@
       </div>
     </el-header>
 
-    <CommonDialog ref="commonDialog" :display="false" title="提示" type="danger" confirm-text="退出" cancel-text="取消"
-                  @confirm="doLogout">
+    <CommonDialog ref="commonDialog" type="danger" confirm-text="退出" @confirm="doLogout">
       <span>该操作会退出当前登录，确认退出？</span>
     </CommonDialog>
 

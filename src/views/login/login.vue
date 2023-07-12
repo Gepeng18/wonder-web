@@ -88,11 +88,11 @@ export default {
       this.$api.user.loginByUsername(this.form).then(res => {
         //请求成功操作
         this.$store.commit('login', res)
-        // this.$notify({
-        //   title: '提示',
-        //   message: '登录成功！欢迎您 ' + res.userInfo.nickname,
-        //   type: 'success'
-        // })
+        this.$notify({
+          title: '提示',
+          message: '登录成功！欢迎您 ' + res.userinfo.nickname,
+          type: 'success'
+        })
         this.$store.dispatch('getUserMenu')
       }).catch(() => {
         this.loading = false
