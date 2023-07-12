@@ -1,5 +1,5 @@
 <template>
-  <CommonDialog :type="data.enabled ? 'warning' : 'success'" ref="dialog" @confirm="confirm" @cancel="cancel">
+  <CommonDialog id="dialog" :type="data.enabled ? 'warning' : 'success'" ref="dialog" @confirm="confirm" @cancel="cancel">
     <div>
       确认{{ data.enabled ? '禁用' : '启用' }} “
       <b :class="data.enabled ? 'color-warning' : 'color-success'">{{ data.name }}</b> ” ？
@@ -28,9 +28,12 @@ export default {
       if (this.data.id){
         this.$api.role.enabledSwitch(this.data.id).then(() => {
           this.$emit('confirm')
+          this.$refs.dialog.close()
+          this.reset()
+        }).catch(() => {
+          this.$refs.dialog.stopLoading()
         })
       }
-      this.reset()
     },
 
     cancel(){

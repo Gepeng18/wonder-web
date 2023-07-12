@@ -34,9 +34,10 @@ export const get = (id) => request({
 })
 
 // 状态更改
-export const enabledSwitch = (id) => request({
+export const enabledSwitch = (id, headers ={showLoading: false}) => request({
     url: prefix + '/enabledSwitch/' + id,
-    method: 'get'
+    method: 'get',
+    headers
 })
 
 // 删除

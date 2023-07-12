@@ -16,17 +16,18 @@ const service = axios.create({
 let needLoadingRequestCount = 0;
 
 //loading对象
-let loading;
+let loading = null;
 
-function showLoading(target) {
+function showLoading(target = '', show = true) {
     needLoadingRequestCount++
     // if (loading == null && target != null){
-    if (loading == null) {
+    if (loading == null && show) {
         loading = Loading.service({
             lock: true,
             text: "加载中",
             background: 'rgba(0, 0, 0, 0.1)',
             target: target || '#main'
+            // fullscreen: true
         });
     }
 }
@@ -45,7 +46,7 @@ function hideLoading() {
 //请求拦截器
 service.interceptors.request.use(
     config => {
-        showLoading(config.headers.target)
+        showLoading(config.headers.target, config.headers.showLoading)
         // 判断是否存在token，把token添加点请求头中，每次请求携带token传给后端
         if (store.state.token) {
             // 请求头的 Token 加上 token 数据
