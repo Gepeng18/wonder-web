@@ -13,7 +13,7 @@ import "@/utils/permission";
 import has from "@/utils/permission";
 import globalConst from "@/utils/globalConst"
 
-Vue.prototype.$globalConst = globalConst
+Vue.prototype.$gc = globalConst
 
 Vue.use(has)
 

@@ -5,5 +5,5 @@ export default {
         'Edit': 3,
         'Tip': 4
     },
-    superAdminCode: 'super_admin',
+    adminCode: 'admin',
 }

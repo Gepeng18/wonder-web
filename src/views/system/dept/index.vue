@@ -1,28 +1,28 @@
 <template>
   <div>
-    <el-collapse-transition>
-      <TableSearchBar v-show="showSearchBar" @search="handleSearch" @reset="handleReset">
-        <el-form :model="searchForm" label-suffix=":" label-width="70px">
-          <el-row :gutter="5" align="middle">
-            <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6">
-              <el-form-item label="名称">
-                <el-input v-model="searchForm.name" placeholder="名称"/>
-              </el-form-item>
-            </el-col>
-          </el-row>
-        </el-form>
-      </TableSearchBar>
-    </el-collapse-transition>
+    <!--    <el-collapse-transition>-->
+    <!--    <TableSearchBar v-show="showSearchBar" @search="handleSearch" @reset="handleReset">-->
+    <!--      <el-form :model="searchForm" label-suffix=":" label-width="70px">-->
+    <!--        <el-row :gutter="5" align="middle">-->
+    <!--          <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6">-->
+    <!--            <el-form-item label="名称">-->
+    <!--              <el-input v-model="searchForm.name" placeholder="名称"/>-->
+    <!--            </el-form-item>-->
+    <!--          </el-col>-->
+    <!--        </el-row>-->
+    <!--      </el-form>-->
+    <!--    </TableSearchBar>-->
+    <!--  </el-collapse-transition>-->
 
 
     <div>
       <el-button type="success" icon="el-icon-plus" size="mini">添加</el-button>
-      <el-button type="primary" icon="el-icon-search" size="mini" @click="showSearchBar = !showSearchBar">搜索</el-button>
-      <span>    存在问题: 在编辑弹框更改上级后,列表没刷新成功,旧的节点没去掉</span>
+      <!--      <el-button type="primary" icon="el-icon-search" size="mini" @click="showSearchBar = !showSearchBar">搜索</el-button>-->
     </div>
 
     <div>
       <el-table
+          :key="keyNum"
           :data="tableData"
           style="width: 100%"
           row-key="id"
@@ -67,8 +67,8 @@
         <el-table-column label="操作"
         >
           <template slot-scope="scope">
-            <el-button type="primary" size="mini" round @click="edit(scope.row)">编辑</el-button>
-            <el-button type="danger" size="mini" round @click="del(scope.row)">删除</el-button>
+            <el-button type="text" size="" @click="edit(scope.row)">编辑</el-button>
+            <el-button type="text" class="color-danger" @click="del(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -78,17 +78,20 @@
                   @confirm="switchEnabledConfirm">
       <div>
         确认{{ selectSwitch ? '停用' : '启用' }} “
-        <span style="font-weight: bolder" :class="selectSwitch ? 'color-warning' : 'color-success'">{{ selectName }}</span>
-          ” ？
+        <span style="font-weight: bolder" :class="selectSwitch ? 'color-warning' : 'color-success'">{{
+            selectName
+          }}</span>
+        ” ？
       </div>
     </CommonDialog>
 
     <!--    编辑框-->
-    <DeptEdit ref="editDialog" title="编辑" @updated="updated"/>
+    <DeptSave ref="saveDialog" title="编辑" @confirm="confirm"/>
+
     <!--删除弹框-->
     <CommonDialog type="danger" ref="delDialog" @confirm="delConfirm">
       <div>
-        确认删除 “  <span style="font-weight: bolder" class="color-danger">{{ deleteName}}</span>  ”  ？
+        确认删除 “ <b class="color-danger">{{ deleteName }}</b> ” ？
       </div>
     </CommonDialog>
   </div>
@@ -97,31 +100,30 @@
 <script>
 import TableSearchBar from "@/components/TableSearchBar/TableSearchBar.vue";
 import CommonDialog from "@/components/CommonDialog.vue";
-import DeptEdit from "@/views/system/dept/DeptEdit.vue";
+import DeptSave from "@/views/system/dept/DeptSave.vue";
 
 export default {
-  name: "Dept",
-  components: {DeptEdit, TableSearchBar, CommonDialog},
+  name: "index",
+  components: {DeptSave, TableSearchBar, CommonDialog},
   data() {
     return {
       style: {
         // overflow: 'auto',
         // 'max-height': this.$store.state.tabContentHeight + 'px'
       },
-      searchForm: {
-        name: '',
-      },
+      // searchForm: {
+      //   name: '',
+      //   parentId: 0
+      // },
       tableData: [],
-      pageInfo: {
-        total: 0,
-        curPage: 1,
-        pageSize: 10
-      },
+
       selectId: null,
       selectName: '',
       showSearchBar: false,
       selectSwitch: false,
       deleteName: '',
+      keyNum: 0,
+      maps: new Map()
     }
   },
 
@@ -138,53 +140,69 @@ export default {
     },
 
     getData() {
-      if (this.searchForm.name === '') {
-        this.$api.dept.list({parentId: 0}, {target: '#main'}).then(res => {
-          this.tableData = []
-          this.tableData = res
-        })
-      } else {
-        this.$api.dept.list(this.searchForm, {target: '#main'}).then(res => {
-          this.tableData = []
-          this.tableData = res
-        })
-      }
+      this.$api.dept.list({parentId: 0}).then(res => {
+        this.tableData = res
+        console.log('this.tableData', this.tableData)
+        // this.tableData.splice(1, 0)
+        this.keyNum++
+      })
+
+      // if (this.searchForm.name === '') {
+      //   this.$api.dept.list({parentId: 0}).then(res => {
+      //     this.tableData = res
+      //   })
+      // } else {
+      //   this.$api.dept.list(this.searchForm).then(res => {
+      //     this.tableData = res
+      //   })
+      // }
     },
 
     load(tree, treeNode, resolve) {
-      this.$api.dept.list({parentId: tree.id}, {target: '#main'}).then(res => {
+      this.maps.set(tree.id, {tree, treeNode, resolve})
+      this.$api.dept.list({parentId: tree.id}).then(res => {
+        console.log('load', res)
         resolve(res)
       })
     },
-    handleSearch() {
-      this.getData()
-    },
-    handleReset(e) {
-      this.searchForm.name = ''
-      this.pageInfo.curPage = 1
-      this.getData()
-      console.log(e)
-      e.target.blur()
-    },
+
+    // handleSearch() {
+    //   this.getData()
+    // },
+    //
+    // handleReset(e) {
+    //   this.searchForm.name = ''
+    //   this.getData()
+    //   e.target.blur()
+    // },
 
     switchEnabledConfirm(data) {
       this.$api.dept.enabledSwitch(data.id).then(() => {
         this.$refs.switchEnabledDialog.close()
-        this.getData()
+        this.refreshRow(data)
       })
     },
 
-    edit(row) {
-      this.$refs.editDialog.show(row.id)
+    // 局部刷新列表
+    refreshRow(row) {
+      const {tree, treeNode, resolve} = this.maps.get(row.parentId)
+      this.load(tree, treeNode, resolve);
     },
+
+    edit(row) {
+      this.$refs.saveDialog.show(row.id, this.$gc.dialogType.Edit)
+    },
+
     del(row) {
       this.deleteName = row.name
       this.$refs.delDialog.show(row)
     },
-    updated() {
+
+    confirm() {
       this.getData()
     },
-    delConfirm(data){
+
+    delConfirm(data) {
       this.$api.dept.del(data.id).then(() => {
         this.getData()
         this.$message.success('删除成功')

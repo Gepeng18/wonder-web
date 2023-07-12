@@ -43,8 +43,9 @@
       </el-collapse-transition>
 
       <div style="padding: 0 10px">
-        <el-button type="success" icon="el-icon-plus" size="mini" @click="add">添加</el-button>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="showSearchBar = !showSearchBar">搜索</el-button>
+        <el-button type="success" icon="el-icon-plus" size="mini" @click="clickAdd()">添加</el-button>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="showSearchBar = !showSearchBar">搜索
+        </el-button>
       </div>
       <el-divider/>
       <div :style="style">
@@ -60,6 +61,7 @@
           <el-table-column label="状态">
             <template slot-scope="scope">
               <el-switch
+                  :disabled="scope.row.username === $gc.adminCode"
                   :value="scope.row.enabled"
                   active-color="#67C23A"
                   inactive-color="#E6A23C"
@@ -72,10 +74,12 @@
           <!--        <el-table-column prop="updateTime" label="修改时间"/>-->
           <el-table-column label="操作">
             <template slot-scope="scope">
-<!--              <el-button class="primary" type="text" @click="detail(scope.row)">查看</el-button>-->
-              <el-button class="primary" type="text" @click="edit(scope.row)">修改</el-button>
-              <el-button class="primary" type="text" @click="resetPWD(scope.row)">重置密码</el-button>
-              <el-button class="danger" type="text" @click="del(scope.row)">删除</el-button>
+              <!--              <el-button class="primary" type="text" @click="detail(scope.row)">查看</el-button>-->
+              <div v-if="scope.row.username !== $gc.adminCode">
+                <el-button type="text" @click="edit(scope.row)">修改</el-button>
+                <el-button type="text" @click="clickResetPWD(scope.row)">重置密码</el-button>
+                <el-button type="text" class="color-danger" @click="clickDel(scope.row)">删除</el-button>
+              </div>
 
             </template>
           </el-table-column>
@@ -93,29 +97,32 @@
               :total="pageInfo.total">
           </el-pagination>
         </div>
-        <ResetPWD ref="resetPWD" @confirm="resetPWDConfirm"></ResetPWD>
-        <UserDetail ref="userDetail"/>
-
-        <!--删除弹框-->
-        <CommonDialog type="danger" ref="delDialog" @confirm="delConfirm" title="提示">
-          <div>
-            确认删除 “<span class="color-danger">{{ selectName }}</span>” ？
-          </div>
-        </CommonDialog>
-
-        <!--停启用 弹框-->
-        <CommonDialog :type="selectSwitch ? 'warning' : 'success'" ref="switchEnabledDialog"
-                      @confirm="switchEnabledConfirm">
-          <div>
-            确认{{ selectSwitch ? '停用' : '启用' }}账号 “
-            <span style="font-weight: bolder" :class="selectSwitch ? 'color-warning' : 'color-success'">{{ selectName }}</span>
-            ” ？
-          </div>
-        </CommonDialog>
-
-        <UserSave ref="userSave" @confirm="userSaveConfirm"/>
       </div>
     </div>
+
+    <ResetPWD ref="resetPWDDialog"/>
+
+    <!--删除弹框-->
+    <CommonDialog type="danger" ref="delDialog" @confirm="delConfirm">
+      <div>
+        确认删除<b class="color-danger">{{ selectRow.nickname }}</b> 的账号 “ <b
+          class="color-danger">{{ selectRow.username }}</b> ” ？
+      </div>
+    </CommonDialog>
+
+    <!--停启用 弹框-->
+    <CommonDialog :type="selectRow.enabled ? 'warning' : 'success'" ref="enabledDialog" @confirm="enabledConfirm">
+      <div>
+        确认{{ selectRow.enabled ? '停用' : '启用' }} <b :class="selectRow.enabled ? 'color-warning' : 'color-success'">{{
+          selectRow.nickname
+        }}</b> 的账号 “
+        <b :class="selectRow.enabled ? 'color-warning' : 'color-success'">{{ selectRow.username }}</b>
+        ” ？
+      </div>
+    </CommonDialog>
+
+    <UserSave ref="userSave" @confirm="userSaveConfirm"/>
+
   </div>
 
 </template>
@@ -123,16 +130,16 @@
 <script>
 import TableSearchBar from "@/components/TableSearchBar/TableSearchBar.vue";
 import ResetPWD from "@/views/system/user/ResetPWD.vue";
-import UserDetail from "@/views/system/user/UserDetail.vue";
 import CommonDialog from "@/components/CommonDialog.vue";
 import UserSave from "@/views/system/user/UserSave.vue";
+import Dict from "@/views/system/dict/Dict.vue";
 
 export default {
-  name: "User",
-  components: {UserSave, CommonDialog, UserDetail, ResetPWD, TableSearchBar},
+  name: "index",
+  components: {Dict, UserSave, CommonDialog, ResetPWD, TableSearchBar},
   data() {
     return {
-      style:{
+      style: {
         // overflow: 'auto',
         // 'max-height': this.$store.state.tabContentHeight + 'px'
       },
@@ -148,8 +155,6 @@ export default {
         curPage: 1,
         pageSize: 10
       },
-      selectId: null,
-      selectName: '',
       showSearchBar: false,
       deptTree: [], // 部门数据
       defaultProps: {
@@ -157,52 +162,52 @@ export default {
         label: 'name',
         id: 'id',
       },
-      selectSwitch: false,
-
+      selectRow: {},
     }
   },
-  watch:{
-    '$store.state.tabContentHeight':{
-      handler(){
+  watch: {
+    '$store.state.tabContentHeight': {
+      handler() {
         this.style['max-height'] = this.$store.state.tabContentHeight + 'px'
         console.log('跟新后的hei', this.style)
       }
     }
   },
 
-  created() {
+  mounted() {
     this.getData()
     this.getTree()
   },
 
   methods: {
-    add(){
-      this.$refs.userSave.show()
+    clickAdd() {
+      this.$refs.userSave.show(null, this.$gc.dialogType.Add)
     },
 
-    edit(row){
-      this.$refs.userSave.show(row.id)
+    edit(row) {
+      this.$refs.userSave.show(row.id, this.$gc.dialogType.Edit)
     },
 
     switchChange(row) {
-      this.selectName = row.username
-      this.selectSwitch = row.enabled
-      this.$refs.switchEnabledDialog.show(row)
+      this.selectRow = row
+      this.$refs.enabledDialog.show(row)
     },
 
-    switchEnabledConfirm(data) {
+    enabledConfirm(data) {
       this.$api.user.enabledSwitch(data.id).then(() => {
-        this.$refs.switchEnabledDialog.close()
+        this.$refs.enabledDialog.close()
         this.getData()
+      }).catch(() => {
+        this.$refs.enabledDialog.stopLoading()
       })
     },
 
     handleNodeClick(data) {
-      if (this.searchForm.deptId == data.id){
+      if (this.searchForm.deptId == data.id) {
         this.searchForm.deptId = null
         this.$refs.tree.setCurrentKey(null)
 
-      }else {
+      } else {
         this.searchForm.deptId = data.id
         this.$refs.tree.setCurrentKey(data.id)
       }
@@ -217,27 +222,25 @@ export default {
     },
 
     delConfirm() {
-      this.$message.success('删除成功')
-      this.selectName = ''
-      this.selectId = null
-    },
-
-    del(row) {
-      this.selectId = row.id
-      this.selectName = row.nickname
-      this.$refs.delDialog.show()
-    },
-    resetPWDConfirm(params) {
-      this.$api.user.resetPWD(params).then(() => {
-        this.$message.success('修改成功')
+      this.$api.user.del(this.selectRow.id).then(() => {
+        this.selectRow = {}
+        this.$refs.delDialog.close()
+        this.$message.success('删除成功')
+        this.getData()
+      }).catch(() => {
+        this.$refs.delDialog.stopLoading()
       })
     },
-    detail(row) {
-      this.$refs.userDetail.show(row)
+
+    clickDel(row) {
+      this.selectRow = row
+      this.$refs.delDialog.show()
     },
-    resetPWD(row) {
-      this.$refs.resetPWD.show(row.id)
+
+    clickResetPWD(row) {
+      this.$refs.resetPWDDialog.show(row.id)
     },
+
     getData() {
       const params = {
         ...this.searchForm,
@@ -250,28 +253,28 @@ export default {
       })
     },
 
-    userSaveConfirm(){
+    userSaveConfirm() {
       this.getData()
     },
 
     handleSearch() {
       this.getData()
     },
+
     handleReset(e) {
-      this.searchForm.nickname = ''
-      this.searchForm.username = ''
-      this.searchForm.phone = ''
-      this.searchForm.deptId = null
+      this.searchForm = {}
       this.pageInfo.curPage = 1
+      this.$refs.tree.setCurrentKey(null)
       this.getData()
-      console.log(e)
       e.target.blur()
     },
+
     handleSizeChange(val) {
       this.pageInfo.pageSize = val
       this.pageInfo.curPage = 1
       this.getData()
     },
+
     handleCurrentChange(val) {
       this.pageInfo.curPage = val
       this.getData()
@@ -285,6 +288,7 @@ export default {
 .content {
   display: flex;
 }
+
 .table-footer {
   text-align: center;
   /*position: absolute;*/
@@ -296,13 +300,13 @@ export default {
 //background: rgb(199, 42, 37);
 }
 
-/deep/.el-tree--highlight-current .el-tree-node.is-current > .el-tree-node__content {
-  background-color: #d2e1f1;
+/deep/ .el-tree--highlight-current .el-tree-node.is-current > .el-tree-node__content {
+  background-color: #F56C6C;
+  color: #fff;
 }
 
-/deep/.el-tree {
-//background: #10498f;
-//color: #ffffff;
+/deep/ .el-tree {
+//background: #10498f; //color: #ffffff;
 }
 
 /deep/ .el-tree-node:focus > .el-tree-node__content {

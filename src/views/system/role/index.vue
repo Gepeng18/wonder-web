@@ -9,22 +9,22 @@
         @switchChange="switchChange"
     />
 
-      <!--删除弹框-->
-      <RoleDelDialog
-          ref="delDialog"
-          @confirm="delConfirm"
-      />
+    <!--删除弹框-->
+    <RoleDelDialog
+        ref="delDialog"
+        @close="delDialogClose"
+    />
 
-      <!--停启用 弹框-->
-      <RoleEnabledDialog
-          ref="enabledDialog"
-          @confirm="enabledConfirm"
-      />
+    <!--停启用 弹框-->
+    <RoleEnabledDialog
+        ref="enabledDialog"
+        @close="enabledDialogClose"
+    />
 
-      <RoleSave
-          ref="roleSave"
-          @confirm="confirm"
-      />
+    <RoleSave
+        ref="roleSave"
+        @close="saveDialogClose"
+    />
 
   </div>
 
@@ -52,30 +52,29 @@ export default {
       this.$refs.enabledDialog.show(row)
     },
 
-    enabledConfirm(){
+    enabledDialogClose() {
       this.$refs.tableList.findList()
     },
 
-    delConfirm(){
+    delDialogClose() {
       this.$refs.tableList.findList()
     },
 
     clickAdd() {
-      this.$refs.roleSave.show(null, this.$globalConst.dialogType.Add)
+      this.$refs.roleSave.show(null, this.$gc.dialogType.Add)
     },
 
-    clickEdit(id){
-      this.$refs.roleSave.show(id, this.$globalConst.dialogType.Edit)
+    clickEdit(id) {
+      this.$refs.roleSave.show(id, this.$gc.dialogType.Edit)
     },
 
     clickDel(row) {
       this.$refs.delDialog.show(row)
     },
 
-    confirm(){
+    saveDialogClose() {
       this.$refs.tableList.findList()
     },
-
 
   }
 }

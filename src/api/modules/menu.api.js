@@ -36,3 +36,9 @@ export const save = (data = {}) => request({
     method: 'post',
     data
 })
+
+export const del = (id, headers= {showLoading: false}) => request({
+    url: prefix + '/delete/' + id,
+    method: 'get',
+    headers
+})

@@ -2,7 +2,7 @@
   <CommonDialog ref="dialog" @confirm="confirm">
     <el-form :model="formData" label-width="100px" label-suffix="：">
       <el-form-item label="上级">
-        <el-popover v-model="popoverShow" style="width: 100%;" placement="bottom-start" trigger="focus">
+        <el-popover v-model="popoverShow" style="width: 100%;" placement="right-start" trigger="focus">
           <el-input readonly style="font-weight: bold;color: #8c939d" placeholder="无" v-model="formData.parentName"
                     slot="reference"></el-input>
           <div style="width: 224px;height: 300px;overflow: auto;">
@@ -33,17 +33,17 @@
 
       </el-form-item>
 
-      <el-form-item label="状态">
-        <el-switch
-            :value="formData.enabled"
-            active-color="#67C23A"
-            inactive-color="#E6A23C"
-            active-text="启用"
-            inactive-text="停用"
-            @change="switchChange(formData.enabled)"
-        >
-        </el-switch>
-      </el-form-item>
+<!--      <el-form-item label="状态">-->
+<!--        <el-switch-->
+<!--            :value="formData.enabled"-->
+<!--            active-color="#67C23A"-->
+<!--            inactive-color="#E6A23C"-->
+<!--            active-text="启用"-->
+<!--            inactive-text="停用"-->
+<!--            @change="switchChange(formData.enabled)"-->
+<!--        >-->
+<!--        </el-switch>-->
+<!--      </el-form-item>-->
     </el-form>
 
   </CommonDialog>
@@ -53,11 +53,11 @@
 import CommonDialog from "@/components/CommonDialog.vue";
 
 export default {
-  name: "DeptEdit",
+  name: "DeptSave",
   components: {CommonDialog},
   data() {
     return {
-      formData: null,
+      formData: {},
       popoverShow: false,
       options: [],
       defaultProps: {
@@ -68,22 +68,32 @@ export default {
     }
   },
 
-  updated() {
-    this.$nextTick(() => {
-      this.$refs.tree.setCurrentKey(this.formData.parentId)
-    })
-  },
-
   methods: {
-    show(id) {
-      this.getData(id)
+    show(id=null, dialogType = null) {
+      if (dialogType === this.$gc.dialogType.Add){
+        this.toAdd()
+      }else if (dialogType === this.$gc.dialogType.Edit){
+        this.toEdit(id)
+      }
     },
+
+    async toAdd(){
+      await this.getTree()
+      this.$refs.dialog.show()
+    },
+
+    async toEdit(id){
+      await this.getData(id)
+      await this.getTree()
+      this.$refs.dialog.show()
+    },
+
     getData(id) {
-      this.$api.dept.getById(id, {target: '#mian'}).then(res => {
+      this.$api.dept.getById(id).then(res => {
         this.formData = res
-        this.getTree()
       })
     },
+
     handleNodeClick(data) {
       if (this.formData.parentId === data.id) {
         this.formData.parentId = '0'
@@ -96,20 +106,26 @@ export default {
       }
       this.popoverShow = false
     },
-    getTree() {
+
+    async getTree() {
       this.$api.dept.tree().then(res => {
         this.options = res
-        this.$refs.dialog.show()
       })
     },
+
     confirm() {
       this.$api.dept.update(this.formData).then(() => {
-        this.$emit('updated')
+        this.$refs.dialog.close()
+        this.$emit('confirm')
+      }).catch(() => {
+        this.$refs.dialog.stopLoading()
       })
     },
+
     switchChange(val) {
       this.formData.enabled = !val
     },
+
     handleChange(currentValue) {
       this.formData.sort = currentValue
     },

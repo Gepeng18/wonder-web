@@ -25,7 +25,7 @@ export default {
     confirm(){
       if (this.data.id){
         this.$api.role.del(this.data.id).then(() => {
-          this.$emit('confirm')
+          this.$emit('close')
           this.$message.success('删除成功')
         })
       }

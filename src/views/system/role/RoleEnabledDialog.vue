@@ -27,7 +27,7 @@ export default {
     confirm(){
       if (this.data.id){
         this.$api.role.enabledSwitch(this.data.id).then(() => {
-          this.$emit('confirm')
+          this.$emit('close')
           this.$refs.dialog.close()
           this.reset()
         }).catch(() => {

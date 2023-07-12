@@ -23,16 +23,11 @@ export const page = (data = {}, headers= {}) => request({
     headers
 })
 
-export const resetPWD = (data = {}) => request({
+export const resetPWD = (data = {}, headers ={showLoading: false}) => request({
     url: prefix + '/resetPWD',
     method: 'post',
-    data
-})
-
-export const findUserById = (params) => request({
-    url: prefix + '/findById',
-    method: 'get',
-    params
+    data,
+    headers
 })
 
 export const update = (data = {}) => request({
@@ -52,12 +47,19 @@ export const getUserLoginInfo = () => request({
     method: 'get'
 })
 
-export const enabledSwitch = (id) => request({
+export const enabledSwitch = (id, headers ={showLoading: false}) => request({
     url: prefix + '/enabledSwitch/' + id,
-    method: 'get'
+    method: 'get',
+    headers
 })
 
 export const getById = (id) => request({
     url: prefix + '/get/' + id,
     method: 'get'
+})
+
+export const del = (id, headers= {showLoading: false}) => request({
+    url: prefix + '/delete/' + id,
+    method: 'get',
+    headers
 })

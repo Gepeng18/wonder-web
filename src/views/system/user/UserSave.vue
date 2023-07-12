@@ -1,9 +1,9 @@
 <template>
-  <CommonDialog ref="dialog" :title="title" :type="dialogType" @confirm="confirm" @cancel="cancel">
+  <CommonDialog ref="dialog" :title="title" :type="dialogType" @confirm="confirm">
     <el-form ref="form" :model="formData" :rules="rules" label-width="100px" label-suffix="：">
 
       <el-form-item label="所属部门">
-        <el-popover v-model="popoverShow" style="width: 100%;" placement="bottom-start" trigger="focus">
+        <el-popover v-model="popoverShow" style="width: 100%;" placement="right-start" trigger="focus">
           <el-input readonly style="font-weight: bold;color: #8c939d" placeholder="请选择所属部门" v-model="formData.deptName"
                     slot="reference"></el-input>
           <div style="width: 224px;height: 300px;overflow: auto;">
@@ -51,9 +51,6 @@
         <el-input v-model="formData.email"></el-input>
       </el-form-item>
 
-      <el-form-item label="备注" prop="description">
-        <el-input type="textarea" v-model="formData.description"></el-input>
-      </el-form-item>
     </el-form>
 
   </CommonDialog>
@@ -116,36 +113,49 @@ export default {
     confirm() {
       if (this.formData.id == null){
         this.$api.user.save(this.formData).then(() => {
-          this.$message.success('保存成功')
+          this.$message.success('添加成功')
+          this.$refs.dialog.close()
           this.$emit('confirm')
+        }).catch(() => {
+          this.$refs.dialog.stopLoading()
         })
+
       }else {
         this.$api.user.update(this.formData).then(() => {
           this.$message.success('保存成功')
+          this.$refs.dialog.close()
           this.$emit('confirm')
+        }).catch(() => {
+          this.$refs.dialog.stopLoading()
         })
       }
-      this.reset()
+    },
 
-    },
-    cancel() {
+    show(id = null, dialogType = null) {
       this.reset()
-    },
-    show(id = null) {
-      if (id === null) {
-        this.title = '添加'
-        this.dialogType = 'success'
-      } else {
-        this.title = '编辑'
-        this.dialogType = 'primary'
-        // 查询数据
-        this.getData(id)
+      this.dialogType = dialogType
+      if (dialogType === this.$gc.dialogType.Add){
+        this.toAdd()
+      }else if (dialogType === this.$gc.dialogType.Edit){
+        this.toEdit(id)
       }
 
-      this.getRoleList()
-      this.getDeptTree()
+       this.getRoleList()
+       this.getDeptTree()
 
       this.$refs.dialog.show()
+    },
+
+    toAdd(){
+      this.title = '添加'
+      this.dialogType = 'success'
+    },
+
+    toEdit(id){
+      this.title = '编辑'
+      this.dialogType = 'primary'
+      // 查询数据
+      this.getData(id)
     },
 
     getData(id) {
@@ -160,6 +170,7 @@ export default {
       this.$refs.tree.setCurrentKey(data.id)
       this.popoverShow = false
     },
+
     getDeptTree() {
       this.$api.dept.tree().then(res => {
         this.options = res
