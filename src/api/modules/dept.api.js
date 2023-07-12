@@ -16,8 +16,15 @@ export const list = (data = {},  headers= {}) => request({
     headers
 })
 
-export const update = (data = {},  headers= {}) => request({
+export const update = (data = {},  headers= {showLoading: true}) => request({
     url: prefix + '/update',
+    method: 'post',
+    data,
+    headers
+})
+
+export const save = (data = {}, headers = {showLoading: false}) => request({
+    url: prefix + '/save',
     method: 'post',
     data,
     headers
@@ -29,13 +36,14 @@ export const getById = (id, headers= {}) => request({
     headers
 })
 
-export const del = (id, headers= {}) => request({
+export const del = (id, headers= {showLoading: false}) => request({
     url: prefix + '/delete/' + id,
     method: 'get',
     headers
 })
 
-export const enabledSwitch = (id) => request({
+export const enabledSwitch = (id, headers = {showLoading: false}) => request({
     url: prefix + '/enabledSwitch/' + id,
-    method: 'get'
+    method: 'get',
+    headers
 })

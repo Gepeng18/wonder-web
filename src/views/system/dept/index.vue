@@ -16,7 +16,7 @@
 
 
     <div>
-      <el-button type="success" icon="el-icon-plus" size="mini">添加</el-button>
+      <el-button type="success" icon="el-icon-plus" size="mini" @click="clickAdd">添加</el-button>
       <!--      <el-button type="primary" icon="el-icon-search" size="mini" @click="showSearchBar = !showSearchBar">搜索</el-button>-->
     </div>
 
@@ -67,31 +67,26 @@
         <el-table-column label="操作"
         >
           <template slot-scope="scope">
-            <el-button type="text" size="" @click="edit(scope.row)">编辑</el-button>
-            <el-button type="text" class="color-danger" @click="del(scope.row)">删除</el-button>
+            <el-button type="text" size="" @click="clickEdit(scope.row)">编辑</el-button>
+            <el-button type="text" class="color-danger" @click="clickDel(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
     </div>
     <!--停启用 弹框-->
-    <CommonDialog :type="selectSwitch ? 'warning' : 'success'" ref="switchEnabledDialog"
-                  @confirm="switchEnabledConfirm">
+    <CommonDialog :type="selectRow.enabled ? 'warning' : 'success'" ref="switchEnabledDialog" @confirm="switchEnabledConfirm">
       <div>
-        确认{{ selectSwitch ? '停用' : '启用' }} “
-        <span style="font-weight: bolder" :class="selectSwitch ? 'color-warning' : 'color-success'">{{
-            selectName
-          }}</span>
-        ” ？
+        确认{{ selectRow.enabled ? '停用' : '启用' }} “ <b :class="selectRow.enabled ? 'color-warning' : 'color-success'">{{ selectRow.name }}</b> ” ？
       </div>
     </CommonDialog>
 
     <!--    编辑框-->
-    <DeptSave ref="saveDialog" title="编辑" @confirm="confirm"/>
+    <DeptSave ref="saveDialog" title="编辑" @close="saveDialogClose"/>
 
     <!--删除弹框-->
     <CommonDialog type="danger" ref="delDialog" @confirm="delConfirm">
       <div>
-        确认删除 “ <b class="color-danger">{{ deleteName }}</b> ” ？
+        确认删除 “ <b class="color-danger">{{ selectRow.name }}</b> ” ？
       </div>
     </CommonDialog>
   </div>
@@ -116,14 +111,10 @@ export default {
       //   parentId: 0
       // },
       tableData: [],
-
-      selectId: null,
-      selectName: '',
       showSearchBar: false,
-      selectSwitch: false,
-      deleteName: '',
       keyNum: 0,
-      maps: new Map()
+      maps: new Map(),
+      selectRow: {},
     }
   },
 
@@ -133,9 +124,7 @@ export default {
 
   methods: {
     switchChange(row) {
-      this.selectSwitch = row.enabled
-      this.selectName = row.name
-      this.selectId = row.id
+      this.selectRow = row
       this.$refs.switchEnabledDialog.show(row)
     },
 
@@ -189,22 +178,28 @@ export default {
       this.load(tree, treeNode, resolve);
     },
 
-    edit(row) {
+    clickEdit(row) {
       this.$refs.saveDialog.show(row.id, this.$gc.dialogType.Edit)
     },
 
-    del(row) {
-      this.deleteName = row.name
+    clickAdd() {
+      this.$refs.saveDialog.show(null, this.$gc.dialogType.Add)
+    },
+
+    clickDel(row) {
+      this.selectRow = row
       this.$refs.delDialog.show(row)
     },
 
-    confirm() {
+    saveDialogClose() {
+      this.selectRow = {}
       this.getData()
     },
 
     delConfirm(data) {
       this.$api.dept.del(data.id).then(() => {
         this.getData()
+        this.selectRow = {}
         this.$message.success('删除成功')
       })
     },

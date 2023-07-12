@@ -1,6 +1,6 @@
 <template>
-  <CommonDialog ref="dialog" @confirm="confirm">
-    <el-form :model="formData" label-width="100px" label-suffix="：">
+  <CommonDialog ref="dialog" @confirm="confirm" @cancel="cancel">
+    <el-form :model="formData" :rules="rules" label-width="100px" label-suffix="：">
       <el-form-item label="上级">
         <el-popover v-model="popoverShow" style="width: 100%;" placement="right-start" trigger="focus">
           <el-input readonly style="font-weight: bold;color: #8c939d" placeholder="无" v-model="formData.parentName"
@@ -23,27 +23,26 @@
         </el-popover>
       </el-form-item>
 
-      <el-form-item label="名称">
+      <el-form-item label="名称" prop="name">
         <el-input v-model="formData.name" clearable placeholder="请输入名称"></el-input>
       </el-form-item>
 
       <el-form-item label="排序">
-<!--        <el-input v-model="formData.sort" clearable placeholder="请输入排序"></el-input>-->
-        <el-input-number v-model="formData.sort" controls-position="right" @change="handleChange" :min="1" :max="999"></el-input-number>
-
+        <el-input-number style="width: 240px" v-model="formData.sort" controls-position="right" @change="handleChange"
+                         :min="1" :max="999"/>
       </el-form-item>
 
-<!--      <el-form-item label="状态">-->
-<!--        <el-switch-->
-<!--            :value="formData.enabled"-->
-<!--            active-color="#67C23A"-->
-<!--            inactive-color="#E6A23C"-->
-<!--            active-text="启用"-->
-<!--            inactive-text="停用"-->
-<!--            @change="switchChange(formData.enabled)"-->
-<!--        >-->
-<!--        </el-switch>-->
-<!--      </el-form-item>-->
+      <!--      <el-form-item label="状态">-->
+      <!--        <el-switch-->
+      <!--            :value="formData.enabled"-->
+      <!--            active-color="#67C23A"-->
+      <!--            inactive-color="#E6A23C"-->
+      <!--            active-text="启用"-->
+      <!--            inactive-text="停用"-->
+      <!--            @change="switchChange(formData.enabled)"-->
+      <!--        >-->
+      <!--        </el-switch>-->
+      <!--      </el-form-item>-->
     </el-form>
 
   </CommonDialog>
@@ -51,6 +50,7 @@
 
 <script>
 import CommonDialog from "@/components/CommonDialog.vue";
+import {validateEMail, validatePhone} from "@/utils/validate";
 
 export default {
   name: "DeptSave",
@@ -65,24 +65,32 @@ export default {
         label: 'name',
         id: 'id',
       },
+      dialogType: null,
+      rules: {
+        name: [
+          {required: true, trigger: 'blur', message: '请输入名称'},
+          {min: 1, max: 10, message: '请输入名称', trigger: "blur"}
+        ]
+      },
     }
   },
 
   methods: {
-    show(id=null, dialogType = null) {
-      if (dialogType === this.$gc.dialogType.Add){
+    show(id = null, dialogType = null) {
+      this.dialogType = dialogType
+      if (dialogType === this.$gc.dialogType.Add) {
         this.toAdd()
-      }else if (dialogType === this.$gc.dialogType.Edit){
+      } else if (dialogType === this.$gc.dialogType.Edit) {
         this.toEdit(id)
       }
     },
 
-    async toAdd(){
+    async toAdd() {
       await this.getTree()
       this.$refs.dialog.show()
     },
 
-    async toEdit(id){
+    async toEdit(id) {
       await this.getData(id)
       await this.getTree()
       this.$refs.dialog.show()
@@ -114,12 +122,23 @@ export default {
     },
 
     confirm() {
-      this.$api.dept.update(this.formData).then(() => {
-        this.$refs.dialog.close()
-        this.$emit('confirm')
-      }).catch(() => {
-        this.$refs.dialog.stopLoading()
-      })
+      if (this.dialogType === this.$gc.dialogType.Add) {
+        this.$api.dept.save(this.formData).then(() => {
+          this.$refs.dialog.close()
+          this.reset()
+          this.$emit('close')
+        }).catch(() => {
+          this.$refs.dialog.stopLoading()
+        })
+      } else if (this.dialogType === this.$gc.dialogType.Edit) {
+        this.$api.dept.update(this.formData).then(() => {
+          this.$refs.dialog.close()
+          this.reset()
+          this.$emit('close')
+        }).catch(() => {
+          this.$refs.dialog.stopLoading()
+        })
+      }
     },
 
     switchChange(val) {
@@ -129,6 +148,14 @@ export default {
     handleChange(currentValue) {
       this.formData.sort = currentValue
     },
+
+    cancel() {
+      this.reset()
+    },
+
+    reset() {
+      this.formData = {}
+    }
   }
 }
 </script>
@@ -138,13 +165,12 @@ export default {
 //background: rgb(199, 42, 37);
 }
 
-/deep/.el-tree--highlight-current .el-tree-node.is-current > .el-tree-node__content {
+/deep/ .el-tree--highlight-current .el-tree-node.is-current > .el-tree-node__content {
   background-color: #d2e1f1;
 }
 
-/deep/.el-tree {
-//background: #10498f;
-//color: #ffffff;
+/deep/ .el-tree {
+//background: #10498f; //color: #ffffff;
 }
 
 /deep/ .el-tree-node:focus > .el-tree-node__content {
