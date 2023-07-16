@@ -3,27 +3,14 @@
       :title="dialogParam.title"
       :show-cancel="dialogParam.showCancel"
       :type="dialogParam.type"
-      width="800px" ref="dialog"
+      ref="dialog"
       @confirm="confirm">
     <div>
       <el-form ref="form" :model="formData" :rules="rules" label-width="100px" label-suffix="：">
         <el-row :gutter="5">
-          <el-col :span="12">
+          <el-col :span="24">
             <el-form-item label="名称" prop="name">
               <el-input v-model="formData.name" placeholder="请输入名称"></el-input>
-            </el-form-item>
-          </el-col>
-
-          <el-col :span="12">
-            <el-form-item label="提供类型" prop="provideType">
-              <el-select v-model="formData.provideType" placeholder="请选择提供类型" @change="provideTypeChange">
-                <el-option
-                    v-for="item in  [{ value: 1, label: '值' },{ value: 2, label: '方法' }]"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                </el-option>
-              </el-select>
             </el-form-item>
           </el-col>
 
@@ -32,104 +19,6 @@
               <el-input v-model="formData.remark" placeholder="请输入备注"></el-input>
             </el-form-item>
           </el-col>
-
-          <el-col :span="12">
-            <el-form-item label="表别名" prop="tableAlias">
-              <el-input v-model="formData.tableAlias" placeholder="请输入表别名"></el-input>
-            </el-form-item>
-          </el-col>
-
-          <el-col :span="12">
-            <el-form-item label="字段名" prop="columnName">
-              <el-input v-model="formData.columnName" placeholder="请输入字段名"></el-input>
-            </el-form-item>
-          </el-col>
-
-          <el-col :span="12">
-            <el-form-item label="拼接类型" prop="spliceType">
-              <el-select v-model="formData.spliceType" placeholder="请选择拼接类型">
-                <el-option
-                    v-for="item in  [{ value: 'AND', label: 'AND' },{ value: 'OR', label: 'OR' }]"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                </el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-
-          <el-col :span="12">
-            <el-form-item label="表达式" prop="expression">
-              <el-select v-model="formData.expression" placeholder="请选择表达式">
-                <el-option
-                    v-for="item in expressionOptions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                </el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-
-          <div v-if="formData.provideType === $gc.provideType.VALUE || formData.provideType == null">
-            <el-col :span="12">
-              <el-form-item label="值1" prop="value1">
-                <el-input v-model="formData.value1" placeholder="请输入值1"></el-input>
-              </el-form-item>
-            </el-col>
-
-            <el-col :span="12">
-              <el-form-item label="值2" prop="value2">
-                <el-input v-model="formData.value2" placeholder="请输入值2"></el-input>
-              </el-form-item>
-            </el-col>
-          </div>
-
-          <div v-else>
-            <el-col :span="24">
-              <el-form-item label="类名" prop="className">
-                <el-input v-model="formData.className" placeholder="请输入类名"></el-input>
-              </el-form-item>
-            </el-col>
-
-            <el-col :span="dialogType !== $gc.dialogType.View ? 20 : 24">
-              <el-form-item label="方法名" prop="methodName">
-                <el-input v-model="formData.methodName" placeholder="请输入方法名"></el-input>
-              </el-form-item>
-            </el-col>
-
-
-            <el-col v-if="dialogType !== $gc.dialogType.View" :span="4">
-              <el-button type="success" @click="addGroup">添加参数</el-button>
-            </el-col>
-
-            <div v-for="(group, index) in getGroups" :key="index">
-
-              <el-col :span="10">
-                <el-form-item :label="`第${index + 1}个形参`">
-
-                  <el-select v-model="group.formalParam" placeholder="请选择形参类型">
-                    <el-option
-                        v-for="item in formalTypeOptions"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value">
-                    </el-option>
-                  </el-select>
-                </el-form-item>
-              </el-col>
-
-              <el-col :span="10">
-                <el-form-item :label="`第${index + 1}个实参`" :key="index">
-                  <el-input v-model="group.actualParam" placeholder="实际参数"></el-input>
-                </el-form-item>
-              </el-col>
-
-              <el-col :span="4">
-                <el-button type="danger" icon="el-icon-delete" @click="removeGroup(index)" circle></el-button>
-              </el-col>
-            </div>
-          </div>
         </el-row>
       </el-form>
 
@@ -140,7 +29,6 @@
 
 <script>
 import CommonDialog from "@/components/CommonDialog.vue";
-import {validateEMail, validatePhone} from "@/utils/validate";
 
 export default {
   name: "CurDialog",
@@ -150,124 +38,16 @@ export default {
       dialogParam: {},
       formData: {},
       dialogType: null,
-      groups: [],
       rules: {
         name: [
           {required: true, trigger: 'blur', message: '请输入名称'},
-          {min: 1, max: 10, message: '用户名称必须1-10个字符之间', trigger: "blur"}
+          {min: 1, max: 10, message: '名称必须1-10个字符之间', trigger: "blur"}
         ],
-        provideType: [
-          {required: true, trigger: 'blur', message: '请选择提供类型'},
-        ],
-        columnName: [
-          {required: true, trigger: 'blur', message: '请输入字段名'},
-          {min: 1, max: 30, message: '字段名必须1-30个字符之间', trigger: "blur"}
-        ],
-        spliceType: [
-          {required: true, trigger: 'blur', message: '请选择拼接类型'},
-        ],
-        expression: [
-          {required: true, trigger: 'blur', message: '请选择表达式'},
-        ],
-        value1: [
-          {required: true, trigger: "blur", message: '请输入value1'}
-        ],
-        className: [
-          {required: true, trigger: 'blur', message: '请输入类名'},
-        ],
-        methodName: [
-          {required: true, trigger: 'blur', message: '请选择方法名'},
-        ]
       },
-      expressionOptions: [{
-        value: 'EQ',
-        label: 'EQ-等于'
-      }, {
-        value: 'NE',
-        label: 'NE-不等于'
-      }, {
-        value: 'LIKE',
-        label: 'LIKE-像'
-      }, {
-        value: 'GT',
-        label: 'GT-大于'
-      }, {
-        value: 'GE',
-        label: 'GE-大于等于'
-      }, {
-        value: 'LT',
-        label: 'LT-小于'
-      }, {
-        value: 'LE',
-        label: 'LE-小于等于'
-      }, {
-        value: 'IN',
-        label: 'IN-在给定的数据内'
-      }, {
-        value: 'NOTIN',
-        label: 'NOTIN-不在给定的数据内'
-      }, {
-        value: 'ISNULL',
-        label: 'ISNULL-为NUll'
-      }, {
-        value: 'NOTNULL',
-        label: 'NOTNULL-不为NUll'
-      }],
-      formalTypeOptions: [{
-        value: 'java.lang.String',
-        label: '字符串'
-      }, {
-        value: 'java.lang.Integer',
-        label: '整型'
-      }, {
-        value: 'java.lang.Long',
-        label: '长整型'
-      }, {
-        value: 'java.lang.Boolean',
-        label: '布尔值'
-      }, {
-        value: 'java.lang.Byte',
-        label: '字节型'
-      }, {
-        value: 'java.lang.Short',
-        label: '短整型'
-      }, {
-        value: 'java.lang.Float',
-        label: '单精度浮点型'
-      }, {
-        value: 'java.lang.Double',
-        label: '双精度浮点型'
-      }],
-
-    }
-  },
-
-  computed: {
-    getGroups() {
-      return this.groups;
     }
   },
 
   methods: {
-    addGroup() {
-      this.groups.push({formalParam: '', actualParam: ''}); // 在组数组中新增一组
-    },
-
-    removeGroup(index) {
-      this.groups.splice(index, 1); // 从组数组中删除指定索引的组
-    },
-
-    provideTypeChange() {
-      // 根据选择的类型动态设置校验规则
-      if (this.formData.provideType === this.$gc.provideType.VALUE) {
-        // this.$set(this.rules.name[0], 'validator', this.validateName);
-        // this.$delete(this.rules.age[0], 'validator');
-      } else if (this.formData.provideType === this.$gc.provideType.METHOD) {
-        // this.$set(this.rules.age[0], 'validator', this.validateAge);
-        // this.$delete(this.rules.name[0], 'validator');
-      }
-    },
-
     confirm() {
       if (this.dialogType === this.$gc.dialogType.View) {
         this.$refs.dialog.close()
@@ -276,25 +56,6 @@ export default {
 
       this.$refs.form.validate((valid) => {
         if (valid) {
-          if (this.formData.provideType === this.$gc.provideType.METHOD && this.groups.length > 0) {
-            let formalParamArray = []
-            let actualParamArray = []
-
-            for (let group of this.groups) {
-              if (group.formalParam === "" || group.actualParam === '') {
-                this.$message.warning('参数请成对填写完整')
-                this.$refs.dialog.stopLoading()
-                return false;
-              }
-              formalParamArray.push(group.formalParam)
-              actualParamArray.push(group.actualParam)
-            }
-            if (formalParamArray.length === actualParamArray.length) {
-              this.formData.formalParam = formalParamArray.join(';')
-              this.formData.actualParam = actualParamArray.join(';')
-            }
-          }
-
           if (this.dialogType === this.$gc.dialogType.Add) {
             this.$api.rule.save(this.formData).then(() => {
               this.$message.success('添加成功')
@@ -358,18 +119,12 @@ export default {
     getData(id) {
       this.$api.rule.getById(id).then(res => {
         this.formData = res
-        if (res.provideType === this.$gc.provideType.METHOD && res.paramList != null) {
-          for (const param of res.paramList) {
-            this.groups.push({formalParam: param.type, actualParam: param.value})
-          }
-        }
         this.$refs.dialog.show()
       })
     },
 
     reset() {
       this.formData = {}
-      this.groups = []
       this.dialogParam = {}
     }
   }

@@ -42,7 +42,8 @@
         <!--        <el-table-column prop="updateTime" label="修改时间"/>-->
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button class="primary" type="text" @click="clickView(scope.row)">查看</el-button>
+<!--            <el-button class="primary" type="text" @click="clickView(scope.row)">查看</el-button>-->
+            <el-button type="text" @click="clickManage(scope.row)">数据管理</el-button>
             <el-button type="text" @click="clickEdit(scope.row)">修改</el-button>
             <el-button type="text" class="color-danger" @click="clickDel(scope.row)">删除</el-button>
           </template>
@@ -119,6 +120,10 @@ export default {
 
     clickEdit(row) {
       this.$refs.curDialog.show(row.id, this.$gc.dialogType.Edit)
+    },
+
+    clickManage(row) {
+      this.$message.success(row.name)
     },
 
     clickView(row) {
