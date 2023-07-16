@@ -6,4 +6,9 @@ export default {
         'Tip': 4
     },
     adminCode: 'admin',
+    provideType: {
+        VALUE: 1,
+        METHOD: 2,
+    },
+
 }

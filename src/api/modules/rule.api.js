@@ -1,6 +1,6 @@
 import request from "@/utils/request";
 
-const prefix = '/dataScope'
+const prefix = '/rule'
 
 export const page = (data = {}, headers= {}) => request({
     url: prefix + '/page',

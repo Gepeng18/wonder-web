@@ -6,7 +6,7 @@
           <el-row :gutter="5" align="middle">
             <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6">
               <el-form-item label="名称">
-                <el-input v-model="searchForm.scopeName" placeholder="名称"/>
+                <el-input v-model="searchForm.name" placeholder="名称"/>
               </el-form-item>
             </el-col>
           </el-row>
@@ -25,7 +25,7 @@
                 stripe
                 style="width: 100%"
       >
-        <el-table-column prop="scopeName" label="名称"/>
+        <el-table-column prop="name" label="名称"/>
         <el-table-column prop="remark" label="备注"/>
         <el-table-column label="状态">
           <template slot-scope="scope">
@@ -42,16 +42,14 @@
         <!--        <el-table-column prop="updateTime" label="修改时间"/>-->
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <!--              <el-button class="primary" type="text" @click="detail(scope.row)">查看</el-button>-->
-            <el-button type="text" @click="edit(scope.row)">修改</el-button>
+            <el-button class="primary" type="text" @click="clickView(scope.row)">查看</el-button>
+            <el-button type="text" @click="clickEdit(scope.row)">修改</el-button>
             <el-button type="text" class="color-danger" @click="clickDel(scope.row)">删除</el-button>
-
           </template>
         </el-table-column>
       </el-table>
       <div class="table-footer">
-        <el-divider></el-divider>
-
+        <el-divider />
         <el-pagination
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
@@ -68,38 +66,36 @@
     <CommonDialog :type="selectRow.enabled ? 'warning' : 'success'" ref="enabledDialog" @confirm="enabledConfirm">
       <div>
         确认{{ selectRow.enabled ? '停用' : '启用' }} <b :class="selectRow.enabled ? 'color-warning' : 'color-success'">{{
-          selectRow.scopeName
+          selectRow.name
         }}</b> 规则 “ ？
       </div>
     </CommonDialog>
 
+    <!--删除弹框-->
+    <CommonDialog type="danger" ref="delDialog" @confirm="delConfirm">
+      <div>
+        确认删除<b class="color-danger">{{ selectRow.name }}</b> 规则 “ ？
+      </div>
+    </CommonDialog>
+
+    <CurDialog ref="curDialog" @close="getData"/>
+
   </div>
-
-  <!--    &lt;!&ndash;删除弹框&ndash;&gt;-->
-  <!--    <CommonDialog type="danger" ref="delDialog" @confirm="delConfirm">-->
-  <!--      <div>-->
-  <!--        确认删除<b class="color-danger">{{ selectRow.name }}</b> 规则 “ ？-->
-  <!--      </div>-->
-  <!--    </CommonDialog>-->
-
-
-  <!--    <UserSave ref="userSave" @confirm="userSaveConfirm"/>-->
 
 </template>
 
 <script>
 import TableSearchBar from "@/components/TableSearchBar/TableSearchBar.vue";
 import CommonDialog from "@/components/CommonDialog.vue";
-import UserSave from "@/views/system/user/UserSave.vue";
-import Dict from "@/views/system/dict/Dict.vue";
+import CurDialog from "@/views/system/rule/CurDialog.vue";
 
 export default {
   name: "index",
-  components: {Dict, UserSave, CommonDialog, TableSearchBar},
+  components: {CurDialog, CommonDialog, TableSearchBar},
   data() {
     return {
       searchForm: {
-        scopeName: ''
+        name: ''
       },
       tableData: [],
       pageInfo: {
@@ -118,11 +114,15 @@ export default {
 
   methods: {
     clickAdd() {
-      this.$refs.userSave.show(null, this.$gc.dialogType.Add)
+      this.$refs.curDialog.show(null, this.$gc.dialogType.Add)
     },
 
-    edit(row) {
-      this.$refs.userSave.show(row.id, this.$gc.dialogType.Edit)
+    clickEdit(row) {
+      this.$refs.curDialog.show(row.id, this.$gc.dialogType.Edit)
+    },
+
+    clickView(row) {
+      this.$refs.curDialog.show(row.id, this.$gc.dialogType.View)
     },
 
     switchChange(row) {
@@ -131,7 +131,7 @@ export default {
     },
 
     enabledConfirm(data) {
-      this.$api.dataScope.enabledSwitch(data.id).then(() => {
+      this.$api.rule.enabledSwitch(data.id).then(() => {
         this.$refs.enabledDialog.close()
         this.getData()
       }).catch(() => {
@@ -139,22 +139,8 @@ export default {
       })
     },
 
-    handleNodeClick(data) {
-      if (this.searchForm.deptId == data.id) {
-        this.searchForm.deptId = null
-        this.$refs.tree.setCurrentKey(null)
-
-      } else {
-        this.searchForm.deptId = data.id
-        this.$refs.tree.setCurrentKey(data.id)
-      }
-
-      this.getData()
-    },
-
-
     delConfirm() {
-      this.$api.dataScope.del(this.selectRow.id).then(() => {
+      this.$api.rule.del(this.selectRow.id).then(() => {
         this.selectRow = {}
         this.$refs.delDialog.close()
         this.$message.success('删除成功')
@@ -169,16 +155,12 @@ export default {
       this.$refs.delDialog.show()
     },
 
-    clickResetPWD(row) {
-      this.$refs.resetPWDDialog.show(row.id)
-    },
-
     getData() {
       const params = {
         ...this.searchForm,
         ...this.pageInfo
       }
-      this.$api.dataScope.page(params).then(res => {
+      this.$api.rule.page(params).then(res => {
         this.tableData = res.list
         this.pageInfo.total = res.total
         this.pageInfo.pages = res.pages
@@ -196,7 +178,6 @@ export default {
     handleReset(e) {
       this.searchForm = {}
       this.pageInfo.curPage = 1
-      this.$refs.tree.setCurrentKey(null)
       this.getData()
       e.target.blur()
     },

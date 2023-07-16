@@ -3,7 +3,7 @@ const role = require('./modules/role.api')
 const menu = require('./modules/menu.api')
 const dict = require('./modules/dict.api')
 const dept = require('./modules/dept.api')
-const dataScope = require('./modules/dataScope.api')
+const rule = require('./modules/rule.api')
 
 const api = {
     user,
@@ -11,7 +11,7 @@ const api = {
     menu,
     dict,
     dept,
-    dataScope
+    rule
 }
 import Vue from "vue";
 

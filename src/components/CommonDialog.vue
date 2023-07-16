@@ -14,8 +14,8 @@
       <slot/>
     </div>
     <div slot="footer" class="dialog-footer" v-if="showFooter">
-      <el-button @click="confirm" :disabled="disabled"  :loading="loading" type="primary">{{ confirmText }}</el-button>
-      <el-button @click="cancel" v-if="showCancel">{{ cancelText }}</el-button>
+      <el-button @click="confirm" v-if="showConfirm" :disabled="disabled"  :loading="loading" type="primary">{{ confirmText }}</el-button>
+      <el-button @click="cancel" v-if="showCancel" >{{ cancelText }}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -42,6 +42,10 @@ export default {
       default: '-50px'
     },
     showCancel: {
+      type: Boolean,
+      default: true
+    },
+    showConfirm: {
       type: Boolean,
       default: true
     },
