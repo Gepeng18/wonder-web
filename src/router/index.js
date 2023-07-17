@@ -47,6 +47,15 @@ const baseRoutes = [
         },
         component: () => import('@/views/index/index.vue'),
         children: []
+    },
+    {
+        name: 'index',
+        path: '/rule-index',
+        meta: {
+            auth: true
+        },
+        component: () => import('@/views/system/rule/index.vue'),
+        children: []
     }
 ]
 

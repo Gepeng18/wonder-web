@@ -21,12 +21,6 @@ export const save = (data = {}) => request({
     data
 })
 
-export const enabledSwitch = (id, headers ={showLoading: false}) => request({
-    url: prefix + '/enabledSwitch/' + id,
-    method: 'get',
-    headers
-})
-
 export const getById = (id) => request({
     url: prefix + '/get/' + id,
     method: 'get'

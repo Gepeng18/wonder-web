@@ -4,14 +4,15 @@ const menu = require('./modules/menu.api')
 const dict = require('./modules/dict.api')
 const dept = require('./modules/dept.api')
 const rule = require('./modules/rule.api')
-
+const mark = require('./modules/mark.api')
 const api = {
     user,
     role,
     menu,
     dict,
     dept,
-    rule
+    rule,
+    mark
 }
 import Vue from "vue";
 
