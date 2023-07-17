@@ -1,5 +1,9 @@
 # wonder-web
 
+#### 前端 https://gitee.com/whzzone/wonder-web
+
+#### 后端 https://gitee.com/whzzone/wonder-server
+
 #### 待解决问题：
 1. 点击页面上按钮的时候，可以打开新的标签页，同时侧边栏保持原来的菜单高亮
 2. 无需重新登录就可以更新路由
