@@ -31,3 +31,8 @@ export const del = (id, headers= {showLoading: false}) => request({
     method: 'get',
     headers
 })
+
+export const getByMarkId = (markId) => request({
+    url: prefix + '/getByMarkId/' + markId,
+    method: 'get'
+})

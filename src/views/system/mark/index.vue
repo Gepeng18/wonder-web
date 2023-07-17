@@ -123,7 +123,12 @@ export default {
     },
 
     clickManage(row) {
-      this.$message.success(row.name)
+      this.$router.push({
+        name: 'rule-index',
+        query: {
+          markId: row.id
+        }
+      })
     },
 
     clickView(row) {

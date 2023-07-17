@@ -32,6 +32,11 @@ const baseRoutes = [
         redirect: 'login',
     },
     {
+        /*
+          如上 redirect 的时候需要
+          this.$router.push({name: 'login'})
+          this.$router.push({path: '/login'})
+        */
         name: 'login',
         path: '/login',
         meta: {
@@ -46,17 +51,20 @@ const baseRoutes = [
             auth: true
         },
         component: () => import('@/views/index/index.vue'),
-        children: []
+        children: [
+            {
+                // TODO 怎么跟数据库菜单表中的按钮绑定？肯定不能写死在这里
+                name: 'rule-index',
+                path: '/rule-index',
+                meta: {
+                    auth: true,
+                    title: '规则',
+                },
+                component: () => import('@/views/system/rule/index.vue'),
+            }
+        ]
     },
-    {
-        name: 'index',
-        path: '/rule-index',
-        meta: {
-            auth: true
-        },
-        component: () => import('@/views/system/rule/index.vue'),
-        children: []
-    }
+
 ]
 
 const createRouter = () => new VueRouter({

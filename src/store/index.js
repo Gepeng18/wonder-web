@@ -139,6 +139,7 @@ const store = new Vuex.Store({
         setDynamicRoutes(context) {
             console.log('setDynamicRoutes', context.state.userRoutes)
             context.state.userRoutes.forEach(item => {
+                // TODO 添加一个字段，如果是in_frame 就加入index，否则就是 _blank 打开
                 router.addRoute('index', {
                     path: item.path,
                     meta: {

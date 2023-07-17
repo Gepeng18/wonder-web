@@ -1,6 +1,6 @@
 <template>
   <div>
-    fdsafsasadfsaf
+
   </div>
 </template>
 
@@ -10,7 +10,21 @@ export default {
   data() {
     return {}
   },
-  methods: {}
+  mounted() {
+    this.getData(this.$route.query.markId)
+  },
+  methods: {
+    getData(markId){
+      if (!markId){
+        return
+      }
+
+      this.$api.rule.getByMarkId(markId).then(res => {
+        console.log(res)
+      })
+    }
+
+  }
 }
 </script>
 
