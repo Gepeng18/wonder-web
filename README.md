@@ -4,6 +4,8 @@
 
 #### 后端 https://gitee.com/whzzone/wonder-server
 
+#### API文档地址：http://wonder.weihuazhou.top/wonder-server/doc.html
+
 #### 待解决问题：
 1. 点击页面上按钮的时候，可以打开新的标签页，同时侧边栏保持原来的菜单高亮
 2. 无需重新登录就可以更新路由
