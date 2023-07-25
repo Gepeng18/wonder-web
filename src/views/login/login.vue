@@ -105,8 +105,9 @@ export default {
 
 <style lang="scss" scoped>
 .page-box {
-  background-color: #597da7;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
+  background-image: url("../../assets/image/login-bg.png");
 }
 
 .login-panel {
@@ -120,6 +121,7 @@ export default {
   left: 50%;
   position: absolute;
   transform: translate(-50%, -50%);
+  box-shadow: 0 0 10px #c1c5c8;
 
   .title {
     color: #545c64;
