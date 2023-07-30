@@ -25,10 +25,17 @@ const store = new Vuex.Store({
     mutations: {
         login(state, payload) {
             state.userinfo = payload;
-            if (payload.deptList.length === 1){
+            /*if (payload.deptList.length === 1){
                 state.userinfo.currentDeptId = payload.deptList[0].id
             }
             if (payload.roleList.length === 1){
+                state.userinfo.currentRoleId = payload.roleList[0].id
+            }*/
+
+            if (payload.deptList.length >= 1){
+                state.userinfo.currentDeptId = payload.deptList[0].id
+            }
+            if (payload.roleList.length >= 1){
                 state.userinfo.currentRoleId = payload.roleList[0].id
             }
         },

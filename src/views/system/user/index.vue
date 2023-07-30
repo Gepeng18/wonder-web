@@ -54,7 +54,11 @@
                   style="width: 100%"
         >
           <el-table-column prop="nickname" label="姓名"/>
-          <el-table-column prop="deptName" label="部门"/>
+          <el-table-column label="部门">
+            <template slot-scope="scope">
+              {{formatDeptNames(scope.row.deptList)}}
+            </template>
+          </el-table-column>
           <el-table-column prop="username" label="帐号"/>
           <el-table-column prop="phone" label="手机"/>
           <el-table-column prop="email" label="邮箱"/>
@@ -180,6 +184,10 @@ export default {
   },
 
   methods: {
+    formatDeptNames(list){
+      return list.map(item => item.name).join('、');
+    },
+
     clickAdd() {
       this.$refs.userSave.show(null, this.$gc.dialogType.Add)
     },

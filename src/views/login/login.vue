@@ -2,7 +2,7 @@
   <div class="page-box">
     <div class="login-panel" id="captcha">
       <div class="title">
-        管理系统
+        Wonder
       </div>
       <el-form :model="form" :rules="rules" label-width="100px" label-suffix="：">
         <el-form-item label="登录账号" prop="username">
@@ -99,7 +99,8 @@ export default {
         this.$notify({
           title: '提示',
           message: '登录成功！欢迎您 ' + res.nickname,
-          type: 'success'
+          type: 'success',
+          offset: 50
         })
         this.$store.dispatch('getUserMenu')
       }).catch(() => {
@@ -116,6 +117,9 @@ export default {
   width: 100%;
   height: 100%;
   background-image: url("../../assets/image/login-bg.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .login-panel {
