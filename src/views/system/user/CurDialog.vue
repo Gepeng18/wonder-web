@@ -3,10 +3,21 @@
     <el-form ref="form" :model="formData" :rules="rules" label-width="100px" label-suffix="：">
 
       <el-form-item label="所属部门" prop="deptId">
-        <el-popover v-model="popoverShow" style="width: 100%;" placement="right-start" trigger="focus">
-          <el-input readonly style="font-weight: bold;color: #8c939d" placeholder="请选择所属部门"
-                    v-model="formData.deptName"
-                    slot="reference"></el-input>
+        <el-popover v-model="popoverShow" style="width: 100%;" placement="right-start" trigger="hover">
+          <div
+              class="tag-group"
+              slot="reference">
+            <span style="margin: 0 2px;" v-for="tag in selectDeptList">
+              <el-tag
+                  :key="tag.name"
+                  closable
+                  @close="tagClose(tag)"
+                  type="info"
+                  size="small">
+                {{ tag.name }}
+              </el-tag>
+            </span>
+          </div>
           <div style="width: 224px;height: 300px;overflow: auto;">
             <el-tree
                 :data="options"
@@ -14,8 +25,10 @@
                 :props="defaultProps"
                 node-key="id"
                 :expand-on-click-node="false"
-                @node-click="handleNodeClick"
                 :highlight-current="true"
+                show-checkbox
+                @check="deptTreeChecked"
+                :check-strictly="true"
             >
           <span class="custom-tree-node" slot-scope="{ node, data }">
             <span :class="data.icon">{{ data.name }}</span>
@@ -62,21 +75,14 @@ import CommonDialog from "@/components/CommonDialog.vue";
 import {validateEMail, validatePhone} from "@/utils/validate";
 
 export default {
-  name: "UserSave",
+  name: "CurDialog",
+
   components: {CommonDialog},
   data() {
     return {
+      selectDeptList: [],
       title: '',
-      formData: {
-        id: null,
-        username: '',
-        nickname: '',
-        deptId: null,
-        deptName: '',
-        phone: '',
-        email: '',
-        enabled: null,
-      },
+      formData: {},
       popoverShow: false,
       options: [],
       defaultProps: {
@@ -92,8 +98,8 @@ export default {
         ],
         // roleIdList 未生效
         roleIdList: [
-          {required: true, trigger: 'blur', message: '请选择角色', type:'array'},
-          {min: 1, max: 10, message: '请选择角色', trigger: "blur", type:'array',}
+          {required: true, trigger: 'blur', message: '请选择角色', type: 'array'},
+          {min: 1, max: 10, message: '请选择角色', trigger: "blur", type: 'array',}
         ],
         nickname: [
           {required: true, trigger: 'blur', message: '请输入用户昵称'},
@@ -166,14 +172,33 @@ export default {
     getData(id) {
       this.$api.user.getById(id).then(res => {
         this.formData = res
+        this.$refs.tree.setCheckedKeys(res.deptIdList);
+
+        for (let item of res.deptList) {
+          this.selectDeptList.push({id: item.id, name: item.name})
+        }
       })
     },
 
-    handleNodeClick(data) {
-      this.formData.deptName = data.name
-      this.formData.deptId = data.id
-      this.$refs.tree.setCurrentKey(data.id)
-      this.popoverShow = false
+    tagClose(tag) {
+      console.log('tag', tag)
+      console.log('this.selectDeptList.indexOf(tag)', this.selectDeptList.indexOf(tag))
+      this.selectDeptList.splice(this.selectDeptList.indexOf(tag), 1);
+      let checkedKeys = []
+      for (let item of this.selectDeptList) {
+        checkedKeys.push(item.id)
+      }
+      this.$refs.tree.setCheckedKeys(checkedKeys);
+      this.formData.deptIdList = checkedKeys
+    },
+
+    deptTreeChecked(data, checked) {
+      let selectDeptList = []
+      for (const item of checked.checkedNodes) {
+        selectDeptList.push({id: item.id, name: item.name})
+      }
+      this.selectDeptList = selectDeptList
+      this.formData.deptIdList = checked.checkedKeys
     },
 
     getDeptTree() {
@@ -195,22 +220,24 @@ export default {
     },
 
     reset() {
-      this.formData = {
-        id: null,
-        username: '',
-        nickname: '',
-        deptId: null,
-        deptName: '',
-        phone: '',
-        email: '',
-        enabled: null,
-      }
+      this.formData = {}
       this.options = []
+      this.selectDeptList = []
     }
   }
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+
+.tag-group {
+  min-height: 40px;
+  background: #ffffff;
+  border: #d7d8da solid 1px;
+  border-radius: 5px;
+
+  max-height: 1000px;
+  //transition: max-height 1s linear;
+}
 
 </style>

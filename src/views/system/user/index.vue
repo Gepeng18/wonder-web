@@ -56,7 +56,7 @@
           <el-table-column prop="nickname" label="姓名"/>
           <el-table-column label="部门">
             <template slot-scope="scope">
-              {{formatDeptNames(scope.row.deptList)}}
+              {{ formatDeptNames(scope.row.deptList) }}
             </template>
           </el-table-column>
           <el-table-column prop="username" label="帐号"/>
@@ -74,8 +74,7 @@
               </el-switch>
             </template>
           </el-table-column>
-          <!--        <el-table-column prop="createTime" label="创建时间"/>-->
-          <!--        <el-table-column prop="updateTime" label="修改时间"/>-->
+
           <el-table-column label="操作">
             <template slot-scope="scope">
               <!--              <el-button class="primary" type="text" @click="detail(scope.row)">查看</el-button>-->
@@ -84,7 +83,6 @@
                 <el-button type="text" @click="clickResetPWD(scope.row)">重置密码</el-button>
                 <el-button type="text" class="color-danger" @click="clickDel(scope.row)">删除</el-button>
               </div>
-
             </template>
           </el-table-column>
         </el-table>
@@ -109,7 +107,7 @@
     <!--删除弹框-->
     <CommonDialog type="danger" ref="delDialog" @confirm="delConfirm">
       <div>
-        确认删除<b class="color-danger">{{ selectRow.nickname }}</b> 的账号 “ <b
+        确认删除 <b class="color-danger">{{ selectRow.nickname }}</b> 的账号 “ <b
           class="color-danger">{{ selectRow.username }}</b> ” ？
       </div>
     </CommonDialog>
@@ -125,7 +123,7 @@
       </div>
     </CommonDialog>
 
-    <UserSave ref="userSave" @confirm="userSaveConfirm"/>
+    <CurDialog ref="curDialog" @confirm="curDialogConfirm"/>
 
   </div>
 
@@ -135,12 +133,12 @@
 import TableSearchBar from "@/components/TableSearchBar/TableSearchBar.vue";
 import ResetPWD from "@/views/system/user/ResetPWD.vue";
 import CommonDialog from "@/components/CommonDialog.vue";
-import UserSave from "@/views/system/user/UserSave.vue";
+import CurDialog from "@/views/system/user/CurDialog.vue";
 import Dict from "@/views/system/dict/Dict.vue";
 
 export default {
   name: "index",
-  components: {Dict, UserSave, CommonDialog, ResetPWD, TableSearchBar},
+  components: {Dict, CurDialog, CommonDialog, ResetPWD, TableSearchBar},
   data() {
     return {
       style: {
@@ -184,16 +182,16 @@ export default {
   },
 
   methods: {
-    formatDeptNames(list){
+    formatDeptNames(list) {
       return list.map(item => item.name).join('、');
     },
 
     clickAdd() {
-      this.$refs.userSave.show(null, this.$gc.dialogType.Add)
+      this.$refs.curDialog.show(null, this.$gc.dialogType.Add)
     },
 
     edit(row) {
-      this.$refs.userSave.show(row.id, this.$gc.dialogType.Edit)
+      this.$refs.curDialog.show(row.id, this.$gc.dialogType.Edit)
     },
 
     switchChange(row) {
@@ -261,7 +259,7 @@ export default {
       })
     },
 
-    userSaveConfirm() {
+    curDialogConfirm() {
       this.getData()
     },
 
@@ -309,7 +307,7 @@ export default {
 }
 
 /deep/ .el-tree--highlight-current .el-tree-node.is-current > .el-tree-node__content {
-  background-color: #F56C6C;
+  background-color: #409EFF;
   color: #fff;
 }
 
