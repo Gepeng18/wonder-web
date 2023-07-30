@@ -85,7 +85,7 @@ router.beforeEach((to, from, next) => {
     // 验证当前路由所有的匹配中是否需要有登录验证的
     if (to.meta.auth) {
         console.log('需要权限')
-        const token = store.state.token
+        const token = store.state.userinfo.token
         if (token && token !== 'undefined') {
             if (isToken && !store.state.userRoutes.length) {
                 store.dispatch('getUserMenu').then(() => {

@@ -5,8 +5,30 @@
       <div class="left"><h2>管理系统</h2></div>
 
       <div class="right">
+        <div class="right-sub top_el_select">
+            <el-select v-model="$store.state.userinfo.currentRoleId" placeholder="请选择角色">
+              <el-option
+                  v-for="item in $store.state.userinfo.roleList"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id">
+              </el-option>
+            </el-select>
+        </div>
+
+        <div class="right-sub top_el_select">
+          <el-select v-model="$store.state.userinfo.currentDeptId" placeholder="请选择部门">
+            <el-option
+                v-for="item in $store.state.userinfo.deptList"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id">
+            </el-option>
+          </el-select>
+        </div>
+
         <div class="right-sub">
-          <h3>{{ this.$store.state.userinfo.nickname }}</h3>
+          <h3>{{ $store.state.userinfo.nickname }}</h3>
         </div>
         <div class="right-sub avatar">
           <el-avatar :size="50"
@@ -75,7 +97,8 @@ export default {
   data() {
     return {
       ifRouterAlive: true,
-
+      currentDeptId: "",
+      deptList: [],
     }
   },
 
@@ -244,4 +267,42 @@ $el-header-height: 60px;
 ::v-deep .el-main {
   padding: 5px;
 }
+
+::v-deep .el-select .el-input {
+  background-color: transparent;
+}
+
+.top_el_select {
+  .el-input__inner {
+    background-color: transparent;
+    //   border-color: rgba(255, 255, 255, 0.5);
+    color: #d52020;
+    //height: 90px;
+  }
+
+  /**修改边框和字体颜色 */
+  ::v-deep .el-select {
+    position: relative;
+    width: 140px;
+    .el-input {
+      input {
+        border-color: rgba(78, 229, 44, 0);
+        color: #FFFFFF;
+        background-color: transparent;
+        font-size: 18px;
+      }
+    }
+  }
+  /**修改下拉图标颜色 */
+  ::v-deep .el-input__suffix {
+    .el-input__suffix-inner {
+      .el-icon-arrow-up:before {
+        color: rgb(255, 255, 255);
+        padding-left: 0.11rem;
+      }
+    }
+  }
+}
+
+
 </style>

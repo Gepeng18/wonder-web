@@ -48,9 +48,11 @@ service.interceptors.request.use(
     config => {
         showLoading(config.headers.target, config.headers.showLoading)
         // 判断是否存在token，把token添加点请求头中，每次请求携带token传给后端
-        if (store.state.token) {
+        if (store.state.userinfo.token) {
             // 请求头的 Token 加上 token 数据
-            config.headers.Authorization = store.state.token;
+            config.headers.Authorization = store.state.userinfo.token;
+            config.headers.RoleId = store.state.userinfo.currentRoleId;
+            config.headers.DeptId = store.state.userinfo.currentDeptId;
         } else {
             console.log('no token');
         }

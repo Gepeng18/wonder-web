@@ -56,13 +56,16 @@ export default {
       }
     }
   },
-  setup() {
 
-
-  },
   mounted() {
+    window.addEventListener('beforeunload', this.handleBeforeUnload);
     this.getCode()
   },
+
+  beforeDestroy() {
+    window.removeEventListener('beforeunload', this.handleBeforeUnload);
+  },
+
   watch: {
     '$store.getters.userMenus': {
       handler() {
@@ -75,6 +78,10 @@ export default {
     }
   },
   methods: {
+    handleBeforeUnload(){
+      this.$store.commit('clear')
+    },
+
     getCode() {
       this.$api.user.getCode({target: '#captcha'}).then(res => {
         this.imgBase64 = res.imgBase64
@@ -83,6 +90,7 @@ export default {
         this.form.code = res.code
       })
     },
+
     onSubmit() {
       this.loading = true
       this.$api.user.loginByUsername(this.form).then(res => {
@@ -90,7 +98,7 @@ export default {
         this.$store.commit('login', res)
         this.$notify({
           title: '提示',
-          message: '登录成功！欢迎您 ' + res.userinfo.nickname,
+          message: '登录成功！欢迎您 ' + res.nickname,
           type: 'success'
         })
         this.$store.dispatch('getUserMenu')

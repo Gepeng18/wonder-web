@@ -10,7 +10,6 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
     state: {
         currentPath:'',
-        token: '',
         activeTab: '',
         tabList: [],   //动态标签页
         userinfo: {},
@@ -25,14 +24,24 @@ const store = new Vuex.Store({
 
     mutations: {
         login(state, payload) {
-            state.token = payload.token;
-            localStorage.setItem('token', payload.token);
-            state.userinfo = payload.userinfo;
+            state.userinfo = payload;
+            if (payload.deptList.length === 1){
+                state.userinfo.currentDeptId = payload.deptList[0].id
+            }
+            if (payload.roleList.length === 1){
+                state.userinfo.currentRoleId = payload.roleList[0].id
+            }
         },
+
         logout() {
             localStorage.clear()
             store.commit('RESET_STATE')
             router.push('/login')
+        },
+
+        clear(){
+            localStorage.clear()
+            store.commit('RESET_STATE')
         },
 
         addTab: (state, tab) => {
@@ -82,7 +91,6 @@ const store = new Vuex.Store({
         RESET_STATE: (state) => {
             console.log('重置store')
             localStorage.clear()
-            state.token = ''
             state.activeTab = ''
             state.tabList = []
             state.userinfo = {}
@@ -121,6 +129,7 @@ const store = new Vuex.Store({
     },
     actions: {
         getUserMenu(context) {
+            console.log('context.getters.userMenus.length', context.getters.userMenus.length)
             if (!context.getters.userMenus.length) {
                 api.menu.findByUserId().then(res => {
                     let {permits, routes, menus} = handleTree(res)
