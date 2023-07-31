@@ -2,7 +2,7 @@
   <!-- 系统整体页面布局 -->
   <el-container>
     <el-header class="header">
-      <div class="left"><h2>管理系统</h2></div>
+      <div class="left"><h2>Wonder</h2></div>
 
       <div class="right">
         <div class="right-sub top_el_select">
