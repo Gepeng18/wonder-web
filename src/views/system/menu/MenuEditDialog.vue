@@ -42,18 +42,21 @@
         </el-popover>
       </el-form-item>
 
-<!--      根据菜单类型显示不同的输入框-->
-      <el-form-item label="路由路径">
-        <el-input v-model="formData.path"></el-input>
-      </el-form-item>
+      <div v-if="formData.menuType !== 1">
+        <!--      根据菜单类型显示不同的输入框-->
+        <el-form-item label="路由路径">
+          <el-input v-model="formData.path"></el-input>
+        </el-form-item>
 
-      <el-form-item label="组件路径">
-        <el-input v-model="formData.component"></el-input>
-      </el-form-item>
+        <el-form-item label="组件路径">
+          <el-input v-model="formData.component"></el-input>
+        </el-form-item>
 
-      <el-form-item label="权限标识">
-        <el-input v-model="formData.permission"></el-input>
-      </el-form-item>
+
+        <el-form-item label="权限标识">
+          <el-input v-model="formData.permission"></el-input>
+        </el-form-item>
+      </div>
 
       <el-form-item label="排序">
         <el-input-number
