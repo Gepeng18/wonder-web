@@ -120,6 +120,8 @@ export default {
     $route: function () {
       this.setActiveTab()
       this.addTab()
+
+      console.log(this.$route)
     },
 
   },

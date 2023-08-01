@@ -58,20 +58,22 @@ export default {
   },
 
   mounted() {
+    this.$store.commit('clear')
     window.addEventListener('beforeunload', this.handleBeforeUnload);
     this.getCode()
   },
 
   beforeDestroy() {
     window.removeEventListener('beforeunload', this.handleBeforeUnload);
+    console.log('login beforeDestroy')
   },
 
   watch: {
     '$store.getters.userMenus': {
       handler() {
         if (this.$store.state.userMenus.length) {
-          this.$router.push({
-            path: '/index'
+          this.$router.replace({
+            name: 'index'
           })
         }
       }

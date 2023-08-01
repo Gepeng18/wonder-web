@@ -52,7 +52,7 @@ const baseRoutes = [
         },
         component: () => import('@/views/index/index.vue'),
         children: [
-            {
+            /*{
                 // TODO 怎么跟数据库菜单表中的按钮绑定？肯定不能写死在这里
                 name: 'rule-index',
                 path: '/rule-index',
@@ -61,7 +61,7 @@ const baseRoutes = [
                     title: '规则',
                 },
                 component: () => import('@/views/system/rule/index.vue'),
-            }
+            }*/
         ]
     },
 

@@ -77,7 +77,7 @@
       </el-table>
     </div>
 
-    <MenuEditDialog ref="menuEditDialog" @close="editDialogClose"/>
+    <CurDialog ref="curDialog" @close="editDialogClose"/>
 
     <CommonDialog type="danger" ref="delDialog" @confirm="delConfirm">
       <div>
@@ -90,12 +90,12 @@
 
 <script>
 import {getMapping} from "@/utils/MappingUtil";
-import MenuEditDialog from "@/views/system/menu/MenuEditDialog.vue";
+import CurDialog from "@/views/system/menu/CurDialog.vue";
 import CommonDialog from "@/components/CommonDialog.vue";
 
 export default {
   name: "index",
-  components: {CommonDialog, MenuEditDialog},
+  components: {CommonDialog, CurDialog},
   data() {
     return {
       tableData: [],
@@ -136,11 +136,11 @@ export default {
     },
 
     clickEdit(row) {
-      this.$refs.menuEditDialog.show(row.id, this.$gc.dialogType.EDIT)
+      this.$refs.curDialog.show(row.id, this.$gc.dialogType.EDIT)
     },
 
     clickAdd() {
-      this.$refs.menuEditDialog.show(null, this.$gc.dialogType.ADD)
+      this.$refs.curDialog.show(null, this.$gc.dialogType.ADD)
     },
 
     getData() {
