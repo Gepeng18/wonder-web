@@ -187,11 +187,11 @@ export default {
     },
 
     clickAdd() {
-      this.$refs.curDialog.show(null, this.$gc.dialogType.Add)
+      this.$refs.curDialog.show(null, this.$gc.dialogType.ADD)
     },
 
     edit(row) {
-      this.$refs.curDialog.show(row.id, this.$gc.dialogType.Edit)
+      this.$refs.curDialog.show(row.id, this.$gc.dialogType.EDIT)
     },
 
     switchChange(row) {

@@ -78,9 +78,9 @@ export default {
   methods: {
     show(id = null, dialogType = null) {
       this.dialogType = dialogType
-      if (dialogType === this.$gc.dialogType.Add) {
+      if (dialogType === this.$gc.dialogType.ADD) {
         this.toAdd()
-      } else if (dialogType === this.$gc.dialogType.Edit) {
+      } else if (dialogType === this.$gc.dialogType.EDIT) {
         this.toEdit(id)
       }
     },
@@ -122,7 +122,7 @@ export default {
     },
 
     confirm() {
-      if (this.dialogType === this.$gc.dialogType.Add) {
+      if (this.dialogType === this.$gc.dialogType.ADD) {
         this.$api.dept.save(this.formData).then(() => {
           this.$refs.dialog.close()
           this.reset()
@@ -130,7 +130,7 @@ export default {
         }).catch(() => {
           this.$refs.dialog.stopLoading()
         })
-      } else if (this.dialogType === this.$gc.dialogType.Edit) {
+      } else if (this.dialogType === this.$gc.dialogType.EDIT) {
         this.$api.dept.update(this.formData).then(() => {
           this.$refs.dialog.close()
           this.reset()

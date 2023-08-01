@@ -115,11 +115,11 @@ export default {
 
   methods: {
     clickAdd() {
-      this.$refs.curDialog.show(null, this.$gc.dialogType.Add)
+      this.$refs.curDialog.show(null, this.$gc.dialogType.ADD)
     },
 
     clickEdit(row) {
-      this.$refs.curDialog.show(row.id, this.$gc.dialogType.Edit)
+      this.$refs.curDialog.show(row.id, this.$gc.dialogType.EDIT)
     },
 
     clickManage(row) {
@@ -132,7 +132,7 @@ export default {
     },
 
     clickView(row) {
-      this.$refs.curDialog.show(row.id, this.$gc.dialogType.View)
+      this.$refs.curDialog.show(row.id, this.$gc.dialogType.VIEW)
     },
 
     switchChange(row) {

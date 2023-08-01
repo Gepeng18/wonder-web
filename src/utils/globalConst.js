@@ -1,9 +1,9 @@
 export default {
     dialogType: {
-        'View': 1,
-        'Add': 2,
-        'Edit': 3,
-        'Tip': 4
+        VIEW: 1,
+        ADD: 2,
+        EDIT: 3,
+        TIP: 4
     },
     adminCode: 'admin',
     provideType: {

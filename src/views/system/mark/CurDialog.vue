@@ -49,14 +49,14 @@ export default {
 
   methods: {
     confirm() {
-      if (this.dialogType === this.$gc.dialogType.View) {
+      if (this.dialogType === this.$gc.dialogType.VIEW) {
         this.$refs.dialog.close()
         return
       }
 
       this.$refs.form.validate((valid) => {
         if (valid) {
-          if (this.dialogType === this.$gc.dialogType.Add) {
+          if (this.dialogType === this.$gc.dialogType.ADD) {
             this.$api.rule.save(this.formData).then(() => {
               this.$message.success('添加成功')
               this.$refs.dialog.close()
@@ -87,9 +87,9 @@ export default {
     show(id = null, dialogType = null) {
       this.reset()
       this.dialogType = dialogType
-      if (dialogType === this.$gc.dialogType.Add) {
+      if (dialogType === this.$gc.dialogType.ADD) {
         this.toAdd()
-      } else if (dialogType === this.$gc.dialogType.Edit) {
+      } else if (dialogType === this.$gc.dialogType.EDIT) {
         this.toEdit(id)
       } else {
         this.toView(id)

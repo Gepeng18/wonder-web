@@ -145,9 +145,9 @@ export default {
     show(id = null, dialogType = null) {
       this.reset()
       this.dialogType = dialogType
-      if (dialogType === this.$gc.dialogType.Add) {
+      if (dialogType === this.$gc.dialogType.ADD) {
         this.toAdd()
-      } else if (dialogType === this.$gc.dialogType.Edit) {
+      } else if (dialogType === this.$gc.dialogType.EDIT) {
         this.toEdit(id)
       }
 

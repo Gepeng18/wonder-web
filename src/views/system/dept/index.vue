@@ -179,11 +179,11 @@ export default {
     },
 
     clickEdit(row) {
-      this.$refs.saveDialog.show(row.id, this.$gc.dialogType.Edit)
+      this.$refs.saveDialog.show(row.id, this.$gc.dialogType.EDIT)
     },
 
     clickAdd() {
-      this.$refs.saveDialog.show(null, this.$gc.dialogType.Add)
+      this.$refs.saveDialog.show(null, this.$gc.dialogType.ADD)
     },
 
     clickDel(row) {
