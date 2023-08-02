@@ -57,7 +57,7 @@ export default {
       this.$refs.form.validate((valid) => {
         if (valid) {
           if (this.dialogType === this.$gc.dialogType.ADD) {
-            this.$api.rule.save(this.formData).then(() => {
+            this.$api.mark.save(this.formData).then(() => {
               this.$message.success('添加成功')
               this.$refs.dialog.close()
               this.$emit('close')
@@ -66,7 +66,7 @@ export default {
             })
 
           } else {
-            this.$api.rule.update(this.formData).then(() => {
+            this.$api.mark.update(this.formData).then(() => {
               this.$message.success('保存成功')
               this.$refs.dialog.close()
               this.$emit('close')
@@ -117,7 +117,7 @@ export default {
     },
 
     getData(id) {
-      this.$api.rule.getById(id).then(res => {
+      this.$api.mark.get(id).then(res => {
         this.formData = res
         this.$refs.dialog.show()
       })

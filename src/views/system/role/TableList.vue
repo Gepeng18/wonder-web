@@ -105,7 +105,7 @@ export default {
     },
 
     clickDataScopeEdit(row) {
-      this.$emit('clickDataScopeEdit', row.id)
+      this.$emit('clickDataScopeEdit', row)
     },
 
     clickDel(row) {

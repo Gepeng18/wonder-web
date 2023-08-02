@@ -82,8 +82,8 @@ export default {
       this.$refs.tableList.findList()
     },
 
-    clickDataScopeEdit(id){
-      this.$refs.dataScopeDialog.show(this.$gc.dialogType.VIEW, id)
+    clickDataScopeEdit(row){
+      this.$refs.dataScopeDialog.show(this.$gc.dialogType.VIEW, row)
     },
 
   }

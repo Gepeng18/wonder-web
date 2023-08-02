@@ -1,5 +1,5 @@
 <template>
-  <CommonDialog ref="dialog" width="1000px" title="配置数据权限">
+  <CommonDialog ref="dialog" width="1000px" :title="title">
     <el-row :gutter="0">
       <el-col :span="12">
         <el-table
@@ -55,18 +55,20 @@ export default {
   components: {Dict, CommonDialog},
   data() {
     return {
+      title: '配置数据权限 - ',
       markTableData: [],
       ruleTableData: [],
       markCurrentRow: null,
-      roleId: null,
+      role: null,
     }
   },
   methods: {
-    show(dialogType = null, roleId = null) {
-      if (roleId == null)
+    show(dialogType = null, role = null) {
+      if (role == null)
         return
 
-      this.roleId = roleId
+      this.role = role
+      this.title = this.title + role.name
 
       this.$api.mark.list().then(res => {
         this.markTableData = res
@@ -95,7 +97,7 @@ export default {
         this.$refs.ruleTable.toggleRowSelection(del_row,false) //设置这一行取消选中
 
         let params = {
-          roleId: this.roleId,
+          roleId: this.role.id,
           ruleId: selection[0].id
         }
         this.$api.role.bindingRule(params).then(() => {
