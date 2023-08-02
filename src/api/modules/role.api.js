@@ -45,3 +45,9 @@ export const del = (id) => request({
     url: prefix + '/delete/' + id,
     method: 'get'
 })
+
+export const bindingRule = (params) => request({
+    url: prefix + '/bindingRule',
+    method: 'get',
+    params
+})

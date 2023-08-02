@@ -6,6 +6,7 @@
         @clickEdit="clickEdit"
         @clickDel="clickDel"
         @clickAdd="clickAdd"
+        @clickDataScopeEdit="clickDataScopeEdit"
         @switchChange="switchChange"
     />
 
@@ -26,6 +27,10 @@
         @close="saveDialogClose"
     />
 
+    <DataScopeDialog
+        ref="dataScopeDialog"
+    />
+
   </div>
 
 </template>
@@ -37,10 +42,11 @@ import RoleSave from "@/views/system/role/RoleSave.vue";
 import RoleEnabledDialog from "@/views/system/role/RoleEnabledDialog.vue";
 import RoleDelDialog from "@/views/system/role/RoleDelDialog.vue";
 import TableList from "@/views/system/role/TableList.vue";
+import DataScopeDialog from "@/views/system/role/DataScopeDialog.vue";
 
 export default {
   name: "index",
-  components: {TableList, RoleDelDialog, RoleEnabledDialog, RoleSave, CommonDialog, TableSearchBar},
+  components: {DataScopeDialog, TableList, RoleDelDialog, RoleEnabledDialog, RoleSave, CommonDialog, TableSearchBar},
   data() {
     return {
 
@@ -74,6 +80,10 @@ export default {
 
     saveDialogClose() {
       this.$refs.tableList.findList()
+    },
+
+    clickDataScopeEdit(id){
+      this.$refs.dataScopeDialog.show(this.$gc.dialogType.VIEW, id)
     },
 
   }
