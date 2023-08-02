@@ -8,10 +8,22 @@
         @close="handleClose"
         background-color="#545c64"
         text-color="#fff"
-        :default-active="$route.path"
+        :default-active="routeChange()"
         active-text-color="#ffd04b"
         :collapse="isCollapse"
     >
+<!--      <el-menu
+          unique-opened
+          router
+          class="el-menu-vertical"
+          @open="handleOpen"
+          @close="handleClose"
+          background-color="#545c64"
+          text-color="#fff"
+          :default-active="$route.path"
+          active-text-color="#ffd04b"
+          :collapse="isCollapse"
+      >-->
       <!--      第一种-->
       <!--      <div style="width: 100%;height: 50px;color: white;">-->
       <!--        <i style="float: right;font-size:25px;line-height: 50px;margin-right: 20px"-->
@@ -80,6 +92,11 @@ export default {
 
     handleClose(key, keyPath) {
       console.log('close key: ', key, 'close keyPath: ', keyPath);
+    },
+
+    routeChange(){
+      console.log('this.$route.path', this.$route.path)
+      return this.$route.path
     }
   }
 }

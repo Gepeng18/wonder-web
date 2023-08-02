@@ -43,7 +43,7 @@
         <el-table-column label="操作">
           <template slot-scope="scope">
 <!--            <el-button class="primary" type="text" @click="clickView(scope.row)">查看</el-button>-->
-            <el-button type="text" @click="clickManage(scope.row)">数据管理</el-button>
+            <el-button type="text" @click="clickManage(scope.row)">规则管理</el-button>
             <el-button type="text" @click="clickEdit(scope.row)">修改</el-button>
             <el-button type="text" class="color-danger" @click="clickDel(scope.row)">删除</el-button>
           </template>
@@ -124,7 +124,8 @@ export default {
 
     clickManage(row) {
       this.$router.push({
-        name: 'rule-index',
+        name: 'rule-index2',
+        // path: '/system/rule',
         query: {
           markId: row.id
         }

@@ -71,19 +71,25 @@
           </el-form-item>
         </el-col>
 
-        <el-col v-if="formData.inFrame || formData.menuType === 3" :span="12">
-          <el-form-item label="路由路径" prop="path">
+        <el-col v-if="formData.menuType !== 1" :span="12">
+          <el-form-item label="路由名称" prop="path">
+            <el-input v-model="formData.routeName"/>
+          </el-form-item>
+        </el-col>
+
+        <el-col v-if="formData.menuType !== 1" :span="12">
+          <el-form-item label="路由地址" prop="path">
             <el-input v-model="formData.path"/>
           </el-form-item>
         </el-col>
 
-        <el-col v-if="formData.inFrame || formData.menuType === 3" :span="12">
+        <el-col v-if="formData.menuType !== 1 && formData.inFrame || formData.menuType === 3" :span="12">
           <el-form-item label="组件路径">
             <el-input v-model="formData.component"/>
           </el-form-item>
         </el-col>
 
-        <el-col :span="12">
+        <el-col v-if="formData.menuType !== 1" :span="12">
           <el-form-item label="权限标识">
             <el-input v-model="formData.permission"/>
           </el-form-item>
@@ -122,12 +128,6 @@
               >
               </el-option>
             </el-select>
-          </el-form-item>
-        </el-col>
-
-        <el-col v-if="formData.menuType === 2 && !formData.inFrame" :span="12">
-          <el-form-item label="外链地址" prop="url">
-            <el-input v-model="formData.url"/>
           </el-form-item>
         </el-col>
 

@@ -8,9 +8,9 @@
     <div>
       <el-form ref="form" :model="formData" :rules="rules" label-width="100px" label-suffix="：">
         <el-row :gutter="5">
-          <el-col :span="12">
-            <el-form-item label="名称" prop="name">
-              <el-input v-model="formData.name" placeholder="请输入名称"></el-input>
+          <el-col :span="24">
+            <el-form-item label="描述" prop="remark">
+              <el-input v-model="formData.remark" placeholder="请输入备注"></el-input>
             </el-form-item>
           </el-col>
 
@@ -27,21 +27,9 @@
             </el-form-item>
           </el-col>
 
-          <el-col :span="24">
-            <el-form-item label="备注" prop="remark">
-              <el-input v-model="formData.remark" placeholder="请输入备注"></el-input>
-            </el-form-item>
-          </el-col>
-
           <el-col :span="12">
             <el-form-item label="表别名" prop="tableAlias">
               <el-input v-model="formData.tableAlias" placeholder="请输入表别名"></el-input>
-            </el-form-item>
-          </el-col>
-
-          <el-col :span="12">
-            <el-form-item label="字段名" prop="columnName">
-              <el-input v-model="formData.columnName" placeholder="请输入字段名"></el-input>
             </el-form-item>
           </el-col>
 
@@ -55,6 +43,12 @@
                     :value="item.value">
                 </el-option>
               </el-select>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="12">
+            <el-form-item label="字段名" prop="columnName">
+              <el-input v-model="formData.columnName" placeholder="请输入字段名"></el-input>
             </el-form-item>
           </el-col>
 
@@ -73,16 +67,16 @@
 
           <div v-if="formData.provideType === $gc.provideType.VALUE || formData.provideType == null">
             <el-col :span="12">
-              <el-form-item label="值1" prop="value1">
-                <el-input v-model="formData.value1" placeholder="请输入值1"></el-input>
+              <el-form-item label="值" prop="value1">
+                <el-input v-model="formData.value1" placeholder="请输入值"></el-input>
               </el-form-item>
             </el-col>
 
-            <el-col :span="12">
-              <el-form-item label="值2" prop="value2">
-                <el-input v-model="formData.value2" placeholder="请输入值2"></el-input>
-              </el-form-item>
-            </el-col>
+<!--            <el-col :span="12">-->
+<!--              <el-form-item label="值2" prop="value2">-->
+<!--                <el-input v-model="formData.value2" placeholder="请输入值2"></el-input>-->
+<!--              </el-form-item>-->
+<!--            </el-col>-->
           </div>
 
           <div v-else>
@@ -92,14 +86,14 @@
               </el-form-item>
             </el-col>
 
-            <el-col :span="dialogType !== $gc.dialogType.View ? 20 : 24">
+            <el-col :span="dialogType !== $gc.dialogType.VIEW ? 20 : 24">
               <el-form-item label="方法名" prop="methodName">
                 <el-input v-model="formData.methodName" placeholder="请输入方法名"></el-input>
               </el-form-item>
             </el-col>
 
 
-            <el-col v-if="dialogType !== $gc.dialogType.View" :span="4">
+            <el-col v-if="dialogType !== $gc.dialogType.VIEW" :span="4">
               <el-button type="success" @click="addGroup">添加参数</el-button>
             </el-col>
 
@@ -200,18 +194,18 @@ export default {
       }, {
         value: 'LE',
         label: 'LE-小于等于'
-      }, {
+      }, /*{
         value: 'IN',
         label: 'IN-在给定的数据内'
       }, {
         value: 'NOTIN',
         label: 'NOTIN-不在给定的数据内'
-      }, {
+      }, */{
         value: 'ISNULL',
-        label: 'ISNULL-为NUll'
+        label: 'IS_NULL-为NUll'
       }, {
         value: 'NOTNULL',
-        label: 'NOTNULL-不为NUll'
+        label: 'NOT_NULL-不为NUll'
       }],
       formalTypeOptions: [{
         value: 'java.lang.String',
@@ -269,7 +263,7 @@ export default {
     },
 
     confirm() {
-      if (this.dialogType === this.$gc.dialogType.View) {
+      if (this.dialogType === this.$gc.dialogType.VIEW) {
         this.$refs.dialog.close()
         return
       }
@@ -295,7 +289,7 @@ export default {
             }
           }
 
-          if (this.dialogType === this.$gc.dialogType.Add) {
+          if (this.dialogType === this.$gc.dialogType.ADD) {
             this.$api.rule.save(this.formData).then(() => {
               this.$message.success('添加成功')
               this.$refs.dialog.close()
@@ -323,12 +317,15 @@ export default {
 
     },
 
-    show(id = null, dialogType = null) {
+    show(dialogType = null, id = null) {
+      if (id == null)
+        return
+
       this.reset()
       this.dialogType = dialogType
-      if (dialogType === this.$gc.dialogType.Add) {
+      if (dialogType === this.$gc.dialogType.ADD) {
         this.toAdd()
-      } else if (dialogType === this.$gc.dialogType.Edit) {
+      } else if (dialogType === this.$gc.dialogType.EDIT) {
         this.toEdit(id)
       } else {
         this.toView(id)

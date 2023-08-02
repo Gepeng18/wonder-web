@@ -40,13 +40,15 @@ export function handleTree(data) {
         if (item.permission && item.permission !== '') {
             permits.push(item.permission)
         }
-        if (item.menuType === 2) {
-            routes.push({
+        if (item.path && item.path !== '') {
+            /*routes.push({
                 path: item.path,
                 auth: !!item.permission,
+                inFrame: item.inFrame,
                 title: item.name,
                 component: item.component
-            })
+            })*/
+            routes.push(item)
         }
     }
     const obj = {};

@@ -15,8 +15,6 @@ const store = new Vuex.Store({
         userinfo: {},
         userRoutes: [],  // 用户的路由信息,
         userMenus: [],
-        userRoles: [],
-        userDepts: [],
         userPerMits: [],
         tabContentHeight: '500',
         mainContentHeight: '500'
@@ -81,14 +79,6 @@ const store = new Vuex.Store({
             state.userPerMits = payload
             localStorage.setItem('userPerMits', payload)
         },
-        setUserRoles(state, payload) {
-            state.userRoles = payload
-            localStorage.setItem('userRoles', JSON.stringify(payload))
-        },
-        setUserDepts(state, payload) {
-            state.userDepts = payload
-            localStorage.setItem('userDepts', payload)
-        },
 
         setTabContentHeight(state, payload){
             state.tabContentHeight = payload - 145
@@ -103,8 +93,6 @@ const store = new Vuex.Store({
             state.userinfo = {}
             state.userRoutes = []
             state.userMenus = []
-            state.userRoles = []
-            state.userDepts = []
             state.userPerMits = []
         },
     },
@@ -123,12 +111,6 @@ const store = new Vuex.Store({
         },
         userPermits(state) {
             return state.userPerMits
-        },
-        userRoles(state) {
-            return state.userRoles
-        },
-        userDepts(state) {
-            return state.userDepts
         },
         currentPath(state){
             return state.currentPath
@@ -155,15 +137,43 @@ const store = new Vuex.Store({
         setDynamicRoutes(context) {
             console.log('setDynamicRoutes', context.state.userRoutes)
             context.state.userRoutes.forEach(item => {
-                // TODO 添加一个字段，如果是in_frame 就加入index，否则就是 _blank 打开
-                router.addRoute('index', {
-                    path: item.path,
-                    meta: {
-                        auth: item.auth,
-                        title: item.title
-                    },
-                    component: resolve => require([`@/views/${item.component}`], resolve)
-                })
+                if (item.inFrame){
+                    console.log('框架内 -> ', item)
+                    router.addRoute('index', {
+                        name: item.routeName,
+                        path: item.path,
+                        meta: {
+                            auth: !!item.permission,
+                            title: item.name,
+                            isUrl: item.isUrl
+                        },
+                        component: resolve => require([`@/views/${item.component}`], resolve)
+                    })
+                }else {
+                    console.log('框架外 -> ', item)
+                    if (item.isUrl){
+                        router.addRoute({
+                            name: item.routeName,
+                            path: '/' + item.path,
+                            meta: {
+                                auth: !!item.permission,
+                                title: item.name,
+                                isUrl: true
+                            }
+                        })
+                    }else {
+                        router.addRoute({
+                            name: item.routeName,
+                            path: item.path,
+                            meta: {
+                                auth: !!item.permission,
+                                title: item.name,
+                                isUrl: false
+                            },
+                            component: resolve => {if (item.component) {require([`@/views/${item.component}`], resolve)}}
+                        })
+                    }
+                }
             })
         }
 
