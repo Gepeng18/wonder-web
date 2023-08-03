@@ -1,11 +1,11 @@
 <template>
   <CommonDialog ref="dialog" @confirm="confirm" @cancel="cancel">
     <div>
-      <el-form :model="formData" label-width="60px" label-suffix="：">
-        <el-form-item label="名称">
+      <el-form ref="form" :model="formData" label-width="70px" :rules="rules" label-suffix="：">
+        <el-form-item label="名称" prop="name">
           <el-input v-model="formData.name" clearable placeholder="请输入名称"></el-input>
         </el-form-item>
-        <el-form-item label="编码">
+        <el-form-item label="编码" prop="code">
           <el-input v-model="formData.code" clearable placeholder="请输入编码"></el-input>
         </el-form-item>
         <el-form-item label="描述">
@@ -21,7 +21,7 @@
           </el-input>
         </el-form-item>
         <el-form-item label="菜单">
-          <div style="width: 280px;overflow: auto;height: 180px;border: #d9dfe8 solid 1px; border-radius: 5px">
+          <div style="width: 270px;overflow: auto;height: 180px;border: #d9dfe8 solid 1px; border-radius: 5px">
             <el-tree
                 :data="menuTreeList"
                 ref="tree"
@@ -66,6 +66,14 @@ export default {
         id: 'id',
       },
       dialogType: null,
+      rules:{
+        name:[
+          {required: true, trigger: 'blur', message: '请输入名称'}
+        ],
+        code:[
+          {required: true, trigger: 'blur', message: '请输入编码'}
+        ]
+      }
 
     }
   },
@@ -142,6 +150,7 @@ export default {
       }
       this.menuTreeList = []
       this.dialogType = null
+      this.$refs.form.resetFields()
     },
 
     getMenuTreeList() {

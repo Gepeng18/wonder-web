@@ -1,13 +1,13 @@
 <template>
-  <CommonDialog ref="dialog" width="1000px" :title="title">
+  <CommonDialog icon="s-tools" ref="dialog" width="1000px" :title="title" :show-cancel="false" @confirm="confirm">
     <el-row :gutter="0">
       <el-col :span="12">
         <el-table
             :data="markTableData"
-            height="250"
+            height="500"
             highlight-current-row
             @current-change="handleMarkCurrentChange"
-            style="width: 100%;max-height: 400px; overflow: auto">
+            style="width: 100%">
           <el-table-column
               prop="name"
               label="标记"
@@ -25,11 +25,11 @@
           <el-table
               ref="ruleTable"
               :data="ruleTableData"
-              height="250"
+              height="500"
               tooltip-effect="light"
               @select="handleSelect"
               @select-all="handleSelectAll"
-              style="width: 100%;max-height: 400px; overflow: auto">
+              style="width: 100%">
             <el-table-column
                 type="selection"
                 width="55">
@@ -48,14 +48,13 @@
 
 <script>
 import CommonDialog from "@/components/CommonDialog.vue";
-import Dict from "@/views/system/dict/Dict.vue";
 
 export default {
   name: "DataScopeDialog",
-  components: {Dict, CommonDialog},
+  components: {CommonDialog},
   data() {
     return {
-      title: '配置数据权限 - ',
+      title: '',
       markTableData: [],
       ruleTableData: [],
       markCurrentRow: null,
@@ -68,7 +67,7 @@ export default {
         return
 
       this.role = role
-      this.title = this.title + role.name
+      this.title = '配置数据权限 - ' + role.name
 
       this.$api.mark.list().then(res => {
         this.markTableData = res
@@ -87,14 +86,32 @@ export default {
 
     handleMarkCurrentChange(val) {
       this.markCurrentRow = val;
+
       this.getRule(val.id)
+
+      let params = {
+        roleId: this.role.id,
+        markId: val.id
+      }
+
+      this.$api.rule.getByRoleIdAndMarkId(params).then(res => {
+        if (res) {
+          for (let i = 0; i < this.ruleTableData.length; i++) {
+            if (this.ruleTableData[i].id === res.id) {
+              this.$refs.ruleTable.toggleRowSelection(this.ruleTableData[i], true)
+              break
+            }
+          }
+        }
+      })
+
     },
 
-    handleSelect(selection, val){
+    handleSelect(selection, val) {
       //只能选择一行，选择其他，清除上一行
-      if(selection.length > 1){
+      if (selection.length > 1) {
         let del_row = selection.shift()
-        this.$refs.ruleTable.toggleRowSelection(del_row,false) //设置这一行取消选中
+        this.$refs.ruleTable.toggleRowSelection(del_row, false) //设置这一行取消选中
 
         let params = {
           roleId: this.role.id,
@@ -106,10 +123,22 @@ export default {
       }
     },
 
-    handleSelectAll(){
+    handleSelectAll() {
       this.$refs.ruleTable.clearSelection()
     },
 
+    confirm(){
+      this.reset()
+      this.$refs.dialog.close()
+    },
+
+    reset() {
+      this.title = ''
+      this.markTableData = []
+      this.ruleTableData = []
+      this.markCurrentRow = null
+      this.role = null
+    }
   }
 }
 </script>

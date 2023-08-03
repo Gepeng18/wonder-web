@@ -42,10 +42,9 @@
         <el-table-column label="操作">
           <template slot-scope="scope">
             <div v-if="scope.row.code !== $gc.adminCode || $store.state.userinfo.username === $gc.adminCode">
-              <el-button type="text" size="mini" @click="clickEdit(scope.row)">修改</el-button>
-              <el-button type="text" size="mini" @click="clickDataScopeEdit(scope.row)">数据权限</el-button>
-              <el-button type="text" size="mini">分配用户</el-button>
-              <el-button type="text" class="color-danger" size="mini" @click="clickDel(scope.row)">删除</el-button>
+              <el-button type="text" @click="clickEdit(scope.row)">修改</el-button>
+              <el-button type="text" @click="clickDataScopeEdit(scope.row)">数据权限</el-button>
+              <el-button v-if="scope.row.code !== $gc.adminCode" type="text" class="color-danger" size="mini" @click="clickDel(scope.row)">删除</el-button>
             </div>
           </template>
         </el-table-column>
