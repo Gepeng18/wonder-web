@@ -51,3 +51,9 @@ export const bindingRule = (params) => request({
     method: 'get',
     params
 })
+
+export const unBindingRule = (params) => request({
+    url: prefix + '/unBindingRule',
+    method: 'get',
+    params
+})

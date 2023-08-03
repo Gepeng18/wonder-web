@@ -71,22 +71,19 @@ export default {
 
       this.$api.mark.list().then(res => {
         this.markTableData = res
-      }).catch(() => {
-
+        this.$refs.dialog.show()
       })
-
-      this.$refs.dialog.show()
     },
 
     getRule(markId) {
       this.$api.rule.getByMarkId(markId).then(res => {
+        this.ruleTableData.slice(0, this.ruleTableData.length)
         this.ruleTableData = res
       }).catch()
     },
 
     handleMarkCurrentChange(val) {
       this.markCurrentRow = val;
-
       this.getRule(val.id)
 
       let params = {
@@ -109,15 +106,24 @@ export default {
 
     handleSelect(selection, val) {
       //只能选择一行，选择其他，清除上一行
-      if (selection.length > 1) {
-        let del_row = selection.shift()
-        this.$refs.ruleTable.toggleRowSelection(del_row, false) //设置这一行取消选中
-
+      if (selection.length >= 1) {
+        if (selection.length > 1){
+          let del_row = selection.shift()
+          this.$refs.ruleTable.toggleRowSelection(del_row, false) //设置这一行取消选中
+        }
         let params = {
           roleId: this.role.id,
           ruleId: selection[0].id
         }
         this.$api.role.bindingRule(params).then(() => {
+          this.$message.success('保存成功')
+        })
+      }else {
+        let params = {
+          roleId: this.role.id,
+          ruleId: val.id
+        }
+        this.$api.role.unBindingRule(params).then(() => {
           this.$message.success('保存成功')
         })
       }
