@@ -7,7 +7,7 @@
       @close="close"
       @confirm="confirm">
     <div>
-      <el-form ref="form" :model="formData" :rules="rules" label-width="100px" label-suffix="：">
+      <el-form ref="form" :model="formData" :rules="rules" label-width="130px" label-suffix="：">
         <el-row :gutter="5">
           <el-col :span="24">
             <el-form-item label="描述" prop="remark">
@@ -53,11 +53,24 @@
             </el-form-item>
           </el-col>
 
-          <el-col :span="12">
+          <el-col :span="12" v-if="formData.provideType === $gc.provideType.VALUE">
             <el-form-item label="表达式" prop="expression">
               <el-select v-model="formData.expression" placeholder="请选择表达式">
                 <el-option
-                    v-for="item in expressionOptions"
+                    v-for="item in valueExpressionOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="12" v-else>
+            <el-form-item label="表达式" prop="expression">
+              <el-select v-model="formData.expression" placeholder="请选择表达式">
+                <el-option
+                    v-for="item in methodExpressionOptions"
                     :key="item.value"
                     :label="item.label"
                     :value="item.value">
@@ -82,7 +95,7 @@
 
           <div v-else>
             <el-col :span="24">
-              <el-form-item label="类名" prop="className">
+              <el-form-item label="类名/bean名称" prop="className">
                 <el-input v-model="formData.className" placeholder="请输入类名"></el-input>
               </el-form-item>
             </el-col>
@@ -149,9 +162,9 @@ export default {
       markId: null,
       groups: [],
       rules: {
-        name: [
-          {required: true, trigger: 'blur', message: '请输入名称'},
-          {min: 1, max: 10, message: '用户名称必须1-10个字符之间', trigger: "blur"}
+        remark: [
+          {required: true, trigger: 'blur', message: '请输入描述'},
+          {min: 1, max: 30, message: '描述必须1-30个字符之间', trigger: "blur"}
         ],
         provideType: [
           {required: true, trigger: 'blur', message: '请选择提供类型'},
@@ -176,7 +189,7 @@ export default {
           {required: true, trigger: 'blur', message: '请选择方法名'},
         ]
       },
-      expressionOptions: [{
+      valueExpressionOptions: [{
         value: 'EQ',
         label: 'EQ-等于'
       }, {
@@ -197,18 +210,25 @@ export default {
       }, {
         value: 'LE',
         label: 'LE-小于等于'
-      }, /*{
+      }, {
         value: 'IN',
         label: 'IN-在给定的数据内'
       }, {
         value: 'NOTIN',
         label: 'NOTIN-不在给定的数据内'
-      }, */{
+      }, {
         value: 'ISNULL',
         label: 'IS_NULL-为NUll'
       }, {
         value: 'NOTNULL',
         label: 'NOT_NULL-不为NUll'
+      }],
+      methodExpressionOptions: [{
+        value: 'IN',
+        label: 'IN-在给定的数据内'
+      }, {
+        value: 'NOTIN',
+        label: 'NOT_IN-不在给定的数据内'
       }],
       formalTypeOptions: [{
         value: 'java.lang.String',
@@ -234,6 +254,9 @@ export default {
       }, {
         value: 'java.lang.Double',
         label: '双精度浮点型'
+      }, {
+        value: 'java.math.BigDecimal',
+        label: 'BigDecimal'
       }],
 
     }
