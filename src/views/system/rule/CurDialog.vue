@@ -197,7 +197,7 @@ export default {
         label: 'NE-不等于'
       }, {
         value: 'LIKE',
-        label: 'LIKE-像'
+        label: 'LIKE-模糊'
       }, {
         value: 'GT',
         label: 'GT-大于'
@@ -210,24 +210,24 @@ export default {
       }, {
         value: 'LE',
         label: 'LE-小于等于'
-      }, {
+      }, /*{
         value: 'IN',
         label: 'IN-在给定的数据内'
       }, {
         value: 'NOTIN',
         label: 'NOTIN-不在给定的数据内'
-      }, {
-        value: 'ISNULL',
+      },*/ {
+        value: 'IS_NULL',
         label: 'IS_NULL-为NUll'
       }, {
-        value: 'NOTNULL',
+        value: 'NOT_NULL',
         label: 'NOT_NULL-不为NUll'
       }],
       methodExpressionOptions: [{
         value: 'IN',
         label: 'IN-在给定的数据内'
       }, {
-        value: 'NOTIN',
+        value: 'NOT_IN',
         label: 'NOT_IN-不在给定的数据内'
       }],
       formalTypeOptions: [{
