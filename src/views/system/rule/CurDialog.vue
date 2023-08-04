@@ -4,6 +4,7 @@
       :show-cancel="dialogParam.showCancel"
       :type="dialogParam.type"
       width="800px" ref="dialog"
+      @close="close"
       @confirm="confirm">
     <div>
       <el-form ref="form" :model="formData" :rules="rules" label-width="100px" label-suffix="：">
@@ -135,6 +136,7 @@
 <script>
 import CommonDialog from "@/components/CommonDialog.vue";
 import {validateEMail, validatePhone} from "@/utils/validate";
+import mark from "@/views/system/mark/index.vue";
 
 export default {
   name: "CurDialog",
@@ -144,6 +146,7 @@ export default {
       dialogParam: {},
       formData: {},
       dialogType: null,
+      markId: null,
       groups: [],
       rules: {
         name: [
@@ -290,6 +293,7 @@ export default {
           }
 
           if (this.dialogType === this.$gc.dialogType.ADD) {
+            this.formData.markId = this.markId
             this.$api.rule.save(this.formData).then(() => {
               this.$message.success('添加成功')
               this.$refs.dialog.close()
@@ -317,11 +321,10 @@ export default {
 
     },
 
-    show(dialogType = null, id = null) {
-      if (id == null)
+    show(dialogType = null, markId = null, id = null) {
+      if (markId == null)
         return
-
-      this.reset()
+      this.markId = markId
       this.dialogType = dialogType
       if (dialogType === this.$gc.dialogType.ADD) {
         this.toAdd()
@@ -362,6 +365,10 @@ export default {
         }
         this.$refs.dialog.show()
       })
+    },
+
+    close(){
+      this.reset()
     },
 
     reset() {

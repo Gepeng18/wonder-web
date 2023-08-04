@@ -41,7 +41,7 @@ const store = new Vuex.Store({
         logout() {
             localStorage.clear()
             store.commit('RESET_STATE')
-            router.push('/login')
+            router.push({name: 'hello'})
         },
 
         clear(){

@@ -107,6 +107,7 @@ export default {
     close(){
       this.stopLoading()
       this.visible = false
+      this.$emit('close', this.data)
     },
 
     startLoading(){

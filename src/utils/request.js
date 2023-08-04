@@ -76,6 +76,9 @@ service.interceptors.response.use(
                 Message.error('登录后重试')
                 store.commit('logout')
                 return Promise.reject(res)
+            case 405:
+                Message.info('暂无数据')
+                return Promise.reject(res)
             default:
                 Message.error(res.msg)
                 return Promise.reject(res)

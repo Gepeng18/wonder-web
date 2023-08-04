@@ -29,7 +29,15 @@ const baseRoutes = [
         meta: {
             auth: false
         },
-        redirect: 'login',
+        redirect: '/hello',
+    },
+    {
+        name: 'hello',
+        path: '/hello',
+        meta: {
+            auth: false
+        },
+        component: () => import('@/views/hello/index.vue')
     },
     {
         /*
@@ -57,7 +65,7 @@ const baseRoutes = [
 ]
 
 const createRouter = () => new VueRouter({
-    mode: 'history',
+    // mode: 'history',
     routes: baseRoutes
 })
 

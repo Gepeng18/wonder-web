@@ -25,8 +25,12 @@
                 stripe
                 style="width: 100%"
       >
+        <el-table-column type="index" width="50"/>
+
         <el-table-column prop="name" label="名称"/>
+
         <el-table-column prop="remark" label="备注"/>
+
         <el-table-column label="状态">
           <template slot-scope="scope">
             <el-switch
@@ -38,8 +42,9 @@
             </el-switch>
           </template>
         </el-table-column>
-        <!--        <el-table-column prop="createTime" label="创建时间"/>-->
-        <!--        <el-table-column prop="updateTime" label="修改时间"/>-->
+
+        <el-table-column prop="createTime" label="创建时间"/>
+
         <el-table-column label="操作">
           <template slot-scope="scope">
 <!--            <el-button class="primary" type="text" @click="clickView(scope.row)">查看</el-button>-->

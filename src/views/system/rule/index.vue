@@ -14,9 +14,15 @@
           stripe
           style="width: 100%"
       >
-        <el-table-column prop="remark" label="描述"/>
+        <el-table-column type="index" width="50"/>
+
+        <el-table-column prop="remark" label="描述"  width="600"/>
+
         <el-table-column prop="createTime" label="创建时间"/>
-        <el-table-column label="操作">
+
+        <el-table-column prop="updateTime" label="更新时间"/>
+
+        <el-table-column label="操作" width="200">
           <template slot-scope="scope">
             <el-button type="text" @click="clickEdit(scope.row)">修改</el-button>
             <el-button type="text" class="color-danger" @click="clickDel(scope.row)">删除</el-button>
@@ -25,7 +31,7 @@
       </el-table>
     </div>
 
-    <CurDialog ref="curDialog"/>
+    <CurDialog ref="curDialog" @close="close"/>
 
   </div>
 </template>
@@ -65,12 +71,16 @@ export default {
     },
 
     clickEdit(row){
-      this.$refs.curDialog.show(this.$gc.dialogType.EDIT, row.id)
+      this.$refs.curDialog.show(this.$gc.dialogType.EDIT, this.mark.id, row.id)
     },
 
     clickAdd(){
-      this.$refs.curDialog.show(this.$gc.dialogType.ADD)
+      this.$refs.curDialog.show(this.$gc.dialogType.ADD, this.mark.id)
     },
+
+    close(){
+      this.getData(this.$route.query.markId)
+    }
 
   }
 }

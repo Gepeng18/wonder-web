@@ -3,6 +3,7 @@
   <el-container>
     <el-header class="header">
       <div class="left"><h2>Wonder</h2></div>
+<!--      <div class="left"><img src="/assets/images/logo.png" alt=""/></div>-->
 
       <div class="right">
         <div class="right-sub top_el_select">

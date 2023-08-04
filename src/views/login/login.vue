@@ -2,7 +2,8 @@
   <div class="page-box">
     <div class="login-panel" id="captcha">
       <div class="title">
-        Wonder
+        <!--        Wonder-->
+        <img src="/assets/images/logo.png" alt="logo"/>
       </div>
       <el-form :model="form" :rules="rules" label-width="100px" label-suffix="：">
         <el-form-item label="登录账号" prop="username">
@@ -14,14 +15,17 @@
         <el-form-item label="验证码" prop="code">
           <el-input v-model="form.code" type="text" style="width: 100px;float: left"/>
           <div>
-            <el-image :src="imgBase64" style="width: 90px;margin-left: 5px;height: 40px" @click="getCode()"></el-image>
+            <el-image :src="imgBase64" style="width: 90px;margin-left: 5px;height: 40px" @click="getCode()"/>
           </div>
         </el-form-item>
 
-        <el-button type="primary" @click="onSubmit" :loading="loading" style="width: 100%;font-size: 17px">登录</el-button>
+        <el-button type="primary" @click="onSubmit" :loading="loading" style="width: 100%;font-size: 17px">登录
+        </el-button>
       </el-form>
 
       <!--      <div style="text-align: center;margin-top: 20px"><h4>扫码登录</h4></div>-->
+      <div class="back-hello"
+           @click="() => {$router.replace({name: 'hello'})}"><p>返回首页</p></div>
     </div>
   </div>
 </template>
@@ -80,7 +84,7 @@ export default {
     }
   },
   methods: {
-    handleBeforeUnload(){
+    handleBeforeUnload() {
       this.$store.commit('clear')
     },
 
@@ -148,4 +152,13 @@ export default {
 
 }
 
+.back-hello {
+  text-align: center;
+  margin-top: 20px;
+  color: #409EFF;
+
+  :hover {
+    font-weight: bold;
+  }
+}
 </style>
