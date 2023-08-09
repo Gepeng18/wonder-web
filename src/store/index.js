@@ -152,9 +152,10 @@ const store = new Vuex.Store({
                 }else {
                     // console.log('框架外 -> ', item)
                     if (item.isUrl){
+                        item.path = '/' + item.path
                         router.addRoute({
                             name: item.routeName,
-                            path: '/' + item.path,
+                            path: item.path,
                             meta: {
                                 auth: !!item.permission,
                                 title: item.name,

@@ -45,7 +45,7 @@
               <el-button type="text" @click="clickEdit(scope.row)">修改</el-button>
               <el-button type="text" @click="clickDataScopeEdit(scope.row)">数据权限</el-button>
               <el-button type="text" >分配用户</el-button>
-              <el-button v-if="scope.row.code !== $gc.adminCode" type="text" class="color-danger" size="mini" @click="clickDel(scope.row)">删除</el-button>
+              <el-button v-if="scope.row.code !== $gc.adminCode" type="text" class="color-danger" @click="clickDel(scope.row)">删除</el-button>
             </div>
           </template>
         </el-table-column>
