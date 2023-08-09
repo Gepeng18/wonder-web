@@ -57,7 +57,7 @@ export default {
         id: this.dictId,
         selectDetail: true
       }
-      this.$api.dict.findById(params).then(res => {
+      this.$api.dict.get(params).then(res => {
         this.tableData = res.dictData
       })
     }

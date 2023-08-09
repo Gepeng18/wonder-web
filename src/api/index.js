@@ -5,6 +5,8 @@ const dict = require('./modules/dict.api')
 const dept = require('./modules/dept.api')
 const rule = require('./modules/rule.api')
 const mark = require('./modules/mark.api')
+const dictData = require('./modules/dict-data.api')
+
 const api = {
     user,
     role,
@@ -12,7 +14,8 @@ const api = {
     dict,
     dept,
     rule,
-    mark
+    mark,
+    dictData,
 }
 import Vue from "vue";
 

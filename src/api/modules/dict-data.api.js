@@ -1,12 +1,6 @@
 import request from "@/utils/request";
 
-const prefix = '/dict'
-
-export const findById = (params = {}) => request({
-    url: '/findById',
-    method: 'get',
-    params
-})
+const prefix = '/dictData'
 
 export const get = (id, headers = {}) => request({
     url: prefix + '/get/' + id,
@@ -29,7 +23,7 @@ export const list = (data = {}, headers = {}) => request({
 })
 
 export const findByDictCode = (dictCode, headers = {}) => request({
-    url: prefix + '/findByDictCode/' + dictCode,
+    url: prefix + '/dictCode/' + dictCode,
     method: 'get',
     headers
 })

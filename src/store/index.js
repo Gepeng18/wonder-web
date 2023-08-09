@@ -41,7 +41,7 @@ const store = new Vuex.Store({
         logout() {
             localStorage.clear()
             store.commit('RESET_STATE')
-            router.push({name: 'hello'})
+            router.replace({name: 'hello'})
         },
 
         clear(){
@@ -138,7 +138,7 @@ const store = new Vuex.Store({
             console.log('setDynamicRoutes', context.state.userRoutes)
             context.state.userRoutes.forEach(item => {
                 if (item.inFrame){
-                    console.log('框架内 -> ', item)
+                    // console.log('框架内 -> ', item)
                     router.addRoute('index', {
                         name: item.routeName,
                         path: item.path,
@@ -150,7 +150,7 @@ const store = new Vuex.Store({
                         component: resolve => require([`@/views/${item.component}`], resolve)
                     })
                 }else {
-                    console.log('框架外 -> ', item)
+                    // console.log('框架外 -> ', item)
                     if (item.isUrl){
                         router.addRoute({
                             name: item.routeName,

@@ -12,10 +12,12 @@ import Fragment from 'vue-fragment'
 import "@/utils/permission";
 import has from "@/utils/permission";
 import globalConst from "@/utils/globalConst"
+import dict from '@/components/DictData'// 数据字典
 
 Vue.prototype.$gc = globalConst
 
 Vue.use(has)
+Vue.use(dict)
 
 Vue.config.productionTip = false
 Vue.use(ElementUI)
