@@ -5,9 +5,9 @@ import store from "@/store";
 const service = axios.create({
     baseURL: process.env.VUE_APP_BASE_URL,
     withCredentials: false, //跨域请求时发送cookies
-    headers: {
-        'Content-Type': 'application/json; charset=UTF-8'
-    },
+    // headers: {
+    //     'Content-Type': 'application/json; charset=UTF-8'
+    // },
     timeout: process.env.VUE_APP_HTTP_TIMEOUT // 请求超时
 })
 

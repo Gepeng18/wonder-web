@@ -16,6 +16,7 @@ import "tinymce/plugins/image"; // 插入上传图片插件
 import "tinymce/plugins/table"; // 插入表格插件
 import "tinymce/plugins/lists"; // 列表插件
 import "tinymce/plugins/wordcount"; // 字数统计插件
+import "tinymce/icons/default"; // 默认图标
 
 import "tinymce/plugins/hr";
 import "tinymce/plugins/code";
@@ -62,7 +63,6 @@ export default {
   data() {
     return {
       init: {
-        selector: 's',
         language_url: `${this.baseUrl}/tinymce/langs/zh_CN.js`, // 语言包路径
         language: "zh_CN",  //语言
         skin_url: `${this.baseUrl}/tinymce/skins/ui/oxide`, //skin路径
@@ -76,16 +76,13 @@ export default {
         branding: false,  //是否禁用“Powered by TinyMCE”
         menubar: false, //顶部菜单栏显示
         // 此处为图片上传处理函数
-        // 如需ajax上传可参考https://www.tiny.cloud/docs/configure/file-image-upload/#images_upload_handler
         images_upload_handler: (blobInfo, success, failure) => {
-          console.log('blobInfo', blobInfo)
           let formdata = new FormData()
           formdata.append('file', blobInfo.blob())
           this.$api.file.upload(formdata).then(res => {
-            console.log(res)
             success(res)
           }).catch(() => {
-            failure('error')
+            failure('上传失败！')
           })
         },
       },

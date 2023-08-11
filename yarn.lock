@@ -1158,6 +1158,11 @@
   resolved "https://registry.npmmirror.com/@soda/get-current-script/-/get-current-script-1.0.2.tgz#a53515db25d8038374381b73af20bb4f2e508d87"
   integrity sha512-T7VNNlYVM1SgQ+VsMYhnDkcGmWhQdL0bDyGm5TlQ3GBXnJscEClUUOKduWTmm2zCnvNLC1hc3JpuXjs/nFOc5w==
 
+"@tinymce/tinymce-vue@^3.0.1":
+  version "3.2.8"
+  resolved "https://registry.npmmirror.com/@tinymce/tinymce-vue/-/tinymce-vue-3.2.8.tgz#014571b52ec8fa83665a7fa887bf65140207de71"
+  integrity sha512-jEz+NZ0g+FZFz273OEUWz9QkwPMyjc5AJYyxOgu51O1Y5UaJ/6IUddXTX6A20mwCleEv5ebwNYdalviafx4fnA==
+
 "@types/body-parser@*":
   version "1.19.2"
   resolved "https://registry.npmmirror.com/@types/body-parser/-/body-parser-1.19.2.tgz#aea2059e28b7658639081347ac4fab3de166e6f0"
@@ -7807,6 +7812,11 @@ timsort@^0.3.0:
   version "0.3.0"
   resolved "https://registry.npmmirror.com/timsort/-/timsort-0.3.0.tgz#405411a8e7e6339fe64db9a234de11dc31e02bd4"
   integrity sha512-qsdtZH+vMoCARQtyod4imc2nIJwg9Cc7lPRrw9CzF8ZKR0khdr8+2nX80PBhET3tcyTtJDxAffGh2rXH4tyU8A==
+
+tinymce@^5.1.0:
+  version "5.10.7"
+  resolved "https://registry.npmmirror.com/tinymce/-/tinymce-5.10.7.tgz#d89d446f1962f2a1df6b2b70018ce475ec7ffb80"
+  integrity sha512-9UUjaO0R7FxcFo0oxnd1lMs7H+D0Eh+dDVo5hKbVe1a+VB0nit97vOqlinj+YwgoBDt6/DSCUoWqAYlLI8BLYA==
 
 to-arraybuffer@^1.0.0:
   version "1.0.1"

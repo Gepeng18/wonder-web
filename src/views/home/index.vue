@@ -1,4 +1,4 @@
-<template>
+<template xmlns="http://www.w3.org/1999/html">
 <div style="color: black">
   <h1>这是首页</h1>
   <h2 v-has="'ttt'">这是ttt权限</h2>
@@ -83,13 +83,10 @@ export default {
   },
 
   mounted() {
-    this.ready()
+
   },
 
   methods: {
-    ready(editorInstance) {
-      console.log(`编辑器实例: `, editorInstance)
-    },
     setup(editor) {
       console.log(editor)
     }
