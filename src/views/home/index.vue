@@ -4,7 +4,7 @@
   <h2 v-has="'ttt'">这是ttt权限</h2>
   <h2 v-has="'sys:user:view'">这是sys:user:view权限</h2>
 
-  <div>
+<!--  <div>
     <el-select v-model="formData.name" placeholder="请选择性别" clearable size="small">
       <el-option v-for="dict in dict.sys_user_sex" :key="dict.dictValue" :label="dict.dictLabel" :value="dict.dictValue" />
     </el-select>
@@ -15,9 +15,9 @@
     <el-select v-model="formData.name" placeholder="请选择天气" clearable size="small">
       <el-option v-for="dict in dict.weather" :key="dict.dictValue" :label="dict.dictLabel" :value="dict.dictValue" />
     </el-select>
-  </div>
+  </div>-->
 
-  <div>
+<!--  <div>
     <el-table
         :data="tableData"
         style="width: 500px">
@@ -37,6 +37,10 @@
         </template>
       </el-table-column>
     </el-table>
+  </div>-->
+
+  <div>
+    <Tinymce  ref="editor" v-model="value"/>
   </div>
 
 
@@ -45,11 +49,12 @@
 
 <script>
 import DictTag from "@/components/DictTag/index.vue";
+import Tinymce from "@/components/Tinymce/Tinymce.vue";
 
 export default {
   name: "index",
-  components: {DictTag},
-  dicts: ['sys_user_sex', 'weather'],
+  components: {Tinymce, DictTag},
+  // dicts: ['sys_user_sex', 'weather'],
   data(){
     return {
       formData: {
@@ -71,11 +76,23 @@ export default {
         date: '2016-05-03',
         name: '王小虎',
         sex: '1'
-      }]
+      }],
+      value: ''
+
     }
   },
-  methods: {
 
+  mounted() {
+    this.ready()
+  },
+
+  methods: {
+    ready(editorInstance) {
+      console.log(`编辑器实例: `, editorInstance)
+    },
+    setup(editor) {
+      console.log(editor)
+    }
   }
 
 }

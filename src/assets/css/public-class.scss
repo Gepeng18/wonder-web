@@ -26,7 +26,7 @@ html,body,#app,.el-container{
   color: $color-warning
 }
 .color-danger{
-  color: $color-danger
+  color: $color-danger !important;
 }
 
 .dialog-header-bg-danger {

@@ -10,10 +10,12 @@
   },
   "dependencies": {
     "@riophae/vue-treeselect": "0.4.0",
+    "@tinymce/tinymce-vue": "^3.0.1",
     "axios": "^1.2.2",
     "core-js": "^3.6.5",
     "element-ui": "^2.15.12",
     "nprogress": "^0.2.0",
+    "tinymce": "^5.1.0",
     "vue": "^2.6.11",
     "vue-fragment": "^1.6.0",
     "vue-router": "3.6.5",
