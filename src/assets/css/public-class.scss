@@ -126,8 +126,8 @@ html,body,#app,.el-container{
 
 
   .dialog-footer .el-button {
-    padding-left: 30px;
-    padding-right: 30px;
+    padding-left: 20px;
+    padding-right: 20px;
 
   }
 
@@ -150,6 +150,13 @@ html,body,#app,.el-container{
     background-color: white;
     border-color: $color-info;
     color: $color-info;
+  }
+
+
+  .dialog-footer .el-button--primary.is-disabled:hover {
+    color: #FFF;
+    background-color: $color-info;
+    border-color: $color-info;
   }
 
 }

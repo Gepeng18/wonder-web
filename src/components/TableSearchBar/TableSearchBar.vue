@@ -2,28 +2,34 @@
   <div>
     <div class="bar">
       <div class="inner-left">
-        <div ref="form">
-          <slot/>
-        </div>
+          <el-form :model="queryParams" ref="queryForm" label-suffix=":" label-width="100px">
+            <slot/>
+          </el-form>
       </div>
       <div class="inner-right">
         <el-row :gutter="5" >
           <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-            <el-button type="primary" @click="handlerSearch">查询</el-button>
+            <el-button type="primary" @click="handlerSearch">搜 索</el-button>
           </el-col>
           <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-            <el-button type="primary" plain @click="handlerReset">重置</el-button>
+            <el-button type="primary" plain ref="handlerReset" @click="handlerReset">重 置</el-button>
           </el-col>
         </el-row>
       </div>
     </div>
-    <el-divider />
+    <el-divider/>
   </div>
 </template>
 
 <script>
 export default {
   name: "TableSearchBar",
+  props:{
+    queryParams: {
+      type: Object,
+      default: {}
+    }
+  },
   methods: {
     handlerSearch(e){
       e.target.blur()
@@ -31,7 +37,8 @@ export default {
     },
 
     handlerReset(e){
-      e.target.blur()
+      this.$refs.handlerReset.$el.blur()
+      this.$resetForm('queryForm')
       this.$emit('reset')
     }
   }

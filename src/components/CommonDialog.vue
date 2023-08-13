@@ -11,11 +11,12 @@
       <i :class="['el-icon-' + icon]"></i> <span style="font-weight: bold">{{ title }}</span>
     </div>
     <div class="content">
-      <slot/>
+      <div v-if="content" v-html="content"></div>
+      <slot v-else/>
     </div>
     <div slot="footer" class="dialog-footer">
-      <el-button @click="confirm" v-if="showConfirm" :disabled="disabled"  :loading="loading" type="primary">{{ confirmText }}</el-button>
-      <el-button @click="cancel" v-if="showCancel" >{{ cancelText }}</el-button>
+      <el-button @click="handleCancel" v-if="showCancel" >{{ cancelText }}</el-button>
+      <el-button @click="handleConfirm" v-if="showConfirm" :disabled="disabled" :loading="loading" type="primary">{{ confirmText }}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -31,7 +32,7 @@ export default {
     },
     title: {
       type: String,
-      default: '提示'
+      default: '提 示'
     },
     width: {
       type: String,
@@ -51,11 +52,11 @@ export default {
     },
     confirmText: {
       type: String,
-      default: '确定'
+      default: '确 定'
     },
     cancelText: {
       type: String,
-      default: '取消'
+      default: '取 消'
     },
     type: {
       type: String,
@@ -72,6 +73,10 @@ export default {
     autoClose: {
       type: Boolean,
       default: false
+    },
+    content: {
+      type: String,
+      default: null
     }
   },
   data() {
@@ -87,7 +92,7 @@ export default {
       this.visible = true
     },
 
-    confirm() {
+    handleConfirm() {
       this.startLoading()
       if (this.autoClose){
         this.close()
@@ -95,7 +100,7 @@ export default {
       this.$emit('confirm', this.data)
     },
 
-    cancel() {
+    handleCancel() {
       this.close()
       this.$emit('cancel', this.data)
     },

@@ -134,11 +134,10 @@ import TableSearchBar from "@/components/TableSearchBar/TableSearchBar.vue";
 import ResetPWD from "@/views/system/user/ResetPWD.vue";
 import CommonDialog from "@/components/CommonDialog.vue";
 import CurDialog from "@/views/system/user/CurDialog.vue";
-import Dict from "@/views/system/dict/Dict.vue";
 
 export default {
   name: "index",
-  components: {Dict, CurDialog, CommonDialog, ResetPWD, TableSearchBar},
+  components: {CurDialog, CommonDialog, ResetPWD, TableSearchBar},
   data() {
     return {
       style: {
