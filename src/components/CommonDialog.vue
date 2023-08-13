@@ -13,7 +13,7 @@
     <div class="content">
       <slot/>
     </div>
-    <div slot="footer" class="dialog-footer" v-if="showFooter">
+    <div slot="footer" class="dialog-footer">
       <el-button @click="confirm" v-if="showConfirm" :disabled="disabled"  :loading="loading" type="primary">{{ confirmText }}</el-button>
       <el-button @click="cancel" v-if="showCancel" >{{ cancelText }}</el-button>
     </div>
@@ -68,10 +68,6 @@ export default {
     disabled:{
       type: Boolean,
       default: false
-    },
-    showFooter:{
-      type: Boolean,
-      default: true
     },
     autoClose: {
       type: Boolean,

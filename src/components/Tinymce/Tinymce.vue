@@ -106,7 +106,10 @@ export default {
     c() {
       var content = tinymce.activeEditor.getContent();
       this.$message.success(content)
-      tinymce.activeEditor.setProgressState(1)
+      tinymce.activeEditor.setProgressState(true)
+      setTimeout(() =>{
+        tinymce.activeEditor.setProgressState(false)
+      }, 2000)
     }
   },
   watch: {
