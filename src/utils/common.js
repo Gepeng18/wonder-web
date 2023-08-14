@@ -2,11 +2,11 @@ import Vue from "vue";
 import CommonDialog from "@/components/CommonDialog.vue";
 
 export function resetForm(refName) {
-    this.$nextTick(() => {
-        if (this.$refs[refName]) {
-            this.$refs[refName].resetFields();
-        }
-    })
+    //this.$nextTick(() => {
+    if (this.$refs[refName]) {
+        this.$refs[refName].resetFields();
+    }
+    //})
 }
 
 export function dialog(options) {
@@ -40,4 +40,13 @@ export function dialog(options) {
 
         document.body.appendChild(dialogInstance.$el);
     });
+}
+
+// 添加日期范围
+export function addDateRange(params, dateRange) {
+    params = typeof (params) === 'object' && params !== null ? params : {};
+    dateRange = Array.isArray(dateRange) ? dateRange : [];
+    params['beginDate'] = dateRange[0];
+    params['endDate'] = dateRange[1];
+    return params;
 }
