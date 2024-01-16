@@ -29,16 +29,16 @@ const baseRoutes = [
         meta: {
             auth: false
         },
-        redirect: '/hello',
+        redirect: '/login',
     },
-    {
-        name: 'hello',
-        path: '/hello',
-        meta: {
-            auth: false
-        },
-        component: () => import('@/views/hello/index.vue')
-    },
+    //{
+    //    name: 'hello',
+    //    path: '/hello',
+    //    meta: {
+    //        auth: false
+    //    },
+    //    component: () => import('@/views/hello/index.vue')
+    //},
     {
         /*
           如上 redirect 的时候需要

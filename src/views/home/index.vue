@@ -39,21 +39,15 @@
     </el-table>
   </div>-->
 
-  <div>
-    <Tinymce  ref="editor" v-model="value"/>
-  </div>
-
-
 </div>
 </template>
 
 <script>
 import DictTag from "@/components/DictTag/index.vue";
-import Tinymce from "@/components/Tinymce/Tinymce.vue";
 
 export default {
   name: "index",
-  components: {Tinymce, DictTag},
+  components: {DictTag},
   // dicts: ['sys_user_sex', 'weather'],
   data(){
     return {

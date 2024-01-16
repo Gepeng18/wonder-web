@@ -23,25 +23,18 @@ const store = new Vuex.Store({
     mutations: {
         login(state, payload) {
             state.userinfo = payload;
-            /*if (payload.deptList.length === 1){
-                state.userinfo.currentDeptId = payload.deptList[0].id
+            if (payload.deptIds.length >= 1){
+                state.userinfo.currentDeptId = payload.deptIds[0]
             }
-            if (payload.roleList.length === 1){
-                state.userinfo.currentRoleId = payload.roleList[0].id
-            }*/
-
-            if (payload.deptList.length >= 1){
-                state.userinfo.currentDeptId = payload.deptList[0].id
-            }
-            if (payload.roleList.length >= 1){
-                state.userinfo.currentRoleId = payload.roleList[0].id
+            if (payload.roleIds.length >= 1){
+                state.userinfo.currentRoleId = payload.roleIds[0]
             }
         },
 
         logout() {
             localStorage.clear()
             store.commit('RESET_STATE')
-            router.replace({name: 'hello'})
+            router.replace({name: 'login'})
         },
 
         clear(){

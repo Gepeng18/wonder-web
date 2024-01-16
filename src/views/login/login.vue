@@ -12,20 +12,16 @@
         <el-form-item label="登录密码" prop="password">
           <el-input v-model="form.password" type="password" show-password/>
         </el-form-item>
-        <el-form-item label="验证码" prop="code">
-          <el-input v-model="form.code" type="text" style="width: 100px;float: left"/>
-          <div>
-            <el-image :src="imgBase64" style="width: 90px;margin-left: 5px;height: 40px" @click="getCode()"/>
-          </div>
-        </el-form-item>
+        <!--<el-form-item label="验证码" prop="code">-->
+        <!--  <el-input v-model="form.code" type="text" style="width: 100px;float: left"/>-->
+        <!--  <div>-->
+        <!--    <el-image :src="imgBase64" style="width: 90px;margin-left: 5px;height: 40px" @click="getCode()"/>-->
+        <!--  </div>-->
+        <!--</el-form-item>-->
 
         <el-button type="primary" @click="onSubmit" :loading="loading" style="width: 100%;font-size: 17px">登录
         </el-button>
       </el-form>
-
-      <!--      <div style="text-align: center;margin-top: 20px"><h4>扫码登录</h4></div>-->
-      <div class="back-hello"
-           @click="() => {$router.replace({name: 'hello'})}"><p>返回首页</p></div>
     </div>
   </div>
 </template>
@@ -37,8 +33,8 @@ export default {
   data() {
     return {
       form: {
-        username: 'admin',
-        password: '123456',
+        username: '',
+        password: '',
         code: '',
         uuid: ''
       },
@@ -64,7 +60,7 @@ export default {
   mounted() {
     this.$store.commit('clear')
     window.addEventListener('beforeunload', this.handleBeforeUnload);
-    this.getCode()
+    //this.getCode()
   },
 
   beforeDestroy() {
@@ -111,7 +107,7 @@ export default {
         this.$store.dispatch('getUserMenu')
       }).catch(() => {
         this.loading = false
-        this.getCode()
+        //this.getCode()
       })
     },
   }

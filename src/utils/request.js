@@ -54,7 +54,7 @@ service.interceptors.request.use(
             config.headers.RoleId = store.state.userinfo.currentRoleId;
             config.headers.DeptId = store.state.userinfo.currentDeptId;
         } else {
-            console.log('no token');
+            console.log('no token:' + config.url);
         }
         return config
     },
