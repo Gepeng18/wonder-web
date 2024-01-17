@@ -4,56 +4,56 @@ const prefix = '/role'
 
 export const page = (data = {}, headers ={}) => request({
     url: prefix + '/page',
-    method: 'post',
+    method: 'get',
     data,
     headers
 })
 
 export const list = (data = {}, headers ={}) => request({
     url: prefix + '/list',
-    method: 'post',
+    method: 'get',
     data,
     headers
 })
 
 export const update = (data = {}) => request({
-    url: prefix + '/update',
-    method: 'post',
+    url: prefix,
+    method: 'put',
     data
 })
 
 export const save = (data = {}) => request({
-    url: prefix + '/save',
+    url: prefix,
     method: 'post',
     data
 })
 
 export const get = (id) => request({
-    url: prefix + '/get/' + id,
+    url: prefix + '/' + id,
     method: 'get'
 })
 
 // 状态更改
 export const enabledSwitch = (id, headers ={showLoading: false}) => request({
     url: prefix + '/enabledSwitch/' + id,
-    method: 'get',
+    method: 'put',
     headers
 })
 
 // 删除
 export const del = (id) => request({
-    url: prefix + '/delete/' + id,
-    method: 'get'
+    url: prefix + '/' + id,
+    method: 'delete'
 })
 
 export const bindingRule = (params) => request({
     url: prefix + '/bindingRule',
-    method: 'get',
+    method: 'put',
     params
 })
 
 export const unBindingRule = (params) => request({
     url: prefix + '/unBindingRule',
-    method: 'get',
+    method: 'put',
     params
 })

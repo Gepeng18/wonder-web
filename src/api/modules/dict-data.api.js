@@ -3,21 +3,21 @@ import request from "@/utils/request";
 const prefix = '/dictData'
 
 export const get = (id, headers = {}) => request({
-    url: prefix + '/get/' + id,
+    url: prefix + '/' + id,
     method: 'get',
     headers
 })
 
 export const page = (data = {}, headers = {}) => request({
     url: prefix + '/page',
-    method: 'post',
+    method: 'get',
     data,
     headers
 })
 
 export const list = (data = {}, headers = {}) => request({
     url: prefix + '/list',
-    method: 'post',
+    method: 'get',
     data,
     headers
 })

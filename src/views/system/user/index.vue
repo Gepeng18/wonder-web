@@ -148,7 +148,7 @@ export default {
         username: '',
         nickname: '',
         phone: '',
-        deptId: null,
+        deptId: '',
       },
       tableData: [],
       pageInfo: {

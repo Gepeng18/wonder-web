@@ -4,46 +4,46 @@ const prefix = '/dept'
 
 export const tree = (data = {}, headers= {}) => request({
     url: prefix + '/tree',
-    method: 'post',
+    method: 'get',
     data,
     headers
 })
 
 export const list = (data = {},  headers= {}) => request({
     url: prefix + '/list',
-    method: 'post',
+    method: 'get',
     data,
     headers
 })
 
 export const update = (data = {},  headers= {showLoading: true}) => request({
-    url: prefix + '/update',
-    method: 'post',
+    url: prefix,
+    method: 'put',
     data,
     headers
 })
 
 export const save = (data = {}, headers = {showLoading: false}) => request({
-    url: prefix + '/save',
+    url: prefix,
     method: 'post',
     data,
     headers
 })
 
 export const getById = (id, headers= {}) => request({
-    url: prefix + '/get/' + id,
+    url: prefix + '/' + id,
     method: 'get',
     headers
 })
 
 export const del = (id, headers= {showLoading: false}) => request({
-    url: prefix + '/delete/' + id,
-    method: 'get',
+    url: prefix + '/' + id,
+    method: 'delete',
     headers
 })
 
 export const enabledSwitch = (id, headers = {showLoading: false}) => request({
     url: prefix + '/enabledSwitch/' + id,
-    method: 'get',
+    method: 'put',
     headers
 })

@@ -56,6 +56,11 @@ service.interceptors.request.use(
         } else {
             console.log('no token:' + config.url);
         }
+
+        if (config.method === 'get' || config.method === 'GET') {
+            config.url += config.data ? ('?' + Object.keys(config.data).map(key => key + '=' + config.data[key]).join('&')) : ''
+        }
+
         return config
     },
     error => {

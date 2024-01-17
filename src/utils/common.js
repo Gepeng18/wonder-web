@@ -46,7 +46,9 @@ export function dialog(options) {
 export function addDateRange(params, dateRange) {
     params = typeof (params) === 'object' && params !== null ? params : {};
     dateRange = Array.isArray(dateRange) ? dateRange : [];
-    params['beginDate'] = dateRange[0];
-    params['endDate'] = dateRange[1];
+    if (dateRange.length) {
+        params['beginDate'] = dateRange[0];
+        params['endDate'] = dateRange[1];
+    }
     return params;
 }

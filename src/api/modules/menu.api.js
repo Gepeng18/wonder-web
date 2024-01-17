@@ -4,19 +4,19 @@ const prefix = '/menu'
 
 export const treeList = (data = {}) => request({
     url: prefix + '/treeList',
-    method: 'post',
+    method: 'get',
     data
 })
 
 export const list = (data = {},  headers= {}) => request({
     url: prefix + '/list',
-    method: 'post',
+    method: 'get',
     data,
     headers
 })
 
 export const get = (id) => request({
-    url: prefix + '/get/' + id,
+    url: prefix + '/' + id,
     method: 'get'
 })
 
@@ -26,19 +26,19 @@ export const findByUserId = () => request({
 })
 
 export const update = (data = {}) => request({
-    url: prefix + '/update',
-    method: 'post',
+    url: prefix,
+    method: 'put',
     data
 })
 
 export const save = (data = {}) => request({
-    url: prefix + '/save',
+    url: prefix,
     method: 'post',
     data
 })
 
 export const del = (id, headers= {showLoading: false}) => request({
-    url: prefix + '/delete/' + id,
+    url: prefix + '/' + id,
     method: 'get',
     headers
 })

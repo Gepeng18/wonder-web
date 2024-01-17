@@ -18,26 +18,26 @@ export const getCode = (headers= {}) => request({
 
 export const page = (data = {}, headers= {}) => request({
     url: prefix + '/page',
-    method: 'post',
+    method: 'get',
     data,
     headers
 })
 
 export const resetPWD = (data = {}, headers ={showLoading: false}) => request({
     url: prefix + '/resetPWD',
-    method: 'post',
+    method: 'put',
     data,
     headers
 })
 
 export const update = (data = {}) => request({
-    url: prefix + '/update',
-    method: 'post',
+    url: prefix,
+    method: 'put',
     data
 })
 
 export const save = (data = {}) => request({
-    url: prefix + '/save',
+    url: prefix,
     method: 'post',
     data
 })
@@ -49,17 +49,17 @@ export const getUserLoginInfo = () => request({
 
 export const enabledSwitch = (id, headers ={showLoading: false}) => request({
     url: prefix + '/enabledSwitch/' + id,
-    method: 'get',
+    method: 'put',
     headers
 })
 
 export const getById = (id) => request({
-    url: prefix + '/get/' + id,
+    url: prefix + '/' + id,
     method: 'get'
 })
 
 export const del = (id, headers= {showLoading: false}) => request({
-    url: prefix + '/delete/' + id,
+    url: prefix + '/' + id,
     method: 'get',
     headers
 })

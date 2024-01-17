@@ -3,21 +3,21 @@ import request from "@/utils/request";
 const prefix = '/dict'
 
 export const get = (id, headers = {}) => request({
-    url: prefix + '/get/' + id,
+    url: prefix + '/' + id,
     method: 'get',
     headers
 })
 
 export const page = (data = {}, headers = {}) => request({
     url: prefix + '/page',
-    method: 'post',
+    method: 'get',
     data,
     headers
 })
 
 export const list = (data = {}, headers = {}) => request({
     url: prefix + '/list',
-    method: 'post',
+    method: 'get',
     data,
     headers
 })
@@ -29,22 +29,22 @@ export const findByDictCode = (dictCode, headers = {}) => request({
 })
 
 export const update = (data = {}, headers = {}) => request({
-    url: prefix + '/update',
-    method: 'post',
+    url: prefix,
+    method: 'put',
     data,
     headers
 })
 
 export const save = (data = {}, headers = {}) => request({
-    url: prefix + '/save',
+    url: prefix,
     method: 'post',
     data,
     headers
 })
 
 export const del = (id, headers = {}) => request({
-    url: prefix + '/delete/' + id,
-    method: 'get',
+    url: prefix + '/' + id,
+    method: 'delete',
     headers
 })
 
