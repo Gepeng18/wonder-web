@@ -34,7 +34,7 @@
             </el-form-item>
           </el-col>
 
-          <el-col :span="12">
+          <!--<el-col :span="12">
             <el-form-item label="拼接类型" prop="spliceType">
               <el-select v-model="formData.spliceType" placeholder="请选择拼接类型">
                 <el-option
@@ -45,7 +45,7 @@
                 </el-option>
               </el-select>
             </el-form-item>
-          </el-col>
+          </el-col>-->
 
           <el-col :span="12">
             <el-form-item label="字段名" prop="columnName">
@@ -229,7 +229,30 @@ export default {
       }, {
         value: 'NOT_IN',
         label: 'NOT_IN-不在给定的数据内'
-      }],
+      },{
+        value: 'EQ',
+        label: 'EQ-等于'
+      }, {
+        value: 'NE',
+        label: 'NE-不等于'
+      }, {
+        value: 'LIKE',
+        label: 'LIKE-模糊'
+      }, {
+        value: 'GT',
+        label: 'GT-大于'
+      }, {
+        value: 'GE',
+        label: 'GE-大于等于'
+      }, {
+        value: 'LT',
+        label: 'LT-小于'
+      }, {
+        value: 'LE',
+        label: 'LE-小于等于'
+      }
+
+      ],
       formalTypeOptions: [{
         value: 'java.lang.String',
         label: '字符串'
