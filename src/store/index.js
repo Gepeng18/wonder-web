@@ -23,11 +23,8 @@ const store = new Vuex.Store({
     mutations: {
         login(state, payload) {
             state.userinfo = payload;
-            if (payload.deptIds.length >= 1){
-                state.userinfo.currentDeptId = payload.deptIds[0]
-            }
-            if (payload.roleIds.length >= 1){
-                state.userinfo.currentRoleId = payload.roleIds[0]
+            if (payload.depts.length >= 1){
+                state.userinfo.currentDeptId = payload.depts[0].id
             }
         },
 

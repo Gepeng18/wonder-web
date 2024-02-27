@@ -7,17 +7,6 @@
 
       <div class="right">
         <div class="right-sub top_el_select">
-            <el-select v-model="$store.state.userinfo.currentRoleId" placeholder="请选择角色">
-              <el-option
-                  v-for="item in $store.state.userinfo.roles"
-                  :key="item.id"
-                  :label="item.name"
-                  :value="item.id">
-              </el-option>
-            </el-select>
-        </div>
-
-        <div class="right-sub top_el_select">
           <el-select v-model="$store.state.userinfo.currentDeptId" placeholder="请选择部门">
             <el-option
                 v-for="item in $store.state.userinfo.depts"
