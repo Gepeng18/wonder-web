@@ -37,8 +37,8 @@ export const getByMarkId = (markId) => request({
     method: 'get'
 })
 
-export const getByRoleIdAndMarkId = (params) => request({
-    url: prefix + '/getByRoleIdAndMarkId',
+export const getRuleIdsByRoleIdAndMarkId = (params) => request({
+    url: prefix + '/ruleIdsByRoleIdAndMarkId',
     method: 'get',
     params
 })

@@ -1,5 +1,5 @@
 <template>
-  <CommonDialog icon="s-tools" ref="dialog" width="1000px" :title="title" :show-cancel="false" @confirm="confirm">
+  <CommonDialog id="dataScopeDialog" icon="s-tools" ref="dialog" width="1000px" :title="title" :show-cancel="false" @confirm="confirm">
     <el-row :gutter="0">
       <el-col :span="12">
         <el-table
@@ -28,7 +28,6 @@
               height="500"
               tooltip-effect="light"
               @select="handleSelect"
-              @select-all="handleSelectAll"
               style="width: 100%">
             <el-table-column
                 type="selection"
@@ -79,61 +78,49 @@ export default {
       this.$api.rule.getByMarkId(markId).then(res => {
         this.ruleTableData.slice(0, this.ruleTableData.length)
         this.ruleTableData = res
+        // -----------------------------
+        let params = {
+          roleId: this.role.id,
+          markId: markId
+        }
+
+        this.$api.rule.getRuleIdsByRoleIdAndMarkId(params).then(selectedRes => {
+          const from = Array.from(selectedRes);
+
+          if (from) {
+            for (let i = 0; i < this.ruleTableData.length; i++) {
+              if (from.includes(this.ruleTableData[i].id)) {
+                this.$refs.ruleTable.toggleRowSelection(this.ruleTableData[i], true)
+              }
+            }
+          }
+        })
+
       }).catch()
     },
 
     handleMarkCurrentChange(val) {
       this.markCurrentRow = val;
       this.getRule(val.id)
-
-      let params = {
-        roleId: this.role.id,
-        markId: val.id
-      }
-
-      this.$api.rule.getByRoleIdAndMarkId(params).then(res => {
-        if (res) {
-          for (let i = 0; i < this.ruleTableData.length; i++) {
-            if (this.ruleTableData[i].id === res.id) {
-              this.$refs.ruleTable.toggleRowSelection(this.ruleTableData[i], true)
-              break
-            }
-          }
-        }
-      })
-
     },
 
-    handleSelect(selection, val) {
-      //只能选择一行，选择其他，清除上一行
-      if (selection.length >= 1) {
-        if (selection.length > 1){
-          let del_row = selection.shift()
-          this.$refs.ruleTable.toggleRowSelection(del_row, false) //设置这一行取消选中
-        }
-        let params = {
-          roleId: this.role.id,
-          ruleId: selection[0].id
-        }
+    handleSelect(selection, row) {
+      let params = {
+        roleId: this.role.id,
+        ruleId: row.id
+      }
+      if (selection.includes(row)) {
         this.$api.role.bindingRule(params).then(() => {
           this.$message.success('保存成功')
         })
       }else {
-        let params = {
-          roleId: this.role.id,
-          ruleId: val.id
-        }
         this.$api.role.unBindingRule(params).then(() => {
           this.$message.success('保存成功')
         })
       }
     },
 
-    handleSelectAll() {
-      this.$refs.ruleTable.clearSelection()
-    },
-
-    confirm(){
+    confirm() {
       this.reset()
       this.$refs.dialog.close()
     },
@@ -150,5 +137,7 @@ export default {
 </script>
 
 <style scoped>
-
+/deep/ .el-table__header-wrapper .el-checkbox {
+  display: none
+}
 </style>

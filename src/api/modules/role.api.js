@@ -46,14 +46,16 @@ export const del = (id) => request({
     method: 'delete'
 })
 
-export const bindingRule = (params) => request({
+export const bindingRule = (params, headers ={showLoading: true, target: '#dataScopeDialog'}) => request({
     url: prefix + '/bindingRule',
     method: 'put',
-    params
+    params,
+    headers
 })
 
-export const unBindingRule = (params) => request({
+export const unBindingRule = (params, headers ={showLoading: true, target: '#dataScopeDialog'}) => request({
     url: prefix + '/unBindingRule',
     method: 'put',
-    params
+    params,
+    headers
 })
